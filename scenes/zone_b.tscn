@@ -3,65 +3,67 @@
 [ext_resource type="Script" uid="uid://q6mg67xu155w" path="res://scripts/spawn_point.gd" id="1_spawn"]
 [ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://scripts/gateway.gd" id="2_gateway"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
+size = Vector3(4, 3, 2)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.76, 0.6, 0.35, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_walls"]
 albedo_color = Color(0.6, 0.45, 0.25, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
-size = Vector3(4, 3, 2)
+[node name="ZoneB" type="Node3D" unique_id=391965773]
 
-[node name="ZoneB" type="Node3D"]
-
-[node name="DefaultSpawn" type="Marker3D" parent="."]
+[node name="DefaultSpawn" type="Marker3D" parent="." unique_id=1493275847]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 script = ExtResource("1_spawn")
 
-[node name="GatewaySouth" type="Area3D" parent="."]
+[node name="GatewaySouth" type="Area3D" parent="." unique_id=1879419761]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
 collision_layer = 0
-collision_mask = 1
 script = ExtResource("2_gateway")
 gateway_id = "zb_south"
 target_scene = "res://scenes/playground.tscn"
 target_gateway_id = "pg_north"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewaySouth"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewaySouth" unique_id=1805568867]
 shape = SubResource("BoxShape3D_gw")
 
-[node name="WalkStart" type="Marker3D" parent="GatewaySouth"]
+[node name="WalkStart" type="Marker3D" parent="GatewaySouth" unique_id=131164680]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="WalkEnd" type="Marker3D" parent="GatewaySouth"]
+[node name="WalkEnd" type="Marker3D" parent="GatewaySouth" unique_id=954150529]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
-[node name="Floor" type="CSGBox3D" parent="."]
+[node name="Floor" type="CSGBox3D" parent="." unique_id=836011069]
 use_collision = true
 size = Vector3(60, 5, 60)
 material = SubResource("StandardMaterial3D_floor")
+metadata/_edit_lock_ = true
 
-[node name="Walls" type="Node3D" parent="."]
+[node name="Walls" type="Node3D" parent="." unique_id=1793527475]
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
-[node name="WallNorth" type="CSGBox3D" parent="Walls"]
+[node name="WallNorth" type="CSGBox3D" parent="Walls" unique_id=2052978698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -28)
 use_collision = true
 size = Vector3(60, 10, 2)
 material = SubResource("StandardMaterial3D_walls")
 
-[node name="WallSouth" type="CSGBox3D" parent="Walls"]
+[node name="WallSouth" type="CSGBox3D" parent="Walls" unique_id=1056402833]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 28)
 use_collision = true
 size = Vector3(60, 10, 2)
 material = SubResource("StandardMaterial3D_walls")
 
-[node name="WallEast" type="CSGBox3D" parent="Walls"]
+[node name="WallEast" type="CSGBox3D" parent="Walls" unique_id=386558668]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 7, 0)
 use_collision = true
 size = Vector3(2, 10, 60)
 material = SubResource("StandardMaterial3D_walls")
 
-[node name="WallWest" type="CSGBox3D" parent="Walls"]
+[node name="WallWest" type="CSGBox3D" parent="Walls" unique_id=1228527470]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 7, 0)
 use_collision = true
 size = Vector3(2, 10, 60)
