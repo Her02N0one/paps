@@ -61,12 +61,22 @@ func _apply_spawn(target_id: String) -> void:
 	if target == null:
 		return
 	if is_gateway:
-		# offset forward past the trigger volume to avoid immediate retrigger
-		player.global_position = target.global_position + (-target.global_transform.basis.z) * 2.0
+		var walk_start: Node3D = target.get_node_or_null("WalkStart")
+		var walk_end: Node3D = target.get_node_or_null("WalkEnd")
+		if walk_start and walk_end:
+			var walk_dir := (walk_end.global_position - walk_start.global_position).normalized()
+			var dist: float = walk_start.global_position.distance_to(walk_end.global_position)
+			player.global_position = walk_start.global_position
+			player.rotation.y = atan2(-walk_dir.x, -walk_dir.z)
+			player.get_node("Head").rotation.y = 0.0
+			player.start_arrival_walk(walk_dir, dist)
+		else:
+			player.global_position = target.global_position
+			player.get_node("Head").rotation.y = 0.0
 	else:
 		player.global_position = target.global_position
-	player.rotation.y = target.rotation.y
-	player.get_node("Head").rotation.y = 0.0
+		player.rotation.y = target.rotation.y
+		player.get_node("Head").rotation.y = 0.0
 
 
 func _on_intro_continue_pressed() -> void:

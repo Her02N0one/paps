@@ -17,6 +17,9 @@ const FOV_CHANGE = 1.5
 
 
 var gravity = 9.8
+var _auto_walk := false
+var _auto_walk_dir := Vector3.ZERO
+var _auto_walk_remaining := 0.0
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
@@ -25,12 +28,35 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 func _unhandled_input(event):
+	if _auto_walk:
+		return
 	if event is InputEventMouseMotion and not get_tree().paused:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-40), deg_to_rad(60))
 
+func start_arrival_walk(direction: Vector3, distance: float) -> void:
+	_auto_walk = true
+	_auto_walk_dir = direction
+	_auto_walk_remaining = distance
+
+
 func _physics_process(delta: float) -> void:
+	if _auto_walk:
+		if not is_on_floor():
+			velocity.y -= gravity * delta
+		else:
+			velocity.y = 0.0
+		velocity.x = _auto_walk_dir.x * WALK_SPEED
+		velocity.z = _auto_walk_dir.z * WALK_SPEED
+		_auto_walk_remaining -= WALK_SPEED * delta
+		if _auto_walk_remaining <= 0.0:
+			_auto_walk = false
+		t_bob += delta * velocity.length() * float(is_on_floor())
+		camera.transform.origin = _headbob(t_bob)
+		camera.fov = lerp(camera.fov, BASE_FOV + FOV_CHANGE * clamp(velocity.length(), 0.5, SPRINT_SPEED * 2), delta * 8.0)
+		move_and_slide()
+		return
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta

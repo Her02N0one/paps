@@ -1,48 +1,72 @@
-extends Marker3D
+@tool
+extends Area3D
 
-## This gateway's ID - what other gateways set as their target_gateway_id to land here.
 @export var gateway_id: String = ""
 @export_file("*.tscn") var target_scene: String = ""
-## gateway_id of the landing gateway in target_scene.
 @export var target_gateway_id: String = ""
-@export var trigger_size: Vector3 = Vector3(4, 3, 2)
 
 var _triggered := false
+var _line_mesh: ImmediateMesh
+var _line_inst: MeshInstance3D
 
 
 func _ready() -> void:
+	_setup_line()
+	if Engine.is_editor_hint():
+		return
 	add_to_group("gateways")
-	_build_trigger()
-	_build_visual()
+	body_entered.connect(_on_body_entered)
+	_build_trigger_visual()
 
 
-func _build_trigger() -> void:
-	var area := Area3D.new()
-	area.collision_layer = 0
-	area.collision_mask = 1
-	add_child(area)
-	var col := CollisionShape3D.new()
-	var box := BoxShape3D.new()
-	box.size = trigger_size
-	col.shape = box
-	area.add_child(col)
-	area.body_entered.connect(_on_body_entered)
-
-
-func _build_visual() -> void:
-	var mesh_inst := MeshInstance3D.new()
-	var box_mesh := BoxMesh.new()
-	box_mesh.size = trigger_size
-	mesh_inst.mesh = box_mesh
+func _build_trigger_visual() -> void:
+	var col := get_node_or_null("CollisionShape3D")
+	if not col or not col.shape is BoxShape3D:
+		return
+	var inst := MeshInstance3D.new()
+	var mesh := BoxMesh.new()
+	mesh.size = (col.shape as BoxShape3D).size
+	inst.mesh = mesh
+	inst.position = col.position
 	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.3, 0.75, 1.0, 0.35)
+	mat.albedo_color = Color(0.3, 0.75, 1.0, 0.15)
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-	mesh_inst.material_override = mat
-	add_child(mesh_inst)
+	inst.material_override = mat
+	add_child(inst)
+
+
+func _setup_line() -> void:
+	_line_inst = MeshInstance3D.new()
+	_line_mesh = ImmediateMesh.new()
+	_line_inst.mesh = _line_mesh
+	_line_inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.albedo_color = Color(1.0, 0.85, 0.0)
+	mat.flags_no_depth_test = true
+	_line_inst.material_override = mat
+	add_child(_line_inst)
+
+
+func _process(_delta: float) -> void:
+	if not Engine.is_editor_hint() or not _line_mesh:
+		return
+	var ws: Node3D = get_node_or_null("WalkStart")
+	var we: Node3D = get_node_or_null("WalkEnd")
+	_line_mesh.clear_surfaces()
+	if not ws or not we:
+		return
+	_line_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+	_line_mesh.surface_add_vertex(to_local(ws.global_position))
+	_line_mesh.surface_add_vertex(to_local(we.global_position))
+	_line_mesh.surface_end()
 
 
 func _on_body_entered(body: Node3D) -> void:
-	if body is CharacterBody3D and not _triggered:
-		_triggered = true
-		GameManager.travel(target_scene, target_gateway_id)
+	if not body is CharacterBody3D or _triggered:
+		return
+	if body.get("_auto_walk") == true:
+		return
+	_triggered = true
+	GameManager.travel(target_scene, target_gateway_id)

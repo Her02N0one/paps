@@ -9,18 +9,32 @@ albedo_color = Color(0.76, 0.6, 0.35, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_walls"]
 albedo_color = Color(0.6, 0.45, 0.25, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
+size = Vector3(4, 3, 2)
+
 [node name="ZoneB" type="Node3D"]
 
 [node name="DefaultSpawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 script = ExtResource("1_spawn")
 
-[node name="GatewaySouth" type="Marker3D" parent="."]
+[node name="GatewaySouth" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
+collision_layer = 0
+collision_mask = 1
 script = ExtResource("2_gateway")
 gateway_id = "zb_south"
 target_scene = "res://scenes/playground.tscn"
 target_gateway_id = "pg_north"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewaySouth"]
+shape = SubResource("BoxShape3D_gw")
+
+[node name="WalkStart" type="Marker3D" parent="GatewaySouth"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="WalkEnd" type="Marker3D" parent="GatewaySouth"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
 [node name="Floor" type="CSGBox3D" parent="."]
 use_collision = true
