@@ -1,0 +1,20 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Exported binaries and packs
+*.exe
+*.x86_64
+*.app
+*.apk
+*.aab
+*.pck
+*.zip
+build/
+
+# Import metadata is generated; omit if we want reproducible imports
+# *.import
+
+# OS junk
+.DS_Store
+Thumbs.db

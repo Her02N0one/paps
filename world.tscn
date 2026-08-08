@@ -1,0 +1,229 @@
+[gd_scene format=3 uid="uid://dksh37sfg0mxf"]
+
+[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://player.gd" id="1_fj7yv"]
+[ext_resource type="Material" uid="uid://b7ihykmxms7ht" path="res://weird_material.tres" id="2_fj7yv"]
+[ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://world.gd" id="3_1tqsm"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_fj7yv"]
+sky_material = SubResource("ProceduralSkyMaterial_f3sb7")
+
+[sub_resource type="Environment" id="Environment_tlwt5"]
+background_mode = 2
+sky = SubResource("Sky_fj7yv")
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3sb7"]
+albedo_color = Color(0.30333334, 0.56, 0.252, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_g4v7s"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1bvp3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4v7s"]
+albedo_color = Color(0.33, 0.21846001, 0.072600015, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d0u6y"]
+albedo_color = Color(1, 0.14999998, 0.14999998, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3gngh"]
+albedo_color = Color(0.6021669, 0.23000002, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_57qmd"]
+albedo_color = Color(1, 0.5503334, 0.29000002, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yf5fn"]
+albedo_color = Color(0.35000002, 0.5883334, 1, 1)
+
+[node name="World" type="Node3D" unique_id=600226008]
+script = ExtResource("3_1tqsm")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=879517922]
+transform = Transform3D(0.96077913, 0.2386964, -0.14116469, 0, 0.5090415, 0.860742, 0.2773147, -0.8269829, 0.48907644, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=553721154]
+environment = SubResource("Environment_tlwt5")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=190486362]
+use_collision = true
+size = Vector3(100, 5, 100)
+material = SubResource("StandardMaterial3D_f3sb7")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1390088440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.940308, 3.9600132, 5.4811077)
+script = ExtResource("1_fj7yv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=672791355]
+mesh = SubResource("CapsuleMesh_g4v7s")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1573777988]
+shape = SubResource("CapsuleShape3D_1bvp3")
+
+[node name="Head" type="Node3D" parent="CharacterBody3D" unique_id=1404934447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4085333, -0.029944897)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head" unique_id=175546984]
+
+[node name="Walls" type="Node3D" parent="." unique_id=4762779]
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Walls" unique_id=1498266808]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, -47.929867)
+use_collision = true
+size = Vector3(100, 10, 2)
+material = SubResource("StandardMaterial3D_g4v7s")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Walls" unique_id=1996955120]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.920677, 7.1520567, 0.9852791)
+use_collision = true
+size = Vector3(2, 10, 100)
+material = SubResource("StandardMaterial3D_g4v7s")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Walls" unique_id=2122487946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.086464, 7.1520567, 0.9852791)
+use_collision = true
+size = Vector3(2, 10, 100)
+material = SubResource("StandardMaterial3D_g4v7s")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Walls" unique_id=1454683948]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, 48.434296)
+use_collision = true
+size = Vector3(100, 10, 2)
+material = SubResource("StandardMaterial3D_g4v7s")
+
+[node name="Props" type="Node" parent="." unique_id=1456386127]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Props" unique_id=1621979767]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.716658, 3.68853, -19.268974)
+use_collision = true
+size = Vector3(10, 3, 10)
+material = SubResource("StandardMaterial3D_d0u6y")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Props" unique_id=682022529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.611359, 4.18853, -22.889032)
+use_collision = true
+size = Vector3(19, 4, 16)
+material = SubResource("StandardMaterial3D_3gngh")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Props" unique_id=1639017863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.6193, 24.862751, 30.814367)
+material_override = ExtResource("2_fj7yv")
+use_collision = true
+size = Vector3(22, 48, 23)
+material = ExtResource("2_fj7yv")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Props" unique_id=1935684989]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.334557, 2.68853, -1.8792272)
+use_collision = true
+size = Vector3(6, 1, 6)
+material = SubResource("StandardMaterial3D_57qmd")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Props" unique_id=831548254]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.611479, 3.25988, -9.573862)
+use_collision = true
+size = Vector3(6, 2.1427002, 6)
+material = SubResource("StandardMaterial3D_yf5fn")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2147483000]
+
+[node name="GameUI" type="Control" parent="CanvasLayer" unique_id=2147483001]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IntroPanel" type="PanelContainer" parent="CanvasLayer/GameUI" unique_id=2147483002]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IntroMargin" type="MarginContainer" parent="CanvasLayer/GameUI/IntroPanel" unique_id=2147483003]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="IntroVBox" type="VBoxContainer" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin" unique_id=2147483004]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IntroTitle" type="Label" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox" unique_id=2147483005]
+layout_mode = 2
+text = "Controls"
+horizontal_alignment = 1
+
+[node name="IntroText" type="Label" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox" unique_id=2147483006]
+layout_mode = 2
+text = "WASD - move
+Mouse - look
+Shift - sprint
+Space - jump
+Esc - pause"
+horizontal_alignment = 1
+
+[node name="IntroContinue" type="Button" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox" unique_id=2147483007]
+layout_mode = 2
+text = "Start"
+
+[node name="PausePanel" type="PanelContainer" parent="CanvasLayer/GameUI" unique_id=2147483008]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -160.0
+offset_right = 220.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseMargin" type="MarginContainer" parent="CanvasLayer/GameUI/PausePanel" unique_id=2147483009]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="PauseVBox" type="VBoxContainer" parent="CanvasLayer/GameUI/PausePanel/PauseMargin" unique_id=2147483010]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PauseTitle" type="Label" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=2147483011]
+layout_mode = 2
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="PauseResume" type="Button" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=2147483012]
+layout_mode = 2
+text = "Resume"
+
+[node name="PauseQuitMenu" type="Button" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=2147483013]
+layout_mode = 2
+text = "Quit to Menu"
+
+[node name="PauseQuitGame" type="Button" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=2147483014]
+layout_mode = 2
+text = "Quit Game"
+
+[connection signal="pressed" from="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox/IntroContinue" to="." method="_on_intro_continue_pressed"]
+[connection signal="pressed" from="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox/PauseResume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox/PauseQuitMenu" to="." method="_on_quit_to_menu_pressed"]
+[connection signal="pressed" from="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox/PauseQuitGame" to="." method="_on_quit_game_pressed"]
