@@ -1,6 +1,6 @@
 extends Marker3D
 
-## This gateway's ID — what other gateways set as their target_gateway_id to land here.
+## This gateway's ID - what other gateways set as their target_gateway_id to land here.
 @export var gateway_id: String = ""
 @export_file("*.tscn") var target_scene: String = ""
 ## gateway_id of the landing gateway in target_scene.
