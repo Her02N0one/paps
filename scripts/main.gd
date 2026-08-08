@@ -7,7 +7,8 @@ func _ready() -> void:
 	var options_button: Button = $MainMenu/HBoxContainer/VBoxContainer/MenuOptions/Options
 	continue_button.disabled = true
 	options_button.disabled = true
+	GameManager.fade_in()
 
 
 func _on_new_game_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/world.tscn")
+	GameManager.start_game("res://scenes/playground.tscn")

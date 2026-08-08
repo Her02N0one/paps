@@ -1,14 +1,16 @@
 extends Node3D
 
-
 @onready var game_ui: Control = $CanvasLayer/GameUI
 @onready var intro_panel: Control = $CanvasLayer/GameUI/IntroPanel
 @onready var pause_panel: Control = $CanvasLayer/GameUI/PausePanel
+@onready var map_container: Node3D = $MapContainer
+@onready var player: CharacterBody3D = $CharacterBody3D
 
 var can_pause := false
 
 
 func _ready() -> void:
+	add_to_group("world")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	game_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	game_ui.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -19,6 +21,7 @@ func _ready() -> void:
 	intro_panel.visible = true
 	pause_panel.visible = false
 	can_pause = false
+	GameManager.on_world_ready(self)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -30,6 +33,37 @@ func _unhandled_input(event: InputEvent) -> void:
 			_resume_game()
 		else:
 			_open_pause_menu()
+
+
+# Frees the current map and instances the new one, then positions the player.
+func swap_map(scene_path: String, spawn_id: String) -> void:
+	for child in map_container.get_children():
+		child.queue_free()
+	var map: Node = load(scene_path).instantiate()
+	map_container.add_child(map)
+	_apply_spawn.call_deferred(spawn_id)
+
+
+func _apply_spawn(spawn_id: String) -> void:
+	var spawns := get_tree().get_nodes_in_group("spawn_points")
+	var target: Node = null
+	if spawn_id != "":
+		for s in spawns:
+			if s.spawn_id == spawn_id:
+				target = s
+				break
+	if target == null:
+		# fall back to the map's default spawn (first SpawnPoint with empty spawn_id)
+		for s in spawns:
+			if s.spawn_id == "":
+				target = s
+				break
+	if target == null:
+		return
+	player.global_position = target.global_position
+	player.rotation.y = target.rotation.y
+	# reset accumulated head yaw so facing matches body exactly
+	player.get_node("Head").rotation.y = 0.0
 
 
 func _on_intro_continue_pressed() -> void:
@@ -46,7 +80,7 @@ func _on_resume_pressed() -> void:
 func _on_quit_to_menu_pressed() -> void:
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	GameManager.quit_to_menu()
 
 
 func _on_quit_game_pressed() -> void:
