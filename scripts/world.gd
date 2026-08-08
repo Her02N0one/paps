@@ -36,15 +36,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 # Frees the current map and instances the new one, then positions the player.
-func swap_map(scene_path: String, spawn_id: String) -> void:
+func swap_map(scene_path: String, spawn_id: String, reversed: bool = false) -> void:
 	for child in map_container.get_children():
 		child.queue_free()
 	var map: Node = load(scene_path).instantiate()
 	map_container.add_child(map)
-	_apply_spawn.call_deferred(spawn_id)
+	_apply_spawn.call_deferred(spawn_id, reversed)
 
 
-func _apply_spawn(target_id: String) -> void:
+func _apply_spawn(target_id: String, reversed: bool = false) -> void:
 	var target: Node = null
 	var is_gateway := false
 	if target_id != "":
@@ -67,7 +67,8 @@ func _apply_spawn(target_id: String) -> void:
 			var walk_dir := (walk_end.global_position - walk_start.global_position).normalized()
 			var dist: float = walk_start.global_position.distance_to(walk_end.global_position)
 			player.global_position = walk_start.global_position
-			player.rotation.y = atan2(-walk_dir.x, -walk_dir.z)
+			# reversed: face back toward the gateway, still walk in same direction (backing away)
+			player.rotation.y = atan2(walk_dir.x, walk_dir.z) if reversed else atan2(-walk_dir.x, -walk_dir.z)
 			player.get_node("Head").rotation.y = 0.0
 			player.start_arrival_walk(walk_dir, dist)
 		else:

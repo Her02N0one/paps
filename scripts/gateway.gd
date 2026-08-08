@@ -69,4 +69,11 @@ func _on_body_entered(body: Node3D) -> void:
 	if body.get("_auto_walk") == true:
 		return
 	_triggered = true
-	GameManager.travel(target_scene, target_gateway_id)
+	var ws: Node3D = get_node_or_null("WalkStart")
+	# direction from WalkStart toward the trigger = the direction players approach from
+	var approach_dir: Vector3 = (global_position - ws.global_position).normalized() if ws else Vector3.ZERO
+	# use horizontal facing rather than velocity (backing in has same velocity as walking forward)
+	var head_fwd: Vector3 = -body.get_node("Head").global_transform.basis.z
+	var ref_dir: Vector3 = Vector3(head_fwd.x, 0.0, head_fwd.z).normalized()
+	var reversed: bool = approach_dir != Vector3.ZERO and ref_dir.dot(approach_dir) < 0.0
+	GameManager.travel(target_scene, target_gateway_id, reversed)

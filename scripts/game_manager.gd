@@ -2,6 +2,7 @@ extends Node
 
 var pending_map := ""
 var pending_spawn_id := ""
+var pending_reversed := false
 var _is_transitioning := false
 var _fade_rect: ColorRect
 
@@ -83,12 +84,13 @@ func on_world_ready(world: Node) -> void:
 
 
 # Swap the active map inside the persistent world scene.
-func travel(target_map: String, spawn_id: String) -> void:
+func travel(target_map: String, spawn_id: String, reversed: bool = false) -> void:
 	if _is_transitioning:
 		return
 	_is_transitioning = true
 	pending_map = target_map
 	pending_spawn_id = spawn_id
+	pending_reversed = reversed
 	_fade_out(func():
 		var world := get_tree().get_first_node_in_group("world")
 		_execute_swap(world)
@@ -105,7 +107,8 @@ func quit_to_menu() -> void:
 
 
 func _execute_swap(world: Node) -> void:
-	world.swap_map(pending_map, pending_spawn_id)
+	world.swap_map(pending_map, pending_spawn_id, pending_reversed)
 	pending_map = ""
 	pending_spawn_id = ""
+	pending_reversed = false
 	fade_in()
