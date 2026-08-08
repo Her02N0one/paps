@@ -46,7 +46,7 @@ func _on_resume_pressed() -> void:
 func _on_quit_to_menu_pressed() -> void:
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	get_tree().change_scene_to_file("res://main.tscn")
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 
 func _on_quit_game_pressed() -> void:
