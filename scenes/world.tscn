@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dksh37sfg0mxf"]
 
-[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://player.gd" id="1_fj7yv"]
-[ext_resource type="Material" uid="uid://b7ihykmxms7ht" path="res://weird_material.tres" id="2_fj7yv"]
-[ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://world.gd" id="3_1tqsm"]
+[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://scripts/player.gd" id="1_fj7yv"]
+[ext_resource type="Material" uid="uid://b7ihykmxms7ht" path="res://materials/weird_material.tres" id="2_fj7yv"]
+[ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://scripts/world.gd" id="3_1tqsm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
