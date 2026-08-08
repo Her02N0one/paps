@@ -22,9 +22,6 @@ albedo_color = Color(1, 0.5503334, 0.29000002, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
 albedo_color = Color(0.35000002, 0.5883334, 1, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
-size = Vector3(6, 4, 2)
-
 [node name="Playground" type="Node3D" unique_id=978182345]
 
 [node name="DefaultSpawn" type="Marker3D" parent="." unique_id=2089636459]
@@ -95,18 +92,9 @@ use_collision = true
 size = Vector3(6, 2.1427002, 6)
 material = SubResource("StandardMaterial3D_blue")
 
-[node name="SpawnFromZoneB" type="Marker3D" parent="." unique_id=1173410200]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 4, -36)
-script = ExtResource("2_spawn")
-spawn_id = "from_zone_b"
-
-[node name="GatewayNorth" type="Area3D" parent="." unique_id=147102988]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -42)
+[node name="GatewayNorth" type="Marker3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 4, -42)
 script = ExtResource("3_gateway")
+gateway_id = "pg_north"
 target_scene = "res://scenes/zone_b.tscn"
-target_spawn_id = "from_playground"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayNorth" unique_id=1124273391]
-shape = SubResource("BoxShape3D_gw")
-
-[connection signal="body_entered" from="GatewayNorth" to="GatewayNorth" method="_on_body_entered"]
+target_gateway_id = "zb_south"

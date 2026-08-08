@@ -44,25 +44,28 @@ func swap_map(scene_path: String, spawn_id: String) -> void:
 	_apply_spawn.call_deferred(spawn_id)
 
 
-func _apply_spawn(spawn_id: String) -> void:
-	var spawns := get_tree().get_nodes_in_group("spawn_points")
+func _apply_spawn(target_id: String) -> void:
 	var target: Node = null
-	if spawn_id != "":
-		for s in spawns:
-			if s.spawn_id == spawn_id:
-				target = s
+	var is_gateway := false
+	if target_id != "":
+		for gw in get_tree().get_nodes_in_group("gateways"):
+			if gw.gateway_id == target_id:
+				target = gw
+				is_gateway = true
 				break
 	if target == null:
-		# fall back to the map's default spawn (first SpawnPoint with empty spawn_id)
-		for s in spawns:
+		for s in get_tree().get_nodes_in_group("spawn_points"):
 			if s.spawn_id == "":
 				target = s
 				break
 	if target == null:
 		return
-	player.global_position = target.global_position
+	if is_gateway:
+		# offset forward past the trigger volume to avoid immediate retrigger
+		player.global_position = target.global_position + (-target.global_transform.basis.z) * 2.0
+	else:
+		player.global_position = target.global_position
 	player.rotation.y = target.rotation.y
-	# reset accumulated head yaw so facing matches body exactly
 	player.get_node("Head").rotation.y = 0.0
 
 
