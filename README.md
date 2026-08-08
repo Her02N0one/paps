@@ -2,7 +2,7 @@
 
 # paps
 
-A small 3D game made in [Godot 4](https://godotengine.org/).
+A 3D game made in [Godot 4](https://godotengine.org/).
 
 ## Controls
 
@@ -12,7 +12,3 @@ A small 3D game made in [Godot 4](https://godotengine.org/).
 | Jump | Space |
 | Sprint | Shift |
 | Pause | Escape |
-
-## Running
-
-Open `project.godot` in Godot 4 and press **Run**.
