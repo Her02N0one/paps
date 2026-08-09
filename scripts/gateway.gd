@@ -5,7 +5,6 @@ extends Area3D
 @export_file("*.tscn") var target_scene: String = ""
 @export var target_gateway_id: String = ""
 
-var _triggered := false
 var _line_mesh: ImmediateMesh
 var _line_inst: MeshInstance3D
 
@@ -64,16 +63,22 @@ func _process(_delta: float) -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
-	if not body is CharacterBody3D or _triggered:
+	var movement := _get_available_movement(body)
+	if movement == null or movement.is_gateway_walking():
 		return
-	if body.get("_auto_walk") == true:
-		return
-	_triggered = true
-	var ws: Node3D = get_node_or_null("WalkStart")
-	# direction from WalkStart toward the trigger = the direction players approach from
-	var approach_dir: Vector3 = (global_position - ws.global_position).normalized() if ws else Vector3.ZERO
-	# use horizontal facing rather than velocity (backing in has same velocity as walking forward)
-	var head_fwd: Vector3 = -body.get_node("Head").global_transform.basis.z
-	var ref_dir: Vector3 = Vector3(head_fwd.x, 0.0, head_fwd.z).normalized()
-	var reversed: bool = approach_dir != Vector3.ZERO and ref_dir.dot(approach_dir) < 0.0
-	GameManager.travel(target_scene, target_gateway_id, reversed)
+	var reversed := _is_reverse_entry(movement)
+	movement.request_gateway_travel(target_scene, target_gateway_id, reversed)
+
+
+func _get_available_movement(body: Node3D) -> ActorMovementComponent:
+	if not body is CharacterBody3D:
+		return null
+	return ActorMovementComponent.find_on(body)
+
+
+func _is_reverse_entry(movement: ActorMovementComponent) -> bool:
+	var walk_start: Node3D = get_node_or_null("WalkStart")
+	if walk_start == null:
+		return false
+	var approach_direction := (global_position - walk_start.global_position).normalized()
+	return movement.get_facing_direction().dot(approach_direction) < 0.0

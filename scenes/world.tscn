@@ -3,16 +3,20 @@
 [ext_resource type="PackedScene" uid="uid://dl7mdn35ogwuu" path="res://scenes/player.tscn" id="2_rwgxs"]
 [ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://scripts/world.gd" id="2_world"]
 [ext_resource type="PackedScene" uid="uid://btuglcom8u6x" path="res://scenes/inventory_panel.tscn" id="3_inventory_panel"]
-[ext_resource type="Script" path="res://scripts/game_ui_controller.gd" id="4_ui_controller"]
+[ext_resource type="Script" uid="uid://bd4qp8q813n2f" path="res://scripts/game_ui_controller.gd" id="4_ui_controller"]
+[ext_resource type="Script" uid="uid://de0s0bg2esg2y" path="res://scripts/modal_state_controller.gd" id="5_modal_state"]
 
 [node name="World" type="Node3D" unique_id=1226249983]
 process_mode = 3
 script = ExtResource("2_world")
 
-[node name="Systems" type="Node" parent="."]
+[node name="Systems" type="Node" parent="." unique_id=1491006325]
 process_mode = 3
 
-[node name="UICoordinator" type="Node" parent="Systems"]
+[node name="ModalStateController" type="Node" parent="Systems" unique_id=281223200]
+script = ExtResource("5_modal_state")
+
+[node name="UICoordinator" type="Node" parent="Systems" unique_id=83629219]
 process_mode = 3
 script = ExtResource("4_ui_controller")
 player_path = NodePath("../../GameplayWorld/EntityRoot/Player")
@@ -24,23 +28,23 @@ crosshair_path = NodePath("../../HUDLayer/HUD/CrossHair")
 examine_panel_path = NodePath("../../ExamineLayer/ExaminePanel")
 inventory_panel_path = NodePath("../../InventoryLayer/InventoryPanel")
 
-[node name="GameplayWorld" type="Node3D" parent="."]
+[node name="GameplayWorld" type="Node3D" parent="." unique_id=526722392]
 process_mode = 1
 
-[node name="LevelRoot" type="Node3D" parent="GameplayWorld"]
+[node name="LevelRoot" type="Node3D" parent="GameplayWorld" unique_id=459021745]
 
-[node name="EntityRoot" type="Node3D" parent="GameplayWorld"]
+[node name="EntityRoot" type="Node3D" parent="GameplayWorld" unique_id=913695083]
 
 [node name="Player" parent="GameplayWorld/EntityRoot" unique_id=1702401823 instance=ExtResource("2_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 
-[node name="EffectRoot" type="Node3D" parent="GameplayWorld"]
+[node name="EffectRoot" type="Node3D" parent="GameplayWorld" unique_id=2047660408]
 
-[node name="HUDLayer" type="CanvasLayer" parent="."]
+[node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1101547801]
 process_mode = 1
 layer = 10
 
-[node name="HUD" type="Control" parent="HUDLayer"]
+[node name="HUD" type="Control" parent="HUDLayer" unique_id=724726339]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,11 +52,44 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MenuLayer" type="CanvasLayer" parent="."]
+[node name="InteractHint" type="Label" parent="HUDLayer/HUD" unique_id=238215584]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.75
+anchor_right = 0.5
+anchor_bottom = 0.75
+offset_left = -120.0
+offset_right = 120.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+
+[node name="CrossHair" type="Label" parent="HUDLayer/HUD" unique_id=57971074]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuLayer" type="CanvasLayer" parent="." unique_id=2051949360]
 process_mode = 3
 layer = 20
 
-[node name="MenuUI" type="Control" parent="MenuLayer"]
+[node name="MenuUI" type="Control" parent="MenuLayer" unique_id=1064056880]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -150,46 +187,12 @@ text = "Quit to Menu"
 layout_mode = 2
 text = "Quit Game"
 
-[node name="InteractHint" type="Label" parent="HUDLayer/HUD" unique_id=238215584]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.75
-anchor_right = 0.5
-anchor_bottom = 0.75
-offset_left = -120.0
-offset_right = 120.0
-offset_bottom = 28.0
-grow_horizontal = 2
-grow_vertical = 2
-horizontal_alignment = 1
-
-[node name="CrossHair" type="Label" parent="HUDLayer/HUD" unique_id=57971074]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 8.0
-offset_bottom = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "+"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ExamineLayer" type="CanvasLayer" parent="."]
+[node name="ExamineLayer" type="CanvasLayer" parent="." unique_id=1703398113]
 process_mode = 3
 layer = 30
 
 [node name="ExaminePanel" type="PanelContainer" parent="ExamineLayer" unique_id=1256249959]
 visible = false
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -221,19 +224,22 @@ layout_mode = 2
 size_flags_vertical = 8
 text = "Close"
 
-[node name="InventoryLayer" type="CanvasLayer" parent="."]
+[node name="InventoryLayer" type="CanvasLayer" parent="." unique_id=692671167]
 process_mode = 3
 layer = 40
 
 [node name="InventoryPanel" parent="InventoryLayer" unique_id=1045513635 instance=ExtResource("3_inventory_panel")]
-layout_mode = 0
 anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
 
-[node name="DebugLayer" type="CanvasLayer" parent="."]
+[node name="DebugLayer" type="CanvasLayer" parent="." unique_id=1768937890]
 process_mode = 3
 layer = 100
 
-[node name="DebugUI" type="Control" parent="DebugLayer"]
+[node name="DebugUI" type="Control" parent="DebugLayer" unique_id=977493640]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

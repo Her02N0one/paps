@@ -1,6 +1,6 @@
 extends Marker3D
 
-## Must match the target_spawn_id set on the Gateway that leads here.
+## Leave empty to use this marker when no matching gateway is found.
 @export var spawn_id: String = ""
 
 

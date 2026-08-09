@@ -12,5 +12,5 @@ func _ready() -> void:
 	interact_label = "Examine " + panel_title
 
 
-func interact(_player: Node3D) -> void:
+func activate(_player: Node3D) -> void:
 	opened.emit(self)

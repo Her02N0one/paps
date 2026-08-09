@@ -1,3 +1,4 @@
+class_name InventoryStore
 extends Node
 
 signal item_added(data: ItemData, quantity: int)

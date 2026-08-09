@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dynwq46rrsgh2" path="res://scripts/main.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://b676q0vvc22c8" path="res://icon.png" id="2_1bvp3"]
 [ext_resource type="Theme" uid="uid://3c3sj6oxiw31" path="res://assets/menu_buttons_theme.tres" id="3_lquwl"]
-[ext_resource type="AudioStream" uid="uid://4sntmc68b6rw" path="res://assets/music/paps title theme project.wav" id="4_1bvp3"]
+[ext_resource type="AudioStream" uid="uid://dadbgeoefn1rt" path="res://assets/music/paps title theme trim.wav" id="4_jyhfs"]
 
 [node name="Main" type="Node" unique_id=1642298925]
 script = ExtResource("1_ig7tw")
@@ -67,7 +67,7 @@ layout_mode = 2
 [node name="CanvasModulate" type="CanvasModulate" parent="MainMenu" unique_id=1652959896]
 
 [node name="BGMusic" type="AudioStreamPlayer" parent="MainMenu" unique_id=145868022]
-stream = ExtResource("4_1bvp3")
+stream = ExtResource("4_jyhfs")
 autoplay = true
 
 [node name="ScreenFader" type="AnimationPlayer" parent="MainMenu" unique_id=2044688954]

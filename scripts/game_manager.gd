@@ -94,7 +94,6 @@ func _start_world(initial_map: String) -> void:
 	_fade_out(func(): get_tree().change_scene_to_file("res://scenes/world.tscn"))
 
 
-# Called by world.gd._ready() so the initial map can be loaded and fade in triggered.
 func on_world_ready(world: Node) -> void:
 	_fade_rect.modulate.a = 1.0
 	_fade_state = _FadeState.IDLE
@@ -104,7 +103,6 @@ func on_world_ready(world: Node) -> void:
 		fade_in()
 
 
-# Swap the active map inside the persistent world scene.
 func travel(target_map: String, spawn_id: String, reversed: bool = false) -> void:
 	if _is_transitioning:
 		return
