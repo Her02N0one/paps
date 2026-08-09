@@ -27,12 +27,6 @@ Paps is a 3D game made with [Godot 4](https://godotengine.org/).
 - `scripts/save_manager.gd` controls binary save slots. The save manager also controls metadata, file checks, and file replacement.
 - `scripts/settings_manager.gd` stores user settings in a `ConfigFile`. These settings are not part of a game slot.
 
-## Inventory rules
-
-Each inventory slot has a stable ID. The ID keeps the correct slot selected when an item stack changes.
-
-To add an inventory action, first add a public function to the inventory API. Then, make the inventory panel call that function. Do not let the panel change item data or slot data directly.
-
 ## Save files
 
 The game writes save slots to `user://saves/slot_<n>.save`. Each save file contains these parts:
