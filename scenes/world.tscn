@@ -1,54 +1,46 @@
 [gd_scene format=3 uid="uid://bworldscene01"]
 
-[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://dl7mdn35ogwuu" path="res://scenes/player.tscn" id="2_rwgxs"]
 [ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://scripts/world.gd" id="2_world"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-
-[sub_resource type="Sky" id="Sky_1"]
-sky_material = SubResource("ProceduralSkyMaterial_1")
-
-[sub_resource type="Environment" id="Environment_1"]
-background_mode = 2
-sky = SubResource("Sky_1")
-glow_enabled = true
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+[ext_resource type="PackedScene" uid="uid://btuglcom8u6x" path="res://scenes/inventory_panel.tscn" id="3_inventory_panel"]
+[ext_resource type="Script" path="res://scripts/game_ui_controller.gd" id="4_ui_controller"]
 
 [node name="World" type="Node3D" unique_id=1226249983]
+process_mode = 3
 script = ExtResource("2_world")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=732547338]
-transform = Transform3D(0.96077913, 0.2386964, -0.14116469, 0, 0.5090415, 0.860742, 0.2773147, -0.8269829, 0.48907644, 0, 0, 0)
-shadow_enabled = true
+[node name="Systems" type="Node" parent="."]
+process_mode = 3
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1805485630]
-environment = SubResource("Environment_1")
+[node name="UICoordinator" type="Node" parent="Systems"]
+process_mode = 3
+script = ExtResource("4_ui_controller")
+player_path = NodePath("../../GameplayWorld/EntityRoot/Player")
+hud_path = NodePath("../../HUDLayer/HUD")
+intro_panel_path = NodePath("../../MenuLayer/MenuUI/IntroPanel")
+pause_panel_path = NodePath("../../MenuLayer/MenuUI/PausePanel")
+interact_hint_path = NodePath("../../HUDLayer/HUD/InteractHint")
+crosshair_path = NodePath("../../HUDLayer/HUD/CrossHair")
+examine_panel_path = NodePath("../../ExamineLayer/ExaminePanel")
+inventory_panel_path = NodePath("../../InventoryLayer/InventoryPanel")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=719540987]
+[node name="GameplayWorld" type="Node3D" parent="."]
+process_mode = 1
+
+[node name="LevelRoot" type="Node3D" parent="GameplayWorld"]
+
+[node name="EntityRoot" type="Node3D" parent="GameplayWorld"]
+
+[node name="Player" parent="GameplayWorld/EntityRoot" unique_id=1702401823 instance=ExtResource("2_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-script = ExtResource("1_player")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=1284143627]
-mesh = SubResource("CapsuleMesh_1")
+[node name="EffectRoot" type="Node3D" parent="GameplayWorld"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1771291725]
-shape = SubResource("CapsuleShape3D_1")
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+process_mode = 1
+layer = 10
 
-[node name="Head" type="Node3D" parent="CharacterBody3D" unique_id=1196810352]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4085333, -0.029944897)
-
-[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head" unique_id=453329912]
-
-[node name="MapContainer" type="Node3D" parent="." unique_id=1658902640]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1954532351]
-
-[node name="GameUI" type="Control" parent="CanvasLayer" unique_id=335297209]
+[node name="HUD" type="Control" parent="HUDLayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,7 +48,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="IntroPanel" type="PanelContainer" parent="CanvasLayer/GameUI" unique_id=598135777]
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 20
+
+[node name="MenuUI" type="Control" parent="MenuLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="IntroPanel" type="PanelContainer" parent="MenuLayer/MenuUI" unique_id=598135777]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -70,36 +76,38 @@ offset_bottom = 140.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="IntroMargin" type="MarginContainer" parent="CanvasLayer/GameUI/IntroPanel" unique_id=924144160]
+[node name="IntroMargin" type="MarginContainer" parent="MenuLayer/MenuUI/IntroPanel" unique_id=924144160]
 layout_mode = 2
 theme_override_constants/margin_left = 18
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 18
 theme_override_constants/margin_bottom = 18
 
-[node name="IntroVBox" type="VBoxContainer" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin" unique_id=1916005355]
+[node name="IntroVBox" type="VBoxContainer" parent="MenuLayer/MenuUI/IntroPanel/IntroMargin" unique_id=1916005355]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="IntroTitle" type="Label" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox" unique_id=1495751281]
+[node name="IntroTitle" type="Label" parent="MenuLayer/MenuUI/IntroPanel/IntroMargin/IntroVBox" unique_id=1495751281]
 layout_mode = 2
 text = "Controls"
 horizontal_alignment = 1
 
-[node name="IntroText" type="Label" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox" unique_id=308046148]
+[node name="IntroText" type="Label" parent="MenuLayer/MenuUI/IntroPanel/IntroMargin/IntroVBox" unique_id=308046148]
 layout_mode = 2
 text = "WASD - move
 Mouse - look
+E - Interact
+I - inventory
 Shift - sprint
 Space - jump
 Esc - pause"
 horizontal_alignment = 1
 
-[node name="IntroContinue" type="Button" parent="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox" unique_id=1155511830]
+[node name="IntroContinue" type="Button" parent="MenuLayer/MenuUI/IntroPanel/IntroMargin/IntroVBox" unique_id=1155511830]
 layout_mode = 2
 text = "Start"
 
-[node name="PausePanel" type="PanelContainer" parent="CanvasLayer/GameUI" unique_id=1087712667]
+[node name="PausePanel" type="PanelContainer" parent="MenuLayer/MenuUI" unique_id=1087712667]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -114,35 +122,128 @@ offset_bottom = 160.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PauseMargin" type="MarginContainer" parent="CanvasLayer/GameUI/PausePanel" unique_id=738076884]
+[node name="PauseMargin" type="MarginContainer" parent="MenuLayer/MenuUI/PausePanel" unique_id=738076884]
 layout_mode = 2
 theme_override_constants/margin_left = 18
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 18
 theme_override_constants/margin_bottom = 18
 
-[node name="PauseVBox" type="VBoxContainer" parent="CanvasLayer/GameUI/PausePanel/PauseMargin" unique_id=1866891892]
+[node name="PauseVBox" type="VBoxContainer" parent="MenuLayer/MenuUI/PausePanel/PauseMargin" unique_id=1866891892]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="PauseTitle" type="Label" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=1079843494]
+[node name="PauseTitle" type="Label" parent="MenuLayer/MenuUI/PausePanel/PauseMargin/PauseVBox" unique_id=1079843494]
 layout_mode = 2
 text = "Paused"
 horizontal_alignment = 1
 
-[node name="PauseResume" type="Button" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=62786532]
+[node name="PauseResume" type="Button" parent="MenuLayer/MenuUI/PausePanel/PauseMargin/PauseVBox" unique_id=62786532]
 layout_mode = 2
 text = "Resume"
 
-[node name="PauseQuitMenu" type="Button" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=976870545]
+[node name="PauseQuitMenu" type="Button" parent="MenuLayer/MenuUI/PausePanel/PauseMargin/PauseVBox" unique_id=976870545]
 layout_mode = 2
 text = "Quit to Menu"
 
-[node name="PauseQuitGame" type="Button" parent="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox" unique_id=1274019066]
+[node name="PauseQuitGame" type="Button" parent="MenuLayer/MenuUI/PausePanel/PauseMargin/PauseVBox" unique_id=1274019066]
 layout_mode = 2
 text = "Quit Game"
 
-[connection signal="pressed" from="CanvasLayer/GameUI/IntroPanel/IntroMargin/IntroVBox/IntroContinue" to="." method="_on_intro_continue_pressed"]
-[connection signal="pressed" from="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox/PauseResume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox/PauseQuitMenu" to="." method="_on_quit_to_menu_pressed"]
-[connection signal="pressed" from="CanvasLayer/GameUI/PausePanel/PauseMargin/PauseVBox/PauseQuitGame" to="." method="_on_quit_game_pressed"]
+[node name="InteractHint" type="Label" parent="HUDLayer/HUD" unique_id=238215584]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.75
+anchor_right = 0.5
+anchor_bottom = 0.75
+offset_left = -120.0
+offset_right = 120.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+
+[node name="CrossHair" type="Label" parent="HUDLayer/HUD" unique_id=57971074]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ExamineLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 30
+
+[node name="ExaminePanel" type="PanelContainer" parent="ExamineLayer" unique_id=1256249959]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -180.0
+offset_right = 240.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ExamineLayer/ExaminePanel" unique_id=1016101027]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="ExamineLayer/ExaminePanel/VBox" unique_id=1649777726]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Content" type="Label" parent="ExamineLayer/ExaminePanel/VBox" unique_id=2098781427]
+custom_minimum_size = Vector2(100, 150)
+layout_mode = 2
+size_flags_vertical = 6
+autowrap_mode = 3
+
+[node name="Close" type="Button" parent="ExamineLayer/ExaminePanel/VBox" unique_id=381299965]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Close"
+
+[node name="InventoryLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 40
+
+[node name="InventoryPanel" parent="InventoryLayer" unique_id=1045513635 instance=ExtResource("3_inventory_panel")]
+layout_mode = 0
+anchors_preset = 0
+
+[node name="DebugLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 100
+
+[node name="DebugUI" type="Control" parent="DebugLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[connection signal="pressed" from="MenuLayer/MenuUI/IntroPanel/IntroMargin/IntroVBox/IntroContinue" to="Systems/UICoordinator" method="_on_intro_continue_pressed"]
+[connection signal="pressed" from="MenuLayer/MenuUI/PausePanel/PauseMargin/PauseVBox/PauseResume" to="Systems/UICoordinator" method="_on_resume_pressed"]
+[connection signal="pressed" from="MenuLayer/MenuUI/PausePanel/PauseMargin/PauseVBox/PauseQuitMenu" to="Systems/UICoordinator" method="_on_quit_to_menu_pressed"]
+[connection signal="pressed" from="MenuLayer/MenuUI/PausePanel/PauseMargin/PauseVBox/PauseQuitGame" to="Systems/UICoordinator" method="_on_quit_game_pressed"]
+[connection signal="pressed" from="ExamineLayer/ExaminePanel/VBox/Close" to="Systems/UICoordinator" method="_on_examine_close_pressed"]

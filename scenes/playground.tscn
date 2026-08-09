@@ -3,6 +3,24 @@
 [ext_resource type="Material" uid="uid://b7ihykmxms7ht" path="res://materials/weird_material.tres" id="1_mat"]
 [ext_resource type="Script" uid="uid://q6mg67xu155w" path="res://scripts/spawn_point.gd" id="2_spawn"]
 [ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://scripts/gateway.gd" id="3_gateway"]
+[ext_resource type="Script" uid="uid://bgr41enmgqgrw" path="res://scripts/pickup_item.gd" id="4_pickup"]
+[ext_resource type="Script" uid="uid://cti50m6boyxq4" path="res://scripts/interactable_panel.gd" id="5_panel"]
+[ext_resource type="Resource" path="res://resources/items/mysterious_key.tres" id="6_key"]
+[ext_resource type="Resource" path="res://resources/items/old_coin.tres" id="7_coin"]
+[ext_resource type="Resource" path="res://resources/items/strange_gem.tres" id="8_gem"]
+[ext_resource type="Script" path="res://scripts/base_level.gd" id="9_level"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mrac1"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_mrac1")
+
+[sub_resource type="Environment" id="Environment_2q4k0"]
+background_mode = 2
+sky = SubResource("Sky_1")
+glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
 albedo_color = Color(0.30333334, 0.56, 0.252, 1)
@@ -22,10 +40,37 @@ albedo_color = Color(1, 0.5503334, 0.29000002, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
 albedo_color = Color(0.35000002, 0.5883334, 1, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pickup"]
+albedo_color = Color(1, 0.85, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_pickup"]
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pickup"]
+radius = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_panel"]
+albedo_color = Color(0.55, 0.35, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+size = Vector3(1.5, 1, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
+size = Vector3(1.5, 1, 0.08)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
 size = Vector3(4, 3, 2)
 
 [node name="Playground" type="Node3D" unique_id=978182345]
+script = ExtResource("9_level")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1579395349]
+transform = Transform3D(0.96077913, 0.23869641, -0.1411647, 0, 0.50904155, 0.860742, 0.2773147, -0.826983, 0.48907647, 0, 285.14883, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1502202385]
+environment = SubResource("Environment_2q4k0")
 
 [node name="DefaultSpawn" type="Marker3D" parent="." unique_id=2089636459]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2246733, 0)
@@ -97,6 +142,58 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.611479, 3.25988, -9.573862
 use_collision = true
 size = Vector3(6, 2.1427002, 6)
 material = SubResource("StandardMaterial3D_blue")
+
+[node name="MysteriousKey" type="StaticBody3D" parent="Props" unique_id=1364982528]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3.3, -5)
+script = ExtResource("4_pickup")
+item_data = ExtResource("6_key")
+persistent_id = "mysterious_key"
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/MysteriousKey" unique_id=1579642779]
+material_override = SubResource("StandardMaterial3D_pickup")
+mesh = SubResource("SphereMesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/MysteriousKey" unique_id=2051888301]
+shape = SubResource("SphereShape3D_pickup")
+
+[node name="OldCoin" type="StaticBody3D" parent="Props" unique_id=2124244298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.3, 12)
+script = ExtResource("4_pickup")
+item_data = ExtResource("7_coin")
+persistent_id = "old_coin"
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/OldCoin" unique_id=1676321129]
+material_override = SubResource("StandardMaterial3D_pickup")
+mesh = SubResource("SphereMesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/OldCoin" unique_id=784704944]
+shape = SubResource("SphereShape3D_pickup")
+
+[node name="StrangeGem" type="StaticBody3D" parent="Props" unique_id=1776735549]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.7, 5.5, -19.3)
+script = ExtResource("4_pickup")
+item_data = ExtResource("8_gem")
+persistent_id = "strange_gem"
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/StrangeGem" unique_id=1479149688]
+material_override = SubResource("StandardMaterial3D_pickup")
+mesh = SubResource("SphereMesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/StrangeGem" unique_id=1919313261]
+shape = SubResource("SphereShape3D_pickup")
+
+[node name="NoticeBoard" type="StaticBody3D" parent="Props" unique_id=758349772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.992878, 4.5521836, 47.41507)
+script = ExtResource("5_panel")
+panel_title = "Notice Board"
+content = "If you're reading this you have 157 hours."
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/NoticeBoard" unique_id=757351653]
+material_override = SubResource("StandardMaterial3D_panel")
+mesh = SubResource("BoxMesh_panel")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/NoticeBoard" unique_id=2059450871]
+shape = SubResource("BoxShape3D_panel")
 
 [node name="GatewayNorth" type="Area3D" parent="." unique_id=295775223]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -42)

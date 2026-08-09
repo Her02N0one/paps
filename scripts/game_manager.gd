@@ -3,6 +3,7 @@ extends Node
 var pending_map := ""
 var pending_spawn_id := ""
 var pending_reversed := false
+var _show_intro_on_world_start := false
 var _is_transitioning := false
 var _fade_rect: ColorRect
 
@@ -64,9 +65,29 @@ func fade_in() -> void:
 	_fade_state = _FadeState.IN
 
 
-func start_game(initial_map: String) -> void:
+func start_new_game(initial_map: String) -> void:
 	if _is_transitioning:
 		return
+	if not SaveManager.start_new_game(initial_map):
+		return
+	_show_intro_on_world_start = true
+	_start_world(initial_map)
+
+
+func continue_game() -> void:
+	if _is_transitioning or GameState.current_area.is_empty():
+		return
+	_show_intro_on_world_start = false
+	_start_world(GameState.current_area)
+
+
+func consume_intro_request() -> bool:
+	var show_intro := _show_intro_on_world_start
+	_show_intro_on_world_start = false
+	return show_intro
+
+
+func _start_world(initial_map: String) -> void:
 	_is_transitioning = true
 	pending_map = initial_map
 	pending_spawn_id = ""
@@ -88,6 +109,7 @@ func travel(target_map: String, spawn_id: String, reversed: bool = false) -> voi
 	if _is_transitioning:
 		return
 	_is_transitioning = true
+	SaveManager.save_game()
 	pending_map = target_map
 	pending_spawn_id = spawn_id
 	pending_reversed = reversed
@@ -101,14 +123,25 @@ func quit_to_menu() -> void:
 	if _is_transitioning:
 		return
 	_is_transitioning = true
+	SaveManager.save_game()
 	pending_map = ""
 	pending_spawn_id = ""
 	_fade_out(func(): get_tree().change_scene_to_file("res://scenes/main.tscn"))
 
 
 func _execute_swap(world: Node) -> void:
-	world.swap_map(pending_map, pending_spawn_id, pending_reversed)
+	if world == null or not world.has_method("swap_map"):
+		push_error("Cannot load level because the world coordinator is unavailable.")
+		_clear_pending_travel()
+		fade_in()
+		return
+	if not world.swap_map(pending_map, pending_spawn_id, pending_reversed):
+		push_error("World rejected level scene: %s" % pending_map)
+	_clear_pending_travel()
+	fade_in()
+
+
+func _clear_pending_travel() -> void:
 	pending_map = ""
 	pending_spawn_id = ""
 	pending_reversed = false
-	fade_in()
