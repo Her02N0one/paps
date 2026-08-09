@@ -28,7 +28,7 @@ func _build_trigger_visual() -> void:
 	inst.mesh = mesh
 	inst.position = col.position
 	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.3, 0.75, 1.0, 0.15)
+	mat.albedo_color = Color(0.2, 0.2, 0.35, 0.80)
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	inst.material_override = mat

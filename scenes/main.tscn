@@ -59,7 +59,7 @@ text = "Options"
 
 [node name="Version" type="Label" parent="MainMenu/MainMenuGUI/HBoxContainer/VBoxContainer" unique_id=909107195]
 layout_mode = 2
-text = "ver -1000000"
+text = "ver -999999"
 
 [node name="CenterContainer" type="CenterContainer" parent="MainMenu/MainMenuGUI/HBoxContainer" unique_id=2086129198]
 layout_mode = 2

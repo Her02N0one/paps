@@ -120,7 +120,7 @@ size = Vector3(10, 3, 10)
 material = SubResource("StandardMaterial3D_red")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="Props" unique_id=1203707170]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.611359, 4.18853, -22.889032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6267395, 4.18853, -22.863073)
 use_collision = true
 size = Vector3(19, 4, 16)
 material = SubResource("StandardMaterial3D_purple")
@@ -145,7 +145,7 @@ size = Vector3(6, 2.1427002, 6)
 material = SubResource("StandardMaterial3D_blue")
 
 [node name="MysteriousKey" type="StaticBody3D" parent="Props" unique_id=1364982528]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3.3, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.348454, 11.768281, -7.5755634)
 script = ExtResource("4_pickup")
 item_data = ExtResource("6_key")
 persistent_id = "mysterious_key"
@@ -161,7 +161,7 @@ mesh = SubResource("SphereMesh_pickup")
 shape = SubResource("SphereShape3D_pickup")
 
 [node name="OldCoin" type="StaticBody3D" parent="Props" unique_id=2124244298]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.3, 12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.249477, 6.195006, -22.68526)
 script = ExtResource("4_pickup")
 item_data = ExtResource("7_coin")
 persistent_id = "old_coin"
@@ -177,7 +177,7 @@ mesh = SubResource("SphereMesh_pickup")
 shape = SubResource("SphereShape3D_pickup")
 
 [node name="StrangeGem" type="StaticBody3D" parent="Props" unique_id=1776735549]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.7, 5.5, -19.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.71871, 2.8040252, 46.889847)
 script = ExtResource("4_pickup")
 item_data = ExtResource("8_gem")
 persistent_id = "strange_gem"
@@ -186,6 +186,7 @@ persistent_id = "strange_gem"
 script = ExtResource("10_interactable")
 
 [node name="Mesh" type="MeshInstance3D" parent="Props/StrangeGem" unique_id=1479149688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1664927, 0)
 material_override = SubResource("StandardMaterial3D_pickup")
 mesh = SubResource("SphereMesh_pickup")
 
@@ -208,7 +209,7 @@ mesh = SubResource("BoxMesh_panel")
 shape = SubResource("BoxShape3D_panel")
 
 [node name="GatewayNorth" type="Area3D" parent="." unique_id=295775223]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.370594, 4, -14.124538)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.370594, 4.024372, -14.657814)
 collision_layer = 0
 script = ExtResource("3_gateway")
 gateway_id = "pg_north"

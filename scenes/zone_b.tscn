@@ -71,12 +71,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 script = ExtResource("1_spawn")
 
 [node name="GatewaySouth" type="Area3D" parent="." unique_id=1465008683]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 27.55683)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0137224, 27.55683)
 collision_layer = 0
 script = ExtResource("2_gateway")
 gateway_id = "zb_south"
 target_scene = "res://scenes/playground.tscn"
 target_gateway_id = "pg_north"
+metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GatewaySouth" unique_id=720286345]
 shape = SubResource("BoxShape3D_gw")
@@ -137,7 +138,7 @@ mesh = SubResource("SphereMesh_pickup")
 shape = SubResource("SphereShape3D_pickup")
 
 [node name="SandCrystal" type="StaticBody3D" parent="Node" unique_id=229503927]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.6101367, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.359957, 2.6101367, -18.378565)
 script = ExtResource("3_pickup")
 item_data = ExtResource("6_crystal")
 persistent_id = "sand_crystal"
