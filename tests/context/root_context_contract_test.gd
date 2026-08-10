@@ -1,6 +1,6 @@
 extends SceneTree
 
-const ROOT_CONTEXT_SCENE := preload("res://scenes/root_context.tscn")
+const ROOT_CONTEXT_SCENE := preload("res://scenes/main/root_context.tscn")
 const CONTEXT_MAIN_MENU := &"main_menu"
 const CONTEXT_WORLD := &"world"
 
@@ -32,7 +32,6 @@ func _run() -> void:
 		and world_context_node != null
 		and world_context_node is World
 		and world_context_node.get_node_or_null("Systems/WorldUIController") != null
-		and world_context_node.get_node_or_null("Systems/RunContext") != null
 		and world_context_node.get_node_or_null("GameplayWorld/LevelRoot") != null
 		and world_context_node.get_node_or_null("GameplayWorld/EntityRoot") != null
 		and world_context_node.get_node_or_null("GameplayWorld/EffectRoot") != null

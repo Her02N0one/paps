@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://bd4qp8q813n2f" path="res://scripts/features/ui/game_ui_controller.gd" id="1_ui_controller"]
 [ext_resource type="Script" uid="uid://de0s0bg2esg2y" path="res://scripts/features/ui/modal_state_controller.gd" id="2_modal_state"]
-[ext_resource type="PackedScene" path="res://scenes/run/run_context.tscn" id="3_run_context"]
 
 [node name="Systems" type="Node"]
 process_mode = 3
@@ -19,5 +18,3 @@ intro_panel_path = NodePath("../../WorldUI/MenuLayer/MenuUI/IntroPanel")
 pause_panel_path = NodePath("../../WorldUI/MenuLayer/MenuUI/PausePanel")
 interact_hint_path = NodePath("../../WorldUI/HUDLayer/HUD/InteractHint")
 crosshair_path = NodePath("../../WorldUI/HUDLayer/HUD/CrossHair")
-
-[node name="RunContext" parent="." instance=ExtResource("3_run_context")]

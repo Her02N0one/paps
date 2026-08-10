@@ -3,14 +3,13 @@
 class_name World
 extends Node3D
 
-const PICKUP_ITEM_SCENE := preload("res://scenes/pickup_item.tscn")
-const PLAYER_SCENE := preload("res://scenes/player.tscn")
+const PICKUP_ITEM_SCENE := preload("res://scenes/world/entities/pickup_item.tscn")
+const PLAYER_SCENE := preload("res://scenes/world/entities/player.tscn")
 const PICKUP_LIFECYCLE_COMPONENT := preload("res://scripts/features/world/pickup_lifecycle_component.gd")
 const PERSON_LIFECYCLE_COMPONENT := preload("res://scripts/features/world/person_lifecycle_component.gd")
 const SCENE_SPAWN_SERVICE := preload("res://scripts/features/world/scene_spawn_service.gd")
 
 @onready var world_ui_controller: GameUIController = $Systems/WorldUIController
-@onready var run_context: RunContext = $Systems/RunContext
 @onready var level_root: Node3D = $GameplayWorld/LevelRoot
 @onready var entity_root: Node3D = $GameplayWorld/EntityRoot
 @onready var effect_root: Node3D = $GameplayWorld/EffectRoot
@@ -44,8 +43,6 @@ func _ready() -> void:
 	_ensure_runtime_player()
 	world_ui_controller.quit_to_menu_requested.connect(_on_quit_to_menu_requested)
 	world_ui_controller.quit_game_requested.connect(_on_quit_game_requested)
-	run_context.map_swap_requested.connect(_on_map_swap_requested)
-	run_context.gateway_travel_requested.connect(_on_gateway_travel_requested_from_run)
 	inventory.item_dropped.connect(_on_item_dropped)
 	# Player may already exist in scene or be spawned above.
 	if player:
@@ -83,8 +80,8 @@ func _ensure_runtime_player() -> void:
 
 
 func swap_map(scene_path: String, spawn_id: String, reversed: bool = false) -> bool:
-	# Direct world swaps (GameManager -> World) execute immediately and report back to RunContext.
-	return _execute_map_swap(scene_path, spawn_id, reversed)
+	# World owns map mutation directly in the simplified runtime path.
+	return _perform_map_swap(scene_path, spawn_id, reversed)
 
 
 func _perform_map_swap(scene_path: String, spawn_id: String, reversed: bool = false) -> bool:
@@ -105,17 +102,6 @@ func _perform_map_swap(scene_path: String, spawn_id: String, reversed: bool = fa
 	_connect_static_pickups.call_deferred()
 	_save_manager.save_game()
 	return true
-
-
-func _on_map_swap_requested(scene_path: String, spawn_id: String, reversed: bool) -> void:
-	# RunContext-driven swaps use the same execution/report path as direct swaps.
-	_execute_map_swap(scene_path, spawn_id, reversed)
-
-
-func _execute_map_swap(scene_path: String, spawn_id: String, reversed: bool) -> bool:
-	var success := _perform_map_swap(scene_path, spawn_id, reversed)
-	run_context.report_map_swap_result(success, scene_path if success else "")
-	return success
 
 
 func _apply_spawn(target_id: String, reversed: bool = false) -> void:
@@ -168,10 +154,6 @@ func _on_pickup_collected(persistent_id: String, dynamic_id: String) -> void:
 
 
 func _on_gateway_travel_requested(target_scene: String, gateway_id: String, reversed: bool) -> void:
-	run_context.request_gateway_travel(target_scene, gateway_id, reversed)
-
-
-func _on_gateway_travel_requested_from_run(target_scene: String, gateway_id: String, reversed: bool) -> void:
 	_game_manager.travel(target_scene, gateway_id, reversed)
 
 
