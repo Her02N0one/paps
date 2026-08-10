@@ -18,3 +18,9 @@ build/
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Local editor settings
+.vscode/
+
+# Local planning/context docs
+local_docs/
