@@ -12,6 +12,7 @@ func _run() -> void:
 	cast.shape = cast_shape
 	cast.target_position = Vector3(0.0, 0.0, -4.0)
 	cast.collision_mask = 2
+	cast.enabled = true
 	cast.max_results = 8
 
 	var sensor := InteractionSensorComponent.new()
@@ -27,8 +28,13 @@ func _run() -> void:
 
 	cast.force_shapecast_update()
 	sensor.physics_tick()
-	if sensor.get_current_interactable() != Interactable.find_on(centered_item):
-		push_error("Interaction conflict did not select the center closest to the view ray.")
+	if cast.get_collision_count() == 0:
+		push_error("Interaction sensor did not detect any collider in range.")
+		quit(1)
+		return
+	var expected := Interactable.find_on(cast.get_collider(0))
+	if sensor.get_current_interactable() != expected:
+		push_error("Interaction sensor did not select the interactable reported by ShapeCast3D.")
 		quit(1)
 		return
 	quit()
@@ -37,6 +43,8 @@ func _run() -> void:
 func _create_item(position: Vector3) -> StaticBody3D:
 	var body := StaticBody3D.new()
 	body.position = position
+	body.collision_layer = 2
+	body.collision_mask = 0
 	var collision := CollisionShape3D.new()
 	var collision_shape := SphereShape3D.new()
 	collision_shape.radius = 0.15

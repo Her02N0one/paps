@@ -9,11 +9,14 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	SaveManager._loading = true
-	GameState.reset(PLAYGROUND)
-	GameState.collect_static_pickup(PLAYGROUND, "mysterious_key")
-	GameState.enter_area(ZONE_B)
-	GameState.enter_area(PLAYGROUND)
+	var game_state := GameState.new()
+	root.add_child(game_state)
+	await process_frame  # allow _ready() to fire so "game_state" group is populated
+
+	game_state.reset(PLAYGROUND)
+	game_state.collect_static_pickup(PLAYGROUND, "mysterious_key")
+	game_state.enter_area(ZONE_B)
+	game_state.enter_area(PLAYGROUND)
 
 	var level := (load(PLAYGROUND) as PackedScene).instantiate()
 	root.add_child(level)
