@@ -1,8 +1,8 @@
 extends SceneTree
 
-const PERSON_SCENE := preload("res://scenes/person.tscn")
-const PLAYGROUND_SCENE := "res://scenes/playground.tscn"
-const OTHER_SCENE := "res://scenes/zone_b.tscn"
+const PERSON_SCENE := preload("res://scenes/world/entities/person.tscn")
+const PLAYGROUND_SCENE := "res://scenes/levels/playground.tscn"
+const OTHER_SCENE := "res://scenes/levels/zone_b.tscn"
 
 
 func _initialize() -> void:
@@ -16,7 +16,7 @@ func _run() -> void:
 
 	game_state.enter_area(PLAYGROUND_SCENE)
 	var saved_transform := Transform3D(Basis.IDENTITY, Vector3(3.0, 4.0, 5.0))
-	game_state.update_person_record(&"unit_person", PLAYGROUND_SCENE, saved_transform, "res://scenes/person.tscn")
+	game_state.update_person_record(&"unit_person", PLAYGROUND_SCENE, saved_transform, "res://scenes/world/entities/person.tscn")
 
 	var primary := PERSON_SCENE.instantiate() as PersonActor
 	primary.person_id = &"unit_person"
@@ -70,7 +70,7 @@ func _run() -> void:
 
 	var clone_rejected := not is_instance_valid(clone) or clone.is_queued_for_deletion()
 
-	game_state.update_person_record(&"other_area_person", OTHER_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://scenes/person.tscn")
+	game_state.update_person_record(&"other_area_person", OTHER_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://scenes/world/entities/person.tscn")
 	var wrong_area_person := PERSON_SCENE.instantiate() as PersonActor
 	wrong_area_person.person_id = &"other_area_person"
 	wrong_area_person.name = "WrongAreaPerson"
@@ -106,7 +106,7 @@ func _run() -> void:
 		and (teleported_record.get("transform") as Transform3D).origin.is_equal_approx(Vector3(7.0, 8.0, 9.0))
 	)
 
-	game_state.update_person_record(&"disabled_person", PLAYGROUND_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://scenes/person.tscn")
+	game_state.update_person_record(&"disabled_person", PLAYGROUND_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://scenes/world/entities/person.tscn")
 	game_state.set_person_enabled(&"disabled_person", false)
 	var disabled_person := PERSON_SCENE.instantiate() as PersonActor
 	disabled_person.person_id = &"disabled_person"

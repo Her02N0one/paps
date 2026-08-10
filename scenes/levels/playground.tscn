@@ -10,8 +10,8 @@
 [ext_resource type="Resource" path="res://resources/items/strange_gem.tres" id="8_gem"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://scripts/features/world/base_level.gd" id="9_level"]
 [ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://scripts/features/interaction/interactable.gd" id="10_interactable"]
-[ext_resource type="PackedScene" uid="uid://n4bsjte24x61" path="res://scenes/person.tscn" id="11_osidk"]
-[ext_resource type="PackedScene" uid="uid://ca77wwyefwgdl" path="res://scenes/scrapping_station.tscn" id="11_scrapping_station"]
+[ext_resource type="PackedScene" uid="uid://n4bsjte24x61" path="res://scenes/world/entities/person.tscn" id="11_osidk"]
+[ext_resource type="PackedScene" uid="uid://ca77wwyefwgdl" path="res://scenes/world/entities/scrapping_station.tscn" id="11_scrapping_station"]
 [ext_resource type="Resource" uid="uid://bff2fxiejbsnt" path="res://resources/people/jerry_person_definition.tres" id="14_jerry_profile"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mrac1"]
@@ -233,7 +233,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.370594, 4.024372, -14.65781
 collision_layer = 0
 script = ExtResource("3_gateway")
 gateway_id = "pg_north"
-target_scene = "res://scenes/zone_b.tscn"
+target_scene = "res://scenes/levels/zone_b.tscn"
 target_gateway_id = "zb_south"
 metadata/_edit_group_ = true
 
@@ -279,3 +279,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 
 [node name="WalkEnd" type="Marker3D" parent="GatewayZoo" unique_id=1499291422]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+

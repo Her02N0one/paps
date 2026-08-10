@@ -1,7 +1,7 @@
 extends SceneTree
 
 const PICKUP_COMPONENT_SCRIPT := preload("res://scripts/features/world/pickup_lifecycle_component.gd")
-const PICKUP_SCENE := preload("res://scenes/pickup_item.tscn")
+const PICKUP_SCENE := preload("res://scenes/world/entities/pickup_item.tscn")
 const SCRAP := preload("res://resources/items/scrap.tres")
 
 

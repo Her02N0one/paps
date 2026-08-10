@@ -33,7 +33,7 @@ script = ExtResource("3_zoo")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, 15)
 collision_layer = 0
 script = ExtResource("4_gateway")
-target_scene = "res://scenes/playground.tscn"
+target_scene = "res://scenes/levels/playground.tscn"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayBack" unique_id=2073124522]
 shape = SubResource("BoxShape3D_gw")

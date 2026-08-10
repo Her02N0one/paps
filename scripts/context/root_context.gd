@@ -8,8 +8,8 @@ signal context_switched(previous_context: StringName, next_context: StringName, 
 const CONTEXT_NONE := &""
 const CONTEXT_MAIN_MENU := &"main_menu"
 const CONTEXT_WORLD := &"world"
-const MAIN_MENU_CONTEXT_SCENE_PATH := "res://scenes/main_menu.tscn"
-const WORLD_SCENE_PATH := "res://scenes/world.tscn"
+const MAIN_MENU_CONTEXT_SCENE_PATH := "res://scenes/main/main_menu.tscn"
+const WORLD_SCENE_PATH := "res://scenes/world/world_root.tscn"
 const MAIN_MENU_CONTEXT_SCENE := preload(MAIN_MENU_CONTEXT_SCENE_PATH)
 const WORLD_SCENE := preload(WORLD_SCENE_PATH)
 

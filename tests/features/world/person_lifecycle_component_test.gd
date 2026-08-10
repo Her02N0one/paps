@@ -21,7 +21,7 @@ func _run() -> void:
 	var area_path := "res://scenes/docs/gym.tscn"
 	var person_id := StringName("jerry")
 	game_state.enter_area(area_path)
-	game_state.register_person_if_missing(person_id, area_path, "res://scenes/person.tscn", Transform3D(Basis.IDENTITY, Vector3(1.0, 0.0, 2.0)), {})
+	game_state.register_person_if_missing(person_id, area_path, "res://scenes/world/entities/person.tscn", Transform3D(Basis.IDENTITY, Vector3(1.0, 0.0, 2.0)), {})
 
 	var component = PERSON_COMPONENT_SCRIPT.new()
 	component.configure(game_state, entity_root)

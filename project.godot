@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="paps"
-run/main_scene="res://scenes/root_context.tscn"
+run/main_scene="res://scenes/main/root_context.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="uid://b676q0vvc22c8"
 

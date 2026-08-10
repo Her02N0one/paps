@@ -1,4 +1,4 @@
-﻿[gd_scene format=3 uid="uid://c0onebmap001"]
+[gd_scene format=3 uid="uid://c0onebmap001"]
 
 [ext_resource type="Script" uid="uid://q6mg67xu155w" path="res://scripts/features/world/spawn_point.gd" id="1_spawn"]
 [ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://scripts/features/world/gateway.gd" id="2_gateway"]
@@ -72,7 +72,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0137224, 27.55683)
 collision_layer = 0
 script = ExtResource("2_gateway")
 gateway_id = "zb_south"
-target_scene = "res://scenes/playground.tscn"
+target_scene = "res://scenes/levels/playground.tscn"
 target_gateway_id = "pg_north"
 metadata/_edit_group_ = true
 

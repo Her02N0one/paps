@@ -5,7 +5,7 @@ class_name ItemZooGenerator
 extends Node3D
 
 const _ITEMS_DIR    := "res://resources/items/"
-const _PICKUP_SCENE := preload("res://scenes/pickup_item.tscn")
+const _PICKUP_SCENE := preload("res://scenes/world/entities/pickup_item.tscn")
 const _COLS         := 4
 const _COL_SPACING  := 4.0
 const _ROW_SPACING  := 5.0

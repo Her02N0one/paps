@@ -3,7 +3,7 @@
 class_name MainMenuContext
 extends Node
 
-@export_file("*.tscn") var new_game_start_scene := "res://scenes/playground.tscn"
+@export_file("*.tscn") var new_game_start_scene := "res://scenes/levels/playground.tscn"
 
 var _game_manager: GameManager
 var _save_manager: SaveManager
