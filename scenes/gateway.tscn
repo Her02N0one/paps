@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://gateway_prefab1"]
 
-[ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://scripts/gateway.gd" id="1_gw"]
+[ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://scripts/features/world/gateway.gd" id="1_gw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(4, 3, 2)

@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[node name="GameplayWorld" type="Node3D"]
+process_mode = 1
+
+[node name="LevelRoot" type="Node3D" parent="."]
+
+[node name="EntityRoot" type="Node3D" parent="."]
+
+[node name="EffectRoot" type="Node3D" parent="."]

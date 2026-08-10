@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://n4bsjte24x61"]
+
+[ext_resource type="Script" uid="uid://crvy8vvanywpj" path="res://scripts/features/world/person_actor.gd" id="1_person_actor"]
+[ext_resource type="Script" uid="uid://bv0s6iewye1h5" path="res://scripts/features/interaction/interactable_person.gd" id="2_interactable_person"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5tb7a"]
+
+[node name="Person" type="CharacterBody3D" unique_id=670110833]
+script = ExtResource("1_person_actor")
+
+[node name="InteractablePerson" type="Node" parent="." unique_id=1400264129]
+script = ExtResource("2_interactable_person")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1720300800]
+transform = Transform3D(0.9999238, -0.008726201, 0.0087265335, 0.0087265335, 0.9999619, -1.9919792e-11, -0.008726201, 7.6152406e-05, 0.9999619, 0, 0, 0)
+billboard = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1815213071]
+shape = SubResource("CapsuleShape3D_5tb7a")

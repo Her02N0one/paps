@@ -1,47 +1,57 @@
-[gd_scene load_steps=7 format=3 uid="uid://dl7mdn35ogwuu"]
+[gd_scene format=3 uid="uid://dl7mdn35ogwuu"]
 
-[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://scripts/player.gd" id="1_3vyb7"]
-[ext_resource type="Script" uid="uid://dq5sv5g34pc6u" path="res://scripts/actor_movement_component.gd" id="2_movement"]
-[ext_resource type="Script" uid="uid://mj5dua6omd51" path="res://scripts/interaction_sensor_component.gd" id="3_interaction"]
-[ext_resource type="Script" path="res://scripts/inventory_holder_component.gd" id="4_inventory_holder"]
+[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://scripts/features/actor/player.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://dq5sv5g34pc6u" path="res://scripts/features/actor/actor_movement_component.gd" id="2_movement"]
+[ext_resource type="Script" uid="uid://mj5dua6omd51" path="res://scripts/features/interaction/interaction_sensor_component.gd" id="3_interaction"]
+[ext_resource type="Script" uid="uid://gnc245sle255" path="res://scripts/features/inventory/inventory_holder_component.gd" id="4_inventory_holder"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
-height = 1.6350098
+radius = 0.3132
+height = 1.74
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.3132
+height = 1.74
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interaction"]
 radius = 0.55
 
 [node name="Player" type="CharacterBody3D" unique_id=1702401823]
 script = ExtResource("1_3vyb7")
+standing_height_meters = 1.74
+eye_height_ratio = 0.93
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=739217968]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18249512, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
 mesh = SubResource("CapsuleMesh_1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=32480970]
+position = Vector3(0, 0.87, 0)
 shape = SubResource("CapsuleShape3D_1")
 
 [node name="ActorMovementComponent" type="Node" parent="." unique_id=2056943079 node_paths=PackedStringArray("body", "facing_reference")]
 script = ExtResource("2_movement")
 body = NodePath("..")
 facing_reference = NodePath("../Head")
+walk_speed = 4.8
+sprint_speed = 7.2
+jump_velocity = 4.1
+gravity = 10.8
 
 [node name="InteractionSensorComponent" type="Node" parent="." unique_id=874721218 node_paths=PackedStringArray("shape_cast")]
 script = ExtResource("3_interaction")
 shape_cast = NodePath("../Head/Camera3D/InteractCast")
 
-[node name="InventoryHolderComponent" type="Node" parent="."]
+[node name="InventoryHolderComponent" type="Node" parent="." unique_id=1659816402]
 script = ExtResource("4_inventory_holder")
 
 [node name="Head" type="Node3D" parent="." unique_id=1655268507]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4085333, -0.029944897)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6182, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=273559578]
 
 [node name="InteractCast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1733465904]
 shape = SubResource("SphereShape3D_interaction")
 target_position = Vector3(0, 0, -4)
-collision_mask = 2
 max_results = 8
+collision_mask = 2

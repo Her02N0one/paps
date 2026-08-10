@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://btuglcom8u6x"]
 
-[ext_resource type="Script" uid="uid://briy4haxjbg4w" path="res://scripts/inventory_panel.gd" id="1_panel"]
-[ext_resource type="PackedScene" path="res://scenes/inventory_slot.tscn" id="2_slot"]
+[ext_resource type="Script" uid="uid://briy4haxjbg4w" path="res://scripts/features/inventory/inventory_panel.gd" id="1_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/widgets/inventory_slot.tscn" id="2_slot"]
 
 [node name="InventoryPanel" type="PanelContainer" unique_id=556432279]
 process_mode = 3
