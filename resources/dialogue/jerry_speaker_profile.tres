@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueSpeakerProfile" format=3 uid="uid://ll46vpcn3n10"]
+
+[ext_resource type="Texture2D" uid="uid://e0jt11ce0x5u" path="res://assets/texture/jerrytorso.png" id="1_hqklv"]
+[ext_resource type="Script" uid="uid://20p6xacrl8mk" path="res://scripts/features/dialogue/dialogue_speaker_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+display_name = "Jerry"
+portrait = ExtResource("1_hqklv")
+name_color = Color(0.95, 0.78, 0.3, 1)
+characters_per_second = 38.0
+comma_pause = 0.1
+sentence_pause = 0.24
+minimum_pitch = 0.92
+maximum_pitch = 1.08
+blip_volume_db = -8.0

@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://bjqf7gcwexsuh"]
+
+[ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://scripts/features/world/base_level.gd" id="1_level"]
+[ext_resource type="Script" uid="uid://q6mg67xu155w" path="res://scripts/features/world/spawn_point.gd" id="2_spawn"]
+[ext_resource type="Script" uid="uid://dwvjdjmpibipu" path="res://scripts/tools/item_zoo_generator.gd" id="3_zoo"]
+[ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://scripts/features/world/gateway.gd" id="4_gateway"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_floor"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
+size = Vector3(4, 3, 2)
+
+[node name="ItemZooLevel" type="Node3D" unique_id=1512443737]
+script = ExtResource("1_level")
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=357245795]
+
+[node name="FloorCollision" type="CollisionShape3D" parent="Floor" unique_id=87148811]
+shape = SubResource("WorldBoundaryShape3D_floor")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1069312763]
+transform = Transform3D(0.70710677, -0.5000378, 0.49996218, 0, 0.7070533, 0.70716023, -0.70710677, -0.5000378, 0.49996218, 0, 10, 0)
+shadow_enabled = true
+
+[node name="DefaultSpawn" type="Marker3D" parent="." unique_id=1451614017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 8)
+script = ExtResource("2_spawn")
+
+[node name="ItemZooDisplay" type="Node3D" parent="." unique_id=1247062328]
+script = ExtResource("3_zoo")
+
+[node name="GatewayBack" type="Area3D" parent="." unique_id=10328143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, 15)
+collision_layer = 0
+script = ExtResource("4_gateway")
+target_scene = "res://scenes/playground.tscn"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayBack" unique_id=2073124522]
+shape = SubResource("BoxShape3D_gw")
+
+[node name="WalkStart" type="Marker3D" parent="GatewayBack" unique_id=762501228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="WalkEnd" type="Marker3D" parent="GatewayBack" unique_id=399561529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)

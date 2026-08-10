@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" format=3]
 
-[ext_resource type="Script" path="res://scripts/item_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/features/inventory/item_data.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
@@ -9,3 +9,4 @@ display_name = "Strange Gem"
 description = "It pulses faintly."
 stackable = false
 max_stack = 1
+scrap_yield = 6
