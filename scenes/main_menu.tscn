@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://cjwsanjagb6mv"]
+
+[ext_resource type="Script" uid="uid://dynwq46rrsgh2" path="res://scripts/context/main_menu.gd" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://b676q0vvc22c8" path="res://icon.png" id="2_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://bkmjxukatsfjr" path="res://assets/puppydoggy.jpg" id="2_tbgi4"]
+[ext_resource type="Theme" uid="uid://3c3sj6oxiw31" path="res://assets/menu_buttons_theme.tres" id="3_lquwl"]
+[ext_resource type="AudioStream" uid="uid://dadbgeoefn1rt" path="res://assets/music/paps title theme trim.wav" id="4_jyhfs"]
+
+[node name="MainMenuContext" type="Node" unique_id=1642298925]
+script = ExtResource("1_ig7tw")
+
+[node name="MainMenu" type="Control" parent="." unique_id=1220209142]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainMenu" unique_id=1275947258]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_tbgi4")
+
+[node name="MainMenuGUI" type="MarginContainer" parent="MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainMenu/MainMenuGUI"]
+layout_mode = 2
+alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/MainMenuGUI/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 35
+
+[node name="Logo" type="TextureRect" parent="MainMenu/MainMenuGUI/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_1bvp3")
+expand_mode = 5
+
+[node name="MenuOptions" type="VBoxContainer" parent="MainMenu/MainMenuGUI/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_lquwl")
+theme_override_constants/separation = 30
+
+[node name="Continue" type="Button" parent="MainMenu/MainMenuGUI/HBoxContainer/VBoxContainer/MenuOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Continue"
+
+[node name="NewGame" type="Button" parent="MainMenu/MainMenuGUI/HBoxContainer/VBoxContainer/MenuOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New Game"
+
+[node name="Options" type="Button" parent="MainMenu/MainMenuGUI/HBoxContainer/VBoxContainer/MenuOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Options"
+
+[node name="Version" type="Label" parent="MainMenu/MainMenuGUI/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "ver -999999"
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenu/MainMenuGUI/HBoxContainer"]
+layout_mode = 2
+
+[node name="CanvasModulate" type="CanvasModulate" parent="MainMenu" unique_id=1652959896]
+
+[node name="BGMusic" type="AudioStreamPlayer" parent="MainMenu" unique_id=145868022]
+stream = ExtResource("4_jyhfs")
+autoplay = true
+
+[node name="ScreenFader" type="AnimationPlayer" parent="MainMenu" unique_id=2044688954]
+root_node = NodePath("../..")
+

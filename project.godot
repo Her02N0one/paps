@@ -11,17 +11,9 @@ config_version=5
 [application]
 
 config/name="paps"
-run/main_scene="uid://cjwsanjagb6mv"
+run/main_scene="res://scenes/root_context.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="uid://b676q0vvc22c8"
-
-[autoload]
-
-GameManager="*res://scripts/game_manager.gd"
-Inventory="*res://scripts/inventory.gd"
-GameState="*res://scripts/game_state.gd"
-SaveManager="*res://scripts/save_manager.gd"
-SettingsManager="*res://scripts/settings_manager.gd"
 
 [display]
 
