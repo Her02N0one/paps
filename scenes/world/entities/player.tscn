@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://dq5sv5g34pc6u" path="res://scripts/features/actor/actor_movement_component.gd" id="2_movement"]
 [ext_resource type="Script" uid="uid://mj5dua6omd51" path="res://scripts/features/interaction/interaction_sensor_component.gd" id="3_interaction"]
 [ext_resource type="Script" uid="uid://gnc245sle255" path="res://scripts/features/inventory/inventory_holder_component.gd" id="4_inventory_holder"]
+[ext_resource type="Script" uid="uid://ctnk0b4ekr7ii" path="res://scripts/features/combat/player_weapon_component.gd" id="5_weapon_component"]
+[ext_resource type="Resource" uid="uid://c0vxwgmj46qjs" path="res://resources/weapons/starter_blaster.tres" id="6_weapon_def"]
+[ext_resource type="Script" uid="uid://3h4acjalio4p" path="res://scripts/features/actor/actor_health_component.gd" id="7_health"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
 radius = 0.3132
@@ -24,9 +27,10 @@ eye_height_ratio = 0.93
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=739217968]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
 mesh = SubResource("CapsuleMesh_1")
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=32480970]
-position = Vector3(0, 0.87, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
 shape = SubResource("CapsuleShape3D_1")
 
 [node name="ActorMovementComponent" type="Node" parent="." unique_id=2056943079 node_paths=PackedStringArray("body", "facing_reference")]
@@ -45,10 +49,26 @@ shape_cast = NodePath("../Head/Camera3D/InteractCast")
 [node name="InventoryHolderComponent" type="Node" parent="." unique_id=1659816402]
 script = ExtResource("4_inventory_holder")
 
+[node name="PlayerWeaponComponent" type="Node" parent="." unique_id=2026212031 node_paths=PackedStringArray("body", "camera", "sway_pivot")]
+script = ExtResource("5_weapon_component")
+body = NodePath("..")
+camera = NodePath("../Head/Camera3D")
+sway_pivot = NodePath("../Head/Camera3D/WeaponSwayPivot")
+weapon_definition = ExtResource("6_weapon_def")
+
+[node name="ActorHealthComponent" type="Node" parent="." unique_id=101155948]
+script = ExtResource("7_health")
+
+[node name="CameraAnchor" type="Marker3D" parent="." unique_id=1843297417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6182, 0)
+
 [node name="Head" type="Node3D" parent="." unique_id=1655268507]
+top_level = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6182, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=273559578]
+
+[node name="WeaponSwayPivot" type="Node3D" parent="Head/Camera3D" unique_id=810220347]
 
 [node name="InteractCast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1733465904]
 shape = SubResource("SphereShape3D_interaction")

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" format=3 uid="uid://c0vxwgmj46qjs"]
+
+[ext_resource type="Script" uid="uid://2klpd1mhmcmv" path="res://scripts/features/combat/weapon_definition.gd" id="1_weapon_def"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/weapons/starter_blaster_view.tscn" id="2_weapon_view"]
+
+[resource]
+script = ExtResource("1_weapon_def")
+view_scene = ExtResource("2_weapon_view")
+reserve_ammo = 72
+shots_per_second = 6.2
+reload_seconds = 1.0
+damage_per_shot = 20.0
+range_meters = 90.0
+spread_degrees = 0.55
+recoil_push_meters = 0.055
+recoil_pitch_degrees = 0.75
+fov_kick_degrees = 0.7

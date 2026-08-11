@@ -13,6 +13,8 @@ Paps is a 3D game made with [Godot 4](https://godotengine.org/).
 | Sprint | Shift |
 | Interact | E |
 | Inventory | I |
+| Fire Weapon | F |
+| Reload Weapon | R |
 | Pause | Escape |
 
 ## Project ontology
@@ -66,3 +68,7 @@ The game writes user settings to `user://settings.cfg`. Display, audio, input, a
 ## Dialogue
 
 Dialogue is authored as Resource graphs with nodes, choices, conditions, effects, speaker profiles, voice lines, and typewriter flavor.
+
+## NPC editing quickstart
+
+If NPC behavior feels hard to trace, use `docs/NPC_EDITING_QUICKSTART.md` for a practical edit map (prefab vs definition vs components vs level placement).

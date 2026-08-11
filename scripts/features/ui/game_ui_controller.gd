@@ -31,6 +31,9 @@ var intro_panel: Control
 var pause_panel: Control
 var interact_hint: Label
 var crosshair: Label
+var combat_feedback: Label
+var health_readout: Label
+var damage_flash: ColorRect
 # Falls back to sibling path so existing scenes work before the export is wired.
 @onready var modal_state: ModalStateController = get_node_or_null("%ModalStateController") \
 	if has_node("%ModalStateController") else get_node("../ModalStateController") as ModalStateController
@@ -40,6 +43,15 @@ var _focused_interactable: Interactable
 var _interaction_router: Variant = UI_INTERACTION_ROUTER_SCRIPT.new()
 var _dialogue_state: Node
 var _pending_inventory: InventoryStore
+var _player_weapon_component: PlayerWeaponComponent
+var _player_health_component: ActorHealthComponent
+var _combat_feedback_timer := 0.0
+var _damage_flash_alpha := 0.0
+
+const COMBAT_FEEDBACK_DURATION := 0.22
+const DAMAGE_FLASH_DECAY_PER_SEC := 2.4
+const CROSSHAIR_DEFAULT_COLOR := Color(1, 1, 1, 1)
+const CROSSHAIR_HIT_COLOR := Color(1, 0.38, 0.2, 1)
 
 
 func _ready() -> void:
@@ -55,7 +67,23 @@ func _ready() -> void:
 	_configure_modal_panels()
 	_register_interaction_handlers()
 	_connect_ui_signals()
+	_bind_player_combat_signals()
+	_update_health_readout()
 	_warn_if_player_missing.call_deferred()
+
+
+func _process(delta: float) -> void:
+	if _combat_feedback_timer > 0.0:
+		_combat_feedback_timer = maxf(_combat_feedback_timer - delta, 0.0)
+		if _combat_feedback_timer <= 0.0:
+			if combat_feedback:
+				combat_feedback.visible = false
+			if crosshair:
+				crosshair.modulate = CROSSHAIR_DEFAULT_COLOR
+	if _damage_flash_alpha > 0.0:
+		_damage_flash_alpha = maxf(_damage_flash_alpha - DAMAGE_FLASH_DECAY_PER_SEC * delta, 0.0)
+	if damage_flash:
+		damage_flash.modulate.a = _damage_flash_alpha
 
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -155,6 +183,8 @@ func set_runtime_player(runtime_player: Player) -> void:
 		player.interactable_changed.disconnect(_on_interactable_changed)
 	player = runtime_player
 	_connect_player_signal()
+	_bind_player_combat_signals()
+	_update_health_readout()
 	var inventory_panel := modal_state.get_registered_panel(MODAL_INVENTORY) as InventoryPanel
 	# Inventory actions should always target the current runtime player.
 	if inventory_panel:
@@ -251,6 +281,9 @@ func _resolve_scene_nodes() -> void:
 	pause_panel = _resolve_node(pause_panel_path, "PausePanel") as Control
 	interact_hint = _resolve_node(interact_hint_path, "InteractHint") as Label
 	crosshair = _resolve_node(crosshair_path, "CrossHair") as Label
+	combat_feedback = _resolve_node(NodePath(), "CombatFeedback") as Label
+	health_readout = _resolve_node(NodePath(), "HealthReadout") as Label
+	damage_flash = _resolve_node(NodePath(), "DamageFlash") as ColorRect
 
 
 func _resolve_node(path: NodePath, fallback_name: String) -> Node:
@@ -278,6 +311,76 @@ func _connect_player_signal() -> void:
 	# Idempotent connect protects against duplicate callbacks during rebinding.
 	if player and not player.interactable_changed.is_connected(_on_interactable_changed):
 		player.interactable_changed.connect(_on_interactable_changed)
+
+
+func _bind_player_combat_signals() -> void:
+	var next_weapon := player.get_node_or_null("PlayerWeaponComponent") as PlayerWeaponComponent if player else null
+	if _player_weapon_component != null and _player_weapon_component != next_weapon:
+		if _player_weapon_component.weapon_fired.is_connected(_on_player_weapon_fired):
+			_player_weapon_component.weapon_fired.disconnect(_on_player_weapon_fired)
+		if _player_weapon_component.dry_fired.is_connected(_on_player_weapon_dry_fired):
+			_player_weapon_component.dry_fired.disconnect(_on_player_weapon_dry_fired)
+	_player_weapon_component = next_weapon
+	if _player_weapon_component != null:
+		if not _player_weapon_component.weapon_fired.is_connected(_on_player_weapon_fired):
+			_player_weapon_component.weapon_fired.connect(_on_player_weapon_fired)
+		if not _player_weapon_component.dry_fired.is_connected(_on_player_weapon_dry_fired):
+			_player_weapon_component.dry_fired.connect(_on_player_weapon_dry_fired)
+
+	var next_health := player.get_node_or_null("ActorHealthComponent") as ActorHealthComponent if player else null
+	if _player_health_component != null and _player_health_component != next_health:
+		if _player_health_component.damaged.is_connected(_on_player_damaged):
+			_player_health_component.damaged.disconnect(_on_player_damaged)
+		if _player_health_component.health_changed.is_connected(_on_player_health_changed):
+			_player_health_component.health_changed.disconnect(_on_player_health_changed)
+	_player_health_component = next_health
+	if _player_health_component != null:
+		if not _player_health_component.damaged.is_connected(_on_player_damaged):
+			_player_health_component.damaged.connect(_on_player_damaged)
+		if not _player_health_component.health_changed.is_connected(_on_player_health_changed):
+			_player_health_component.health_changed.connect(_on_player_health_changed)
+
+
+func _show_combat_feedback(text: String, color: Color) -> void:
+	if combat_feedback:
+		combat_feedback.text = text
+		combat_feedback.modulate = color
+		combat_feedback.visible = true
+	if crosshair:
+		crosshair.modulate = color
+	_combat_feedback_timer = COMBAT_FEEDBACK_DURATION
+
+
+func _on_player_weapon_fired(hit: bool, _hit_position: Vector3, _ammo_in_mag: int, _ammo_reserve: int) -> void:
+	if hit:
+		_show_combat_feedback("HIT", CROSSHAIR_HIT_COLOR)
+	else:
+		_show_combat_feedback("MISS", CROSSHAIR_DEFAULT_COLOR)
+
+
+func _on_player_weapon_dry_fired(_ammo_in_mag: int, _ammo_reserve: int) -> void:
+	_show_combat_feedback("EMPTY", Color(1, 0.85, 0.4, 1))
+
+
+func _on_player_damaged(amount: float, _source: Node) -> void:
+	if amount <= 0.0:
+		return
+	_damage_flash_alpha = minf(0.75, _damage_flash_alpha + 0.3)
+	_show_combat_feedback("-%d HP" % int(round(amount)), Color(1, 0.45, 0.4, 1))
+
+
+func _on_player_health_changed(current_health: float, max_health: float) -> void:
+	if health_readout:
+		health_readout.text = "HP %d/%d" % [int(round(current_health)), int(round(max_health))]
+
+
+func _update_health_readout() -> void:
+	if health_readout == null:
+		return
+	if _player_health_component == null:
+		health_readout.text = "HP --"
+		return
+	_on_player_health_changed(_player_health_component.current_health, _player_health_component.max_health)
 
 
 func _warn_if_player_missing() -> void:
