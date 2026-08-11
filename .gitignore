@@ -15,6 +15,9 @@ build/
 # Import metadata is generated; omit if we want reproducible imports
 # *.import
 
+# Godot temporary scene save artifacts
+*.tscn*.tmp
+
 # OS junk
 .DS_Store
 Thumbs.db
