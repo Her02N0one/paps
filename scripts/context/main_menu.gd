@@ -4,6 +4,7 @@ class_name MainMenuContext
 extends Node
 
 @export_file("*.tscn") var new_game_start_scene := "res://scenes/levels/playground.tscn"
+@export var new_game_spawn_marker_id: StringName
 
 var _game_manager: GameManager
 var _save_manager: SaveManager
@@ -67,7 +68,7 @@ func _on_new_game_pressed() -> void:
 	if new_game_start_scene.is_empty() or not ResourceLoader.exists(new_game_start_scene, "PackedScene"):
 		push_error("Cannot start a new game: new_game_start_scene is invalid.")
 		return
-	_game_manager.start_new_game(new_game_start_scene)
+	_game_manager.start_new_game(new_game_start_scene, new_game_spawn_marker_id)
 
 
 func _on_continue_pressed() -> void:

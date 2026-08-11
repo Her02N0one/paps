@@ -11,6 +11,10 @@ func get_default_spawn() -> Node3D:
 	return find_default_spawn_point()
 
 
+func get_new_game_spawn(marker_id: StringName = &"") -> Node3D:
+	return find_new_game_spawn_point(marker_id)
+
+
 func find_gateway_by_id(gateway_id: String) -> Node3D:
 	if gateway_id.is_empty():
 		return null
@@ -27,3 +31,15 @@ func find_default_spawn_point() -> Node3D:
 		if node is Node3D and node.is_in_group("spawn_points") and node.get("spawn_id") == "":
 			return node as Node3D
 	return null
+
+
+func find_new_game_spawn_point(marker_id: StringName = &"") -> Node3D:
+	if not marker_id.is_empty():
+		for node in find_children("*", "Node", true, false):
+			if node is Node3D and node.is_in_group("new_game_spawn_points") and node.get("marker_id") == marker_id:
+				return node as Node3D
+	for node in find_children("*", "Node", true, false):
+		if node is Node3D and node.is_in_group("new_game_spawn_points"):
+			return node as Node3D
+	# Keep older maps functional until they get an explicit new-game marker.
+	return find_default_spawn_point()

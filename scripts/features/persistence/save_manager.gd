@@ -62,6 +62,9 @@ func has_save(slot: int = DEFAULT_SLOT) -> bool:
 
 func save_game(slot: int = _active_slot) -> bool:
 	_save_queued = false
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and world.has_method("capture_player_transform_for_save"):
+		world.call("capture_player_transform_for_save")
 	# Current area is the minimum viable runtime marker for a resumable save.
 	if _game_state == null or _game_state.current_area.is_empty():
 		save_completed.emit(slot, false)

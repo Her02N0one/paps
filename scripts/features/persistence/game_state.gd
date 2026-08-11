@@ -8,6 +8,7 @@ signal person_record_changed(person_id: StringName, record: Dictionary)
 const PERSON_RECORD_VERSION := 1
 
 var current_area := ""
+var player_transform := Transform3D(Basis.IDENTITY, Vector3.ZERO)
 var global_flags: Dictionary = {}
 var people: Dictionary = {}
 
@@ -29,6 +30,7 @@ func get_inventory() -> InventoryStore:
 
 func reset(initial_area: String) -> void:
 	current_area = initial_area
+	player_transform = Transform3D(Basis.IDENTITY, Vector3.ZERO)
 	global_flags.clear()
 	people.clear()
 	_areas.clear()
@@ -42,6 +44,7 @@ func reset(initial_area: String) -> void:
 func to_global_save_data() -> Dictionary:
 	return {
 		"current_area": current_area,
+		"player_transform": player_transform,
 		"next_dynamic_id": _next_dynamic_id,
 		"flags": global_flags.duplicate(true),
 		"people": people.duplicate(true),
@@ -55,6 +58,7 @@ func to_scene_save_data() -> Dictionary:
 
 func load_save_data(global_data: Dictionary, scene_data: Dictionary) -> bool:
 	var area_path := str(global_data.get("current_area", ""))
+	var saved_player_transform = global_data.get("player_transform", Transform3D(Basis.IDENTITY, Vector3.ZERO))
 	var inventory_data = global_data.get("inventory", [])
 	var flags = global_data.get("flags", {})
 	var saved_people = global_data.get("people", {})
@@ -62,6 +66,7 @@ func load_save_data(global_data: Dictionary, scene_data: Dictionary) -> bool:
 	if area_path.is_empty() or not inventory_data is Array or not flags is Dictionary or not saved_people is Dictionary:
 		return false
 	current_area = area_path
+	player_transform = saved_player_transform if typeof(saved_player_transform) == TYPE_TRANSFORM3D else Transform3D(Basis.IDENTITY, Vector3.ZERO)
 	_next_dynamic_id = maxi(int(global_data.get("next_dynamic_id", 1)), 1)
 	global_flags = flags.duplicate(true)
 	people.clear()
@@ -265,6 +270,14 @@ func set_global_flag(flag: StringName, value: Variant) -> void:
 
 func get_global_flag(flag: StringName, default_value: Variant = null) -> Variant:
 	return global_flags.get(flag, default_value)
+
+
+func set_player_transform(transform: Transform3D) -> void:
+	player_transform = transform
+
+
+func get_player_transform() -> Transform3D:
+	return player_transform
 
 
 func enter_area(area_path: String) -> void:

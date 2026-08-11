@@ -8,6 +8,8 @@
 [ext_resource type="Resource" path="res://resources/items/sand_crystal.tres" id="6_crystal"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://scripts/features/world/base_level.gd" id="7_level"]
 [ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://scripts/features/interaction/interactable.gd" id="8_interactable"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/person_hostile.tscn" id="9_person_hostile"]
+[ext_resource type="Script" path="res://scripts/features/world/new_game_spawn_point.gd" id="10_new_game_spawn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n5nep"]
 sky_top_color = Color(0.497509, 0.45307195, 0.1831828, 1)
@@ -66,6 +68,11 @@ environment = SubResource("Environment_q50nw")
 [node name="DefaultSpawn" type="Marker3D" parent="." unique_id=1050175730]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 script = ExtResource("1_spawn")
+
+[node name="NewGameSpawn" type="Marker3D" parent="." unique_id=1771105273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+script = ExtResource("10_new_game_spawn")
+marker_id = &"zone_b_main"
 
 [node name="GatewaySouth" type="Area3D" parent="." unique_id=1465008683]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0137224, 27.55683)
@@ -173,3 +180,11 @@ shape = SubResource("BoxShape3D_panel")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node/StaticBody3D" unique_id=849828534]
 transform = Transform3D(0.78831524, 0.60394293, -0.49386403, -0.5288582, 0.30774492, -1.3318717, -0.37337112, 0.8392298, 0.84380096, 22.209772, 0, -20.83525)
 mesh = SubResource("TorusMesh_g4v7s")
+
+[node name="DesertShooterA" parent="Node" instance=ExtResource("9_person_hostile")]
+transform = Transform3D(0.9773961, 0, 0.21142279, 0, 1, 0, -0.21142279, 0, 0.9773961, 10, 2.5, -10)
+person_id = &"zone_b_shooter_a"
+
+[node name="DesertShooterB" parent="Node" instance=ExtResource("9_person_hostile")]
+transform = Transform3D(0.9304176, 0, -0.36650124, 0, 1, 0, 0.36650124, 0, 0.9304176, -12, 2.5, -8)
+person_id = &"zone_b_shooter_b"

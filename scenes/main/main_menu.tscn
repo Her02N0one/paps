@@ -8,6 +8,7 @@
 
 [node name="MainMenuContext" type="Node" unique_id=1642298925]
 script = ExtResource("1_ig7tw")
+new_game_spawn_marker_id = &"playground_main"
 
 [node name="MainMenu" type="Control" parent="." unique_id=1220209142]
 layout_mode = 3

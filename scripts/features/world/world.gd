@@ -3,6 +3,9 @@
 class_name World
 extends Node3D
 
+const NEW_GAME_ENTRY_ID := "__new_game_entry__"
+const NEW_GAME_ENTRY_PREFIX := "__new_game_entry__:"
+
 const PICKUP_ITEM_SCENE := preload("res://scenes/world/entities/pickup_item.tscn")
 const PLAYER_SCENE := preload("res://scenes/world/entities/player.tscn")
 const PICKUP_LIFECYCLE_COMPONENT := preload("res://scripts/features/world/pickup_lifecycle_component.gd")
@@ -95,16 +98,16 @@ func _perform_map_swap(scene_path: String, spawn_id: String, reversed: bool = fa
 	# Pickups read current_area in _ready(), so destination state must be active before attachment.
 	_game_state.enter_area(scene_path)
 	level_root.add_child(_current_level)
-	# Deferred ordering keeps level _ready() complete before spawn/restore passes execute.
-	_apply_spawn.call_deferred(spawn_id, reversed)
+	# Place the player immediately to avoid one-frame spawn/teleport artifacts.
+	_apply_entry_placement(scene_path, spawn_id, reversed)
 	_restore_dynamic_pickups.call_deferred(scene_path)
 	_restore_persisted_people.call_deferred(scene_path)
 	_connect_static_pickups.call_deferred()
-	_save_manager.save_game()
+	_save_manager.save_game.call_deferred()
 	return true
 
 
-func _apply_spawn(target_id: String, reversed: bool = false) -> void:
+func _apply_entry_placement(scene_path: String, target_id: String, reversed: bool = false) -> void:
 	# Deferred callbacks may run after level has already been replaced/freed.
 	if not is_instance_valid(_current_level):
 		return
@@ -112,28 +115,38 @@ func _apply_spawn(target_id: String, reversed: bool = false) -> void:
 	if player_movement == null:
 		push_error("The active player has no ActorMovementComponent and cannot be placed.")
 		return
-	var target: Node3D = _current_level.find_gateway_by_id(target_id)
-	var is_gateway := target != null
-	# Unknown explicit gateway falls back to map default spawn marker.
-	if target == null:
-		# Unknown gateway IDs safely fall back to the level's default spawn marker.
-		target = _current_level.find_default_spawn_point()
-	# Missing fallback spawn is treated as a level authoring error.
-	if target == null:
-		push_error("Level '%s' has no valid spawn for '%s'." % [_current_level.name, target_id])
+	if target_id == NEW_GAME_ENTRY_ID or target_id.begins_with(NEW_GAME_ENTRY_PREFIX):
+		var new_game_marker_id := _extract_new_game_marker_id(target_id)
+		var new_game_spawn := _current_level.find_new_game_spawn_point(new_game_marker_id)
+		if new_game_spawn == null:
+			push_error("Level '%s' is missing a NewGameSpawnPoint marker%s." % [_current_level.name, (" for '%s'" % new_game_marker_id) if not new_game_marker_id.is_empty() else ""])
+			return
+		player_movement.place_at_spawn(new_game_spawn)
+		if new_game_spawn.has_method("apply_debug_player_start"):
+			new_game_spawn.call("apply_debug_player_start", player)
+		_capture_player_transform_for_save_internal(scene_path)
 		return
-	# Gateways support walk-in animation from WalkStart->WalkEnd anchors.
-	if is_gateway:
-		var walk_start: Node3D = target.get_node_or_null("WalkStart")
-		var walk_end: Node3D = target.get_node_or_null("WalkEnd")
-		# If lane markers are missing, place directly at gateway node.
+	if not target_id.is_empty():
+		var gateway_target := _current_level.find_gateway_by_id(target_id)
+		if gateway_target == null:
+			push_error("Level '%s' has no gateway matching '%s'." % [_current_level.name, target_id])
+			return
+		var walk_start: Node3D = gateway_target.get_node_or_null("WalkStart")
+		var walk_end: Node3D = gateway_target.get_node_or_null("WalkEnd")
 		if walk_start and walk_end:
 			player_movement.place_at_gateway(walk_start, walk_end, reversed)
 		else:
-			player_movement.place_at_spawn(target)
-	else:
-		# Default spawn path places directly at the resolved marker.
-		player_movement.place_at_spawn(target)
+			player_movement.place_at_spawn(gateway_target)
+		_capture_player_transform_for_save_internal(scene_path)
+		return
+	if _try_place_player_from_saved_transform(scene_path):
+		return
+	var fallback_spawn := _current_level.find_default_spawn_point()
+	if fallback_spawn:
+		player_movement.place_at_spawn(fallback_spawn)
+		_capture_player_transform_for_save_internal(scene_path)
+		return
+	push_error("Level '%s' has no valid entry placement." % _current_level.name)
 
 
 func _on_quit_to_menu_requested() -> void:
@@ -186,3 +199,35 @@ func _clear_transient_world() -> void:
 
 func _spawn_dynamic_pickup(data: ItemData, quantity: int, dynamic_id: String, spawn_transform: Transform3D) -> void:
 	_pickup_lifecycle.spawn_dynamic_pickup(data, quantity, dynamic_id, spawn_transform)
+
+
+func capture_player_transform_for_save() -> void:
+	_capture_player_transform_for_save_internal(_game_state.current_area if _game_state else "")
+
+
+func _capture_player_transform_for_save_internal(area_path: String) -> void:
+	if _game_state == null or player == null:
+		return
+	if area_path != _game_state.current_area:
+		return
+	_game_state.set_player_transform(player.global_transform)
+
+
+func _try_place_player_from_saved_transform(scene_path: String) -> bool:
+	if _game_state == null or player == null:
+		return false
+	if _game_state.current_area != scene_path:
+		return false
+	var saved := _game_state.get_player_transform()
+	if typeof(saved) != TYPE_TRANSFORM3D:
+		return false
+	player.global_transform = saved
+	player_movement._reset_facing_reference()
+	return true
+
+
+func _extract_new_game_marker_id(target_id: String) -> StringName:
+	if not target_id.begins_with(NEW_GAME_ENTRY_PREFIX):
+		return &""
+	var marker_id := target_id.substr(NEW_GAME_ENTRY_PREFIX.length())
+	return StringName(marker_id)

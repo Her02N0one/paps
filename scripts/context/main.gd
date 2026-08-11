@@ -36,7 +36,7 @@ func _ready() -> void:
 
 
 func _on_new_game_pressed() -> void:
-	_game_manager.start_new_game("res://scenes/levels/playground.tscn")
+	_game_manager.start_new_game("res://scenes/levels/playground.tscn", &"")
 
 
 func _on_continue_pressed() -> void:

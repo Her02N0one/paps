@@ -3,6 +3,8 @@
 class_name GameManager
 extends Node
 
+const NEW_GAME_ENTRY_ID := "__new_game_entry__"
+
 var pending_target_map := ""
 var pending_target_spawn_id := ""
 var pending_entry_reversed := false
@@ -14,6 +16,7 @@ enum _FadeState { IDLE, OUT, IN }
 var _fade_state := _FadeState.IDLE
 var _fade_elapsed := 0.0
 const _FADE_DURATION := 0.5
+const NEW_GAME_ENTRY_PREFIX := "__new_game_entry__:"
 var _pending_fade_completion_action: Callable
 var _save_manager: SaveManager
 var _game_state: GameState
@@ -90,7 +93,7 @@ func fade_in() -> void:
 	_fade_state = _FadeState.IN
 
 
-func start_new_game(initial_map: String) -> void:
+func start_new_game(initial_map: String, new_game_spawn_marker_id: StringName = &"") -> void:
 	# Ignore re-entrant requests while another transition is mid-flight.
 	if _is_transitioning or _save_manager == null:
 		return
@@ -102,7 +105,7 @@ func start_new_game(initial_map: String) -> void:
 	if not _save_manager.start_new_game(initial_map):
 		return
 	_show_intro_on_world_start = true
-	_start_world(initial_map)
+	_start_world(initial_map, new_game_spawn_marker_id)
 
 
 func continue_game() -> void:
@@ -123,13 +126,19 @@ func consume_intro_request() -> bool:
 	return show_intro
 
 
-func _start_world(initial_map: String) -> void:
+func _start_world(initial_map: String, new_game_spawn_marker_id: StringName = &"") -> void:
 	# Capture intent before fade-out so callbacks consume one stable snapshot.
 	_is_transitioning = true
 	pending_target_map = initial_map
-	pending_target_spawn_id = ""
+	pending_target_spawn_id = _build_new_game_entry_token(new_game_spawn_marker_id) if _show_intro_on_world_start else ""
 	pending_entry_reversed = false
 	_fade_out(func(): _show_world_context_fn.call(pending_target_map, pending_target_spawn_id, pending_entry_reversed))
+
+
+func _build_new_game_entry_token(marker_id: StringName) -> String:
+	if marker_id.is_empty():
+		return NEW_GAME_ENTRY_ID
+	return NEW_GAME_ENTRY_PREFIX + String(marker_id)
 
 
 func on_world_ready(world: World) -> void:

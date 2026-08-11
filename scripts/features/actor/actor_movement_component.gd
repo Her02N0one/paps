@@ -63,6 +63,7 @@ func place_at_gateway(walk_start: Node3D, walk_end: Node3D, reversed: bool) -> v
 	# Return trips enter from the opposite side, so `reversed` flips which way the actor faces.
 	body.rotation.y = atan2(walk_direction.x, walk_direction.z) if reversed else atan2(-walk_direction.x, -walk_direction.z)
 	_reset_facing_reference()
+	_sync_body_look_if_supported()
 	start_gateway_walk(walk_direction, walk_start.global_position.distance_to(walk_end.global_position))
 
 
@@ -72,6 +73,7 @@ func place_at_spawn(spawn: Node3D) -> void:
 	body.global_position = spawn.global_position
 	body.rotation.y = spawn.rotation.y
 	_reset_facing_reference()
+	_sync_body_look_if_supported()
 
 
 func request_gateway_travel(target_scene: String, target_gateway_id: String, reversed: bool) -> void:
@@ -165,3 +167,10 @@ func _apply_air_velocity(speed: float, delta: float) -> void:
 func _reset_facing_reference() -> void:
 	if facing_reference != null and facing_reference != body:
 		facing_reference.rotation.y = 0.0
+
+
+func _sync_body_look_if_supported() -> void:
+	if body != null and body.has_method("sync_look_to_body_yaw"):
+		body.call("sync_look_to_body_yaw")
+	if body != null and body.has_method("sync_camera_to_body_anchor"):
+		body.call("sync_camera_to_body_anchor")
