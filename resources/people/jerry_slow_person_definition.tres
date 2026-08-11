@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PersonDefinition" format=3 uid="uid://bff2fxiejbsnt"]
+[gd_resource type="Resource" script_class="PersonDefinition" format=3]
 
 [ext_resource type="Script" uid="uid://dkityklnyh64g" path="res://scripts/features/world/person_definition.gd" id="1_definition"]
 [ext_resource type="Resource" uid="uid://1lcf4l7xxbd0" path="res://resources/dialogue/example_person.tres" id="2_conversation"]
@@ -6,9 +6,16 @@
 
 [resource]
 script = ExtResource("1_definition")
-speaker_name = "Jerry"
+speaker_name = "Jerry Slow"
+opening_text = "I follow you slowly for movement testing."
 conversation = ExtResource("2_conversation")
 portrait_texture = ExtResource("3_sprite")
-sprite_tint = Color(1, 1, 1, 1)
+sprite_tint = Color(1, 0.86, 0.62, 1)
 height_meters = 1.6764
-move_speed_meters_per_sec = 1.5
+max_health = 100.0
+base_damage = 10.0
+attack_range_meters = 2.0
+attack_cooldown_seconds = 1.0
+move_speed_meters_per_sec = 0.9
+combat_engage_distance_meters = 8.0
+combat_disengage_distance_meters = 12.0

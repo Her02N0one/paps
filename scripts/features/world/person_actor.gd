@@ -5,12 +5,26 @@ extends CharacterBody3D
 
 const PERSON_DEFINITION_SCRIPT := preload("res://scripts/features/world/person_definition.gd")
 const PERSON_ACTOR_EDITOR_ADAPTER_SCRIPT := preload("res://scripts/tools/person_actor_editor_adapter.gd")
+const ACTOR_HEALTH_COMPONENT_SCRIPT := preload("res://scripts/features/actor/actor_health_component.gd")
+const ACTOR_COMBAT_COMPONENT_SCRIPT := preload("res://scripts/features/actor/actor_combat_component.gd")
+const ACTOR_COMBAT_AI_COMPONENT_SCRIPT := preload("res://scripts/features/actor/actor_combat_ai_component.gd")
+const ACTOR_MOVEMENT_AI_COMPONENT_SCRIPT := preload("res://scripts/features/actor/actor_movement_ai_component.gd")
 
 signal person_profile_changed(actor: PersonActor)
 signal person_transform_changed(actor: PersonActor)
 
 @export var person_id: StringName
 @export var persist_transform := true
+@export var auto_target_runtime_player := false
+@export_group("Capability Expectations")
+@export var require_interactable_person := false
+@export var require_movement_ai := false
+@export var require_health_component := false
+@export var require_combat_component := false
+@export var require_combat_ai_component := false
+@export_group("Weapon Placeholder")
+@export var weapon_recoil_distance_meters := 0.06
+@export var weapon_recoil_return_speed := 0.9
 var _definition: Resource
 @export var definition: Resource:
 	get:
@@ -27,6 +41,35 @@ var _resolved_person_id: StringName
 var _is_registered_active := false
 var _persist_on_exit := false
 var _editor_adapter: Variant
+
+# Component node names are a scene contract used by role prefabs.
+# If a node is renamed in a .tscn, these lookups will return null and that capability is disabled.
+@onready var interactable_person_component = get_node_or_null("InteractablePerson")
+@onready var movement_ai_component = get_node_or_null("ActorMovementAIComponent")
+@onready var health_component = get_node_or_null("ActorHealthComponent")
+@onready var combat_component = get_node_or_null("ActorCombatComponent")
+@onready var combat_ai_component = get_node_or_null("ActorCombatAIComponent")
+@onready var weapon_placeholder_visual = get_node_or_null("WeaponHold/PlaceholderWeapon") as Node3D
+
+var _weapon_placeholder_rest_position := Vector3.ZERO
+var _weapon_recoil_offset := 0.0
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings := PackedStringArray()
+	if require_interactable_person and interactable_person_component == null:
+		warnings.append("PersonActor expects child node 'InteractablePerson' but it is missing.")
+	if require_movement_ai and movement_ai_component == null:
+		warnings.append("PersonActor expects child node 'ActorMovementAIComponent' but it is missing.")
+	if require_health_component and health_component == null:
+		warnings.append("PersonActor expects child node 'ActorHealthComponent' but it is missing.")
+	if require_combat_component and combat_component == null:
+		warnings.append("PersonActor expects child node 'ActorCombatComponent' but it is missing.")
+	if require_combat_ai_component and combat_ai_component == null:
+		warnings.append("PersonActor expects child node 'ActorCombatAIComponent' but it is missing.")
+	if auto_target_runtime_player and movement_ai_component == null:
+		warnings.append("auto_target_runtime_player is enabled but 'ActorMovementAIComponent' is missing.")
+	return warnings
 
 
 func _connect_definition_changed(resource: Resource) -> void:
@@ -56,8 +99,14 @@ func _on_definition_changed() -> void:
 
 func _ready() -> void:
 	_connect_definition_changed(_definition)
+	_wire_phase_one_components()
+	_bind_weapon_placeholder_feedback()
+	_validate_capability_contract_runtime()
+	if weapon_placeholder_visual != null:
+		_weapon_placeholder_rest_position = weapon_placeholder_visual.position
 	if Engine.is_editor_hint():
 		# Editor mode uses polling adapter; runtime persistence wiring is skipped.
+		update_configuration_warnings()
 		_editor_adapter = PERSON_ACTOR_EDITOR_ADAPTER_SCRIPT.new()
 		_editor_adapter.call("enter_editor_mode", self)
 		return
@@ -79,6 +128,9 @@ func _ready() -> void:
 		queue_free()
 		return
 	_is_registered_active = true
+	if auto_target_runtime_player:
+		# Delay target discovery until world/player nodes are fully attached.
+		_try_bind_runtime_player_target.call_deferred()
 
 	_game_state.register_person_if_missing(
 		_resolved_person_id,
@@ -105,6 +157,22 @@ func _ready() -> void:
 		# Persisted transform wins for continuity when actor re-enters an area.
 		global_transform = saved_transform
 	_persist_on_exit = true
+
+
+func _physics_process(delta: float) -> void:
+	# In editor @tool mode, non-tool child scripts are placeholder instances.
+	if Engine.is_editor_hint():
+		return
+	_update_weapon_placeholder_feedback(delta)
+	# Phase 1 keeps behavior light: component logic runs only when those nodes are present.
+	if movement_ai_component is ActorMovementAIComponent:
+		_apply_movement_ai_velocity(delta)
+	var combat := combat_component as ActorCombatComponent
+	if combat != null:
+		combat.physics_tick(delta)
+	var combat_ai := combat_ai_component as ActorCombatAIComponent
+	if combat_ai != null:
+		combat_ai.physics_tick(delta)
 
 
 func _process(_delta: float) -> void:
@@ -142,6 +210,80 @@ func get_person_definition() -> PersonDefinition:
 func refresh_person_profile() -> void:
 	_apply_definition_to_children()
 	person_profile_changed.emit(self)
+
+
+func get_movement_ai_component() -> Node:
+	return movement_ai_component
+
+
+func get_health_component() -> Node:
+	return health_component
+
+
+func get_combat_component() -> Node:
+	return combat_component
+
+
+func get_combat_ai_component() -> Node:
+	return combat_ai_component
+
+
+func set_person_target(target: Node3D) -> void:
+	var movement_ai := movement_ai_component as ActorMovementAIComponent
+	if movement_ai != null:
+		movement_ai.set_target(target)
+	var combat := combat_component as ActorCombatComponent
+	if combat != null:
+		combat.set_target(target)
+	var combat_ai := combat_ai_component as ActorCombatAIComponent
+	if combat_ai != null:
+		combat_ai.set_target(target)
+
+
+func clear_person_target() -> void:
+	set_person_target(null)
+
+
+func apply_damage(amount: float, source: Node = null) -> float:
+	var health := health_component as ActorHealthComponent
+	if health != null:
+		return health.apply_damage(amount, source)
+	return 0.0
+
+
+func heal_person(amount: float) -> float:
+	var health := health_component as ActorHealthComponent
+	if health != null:
+		return health.heal(amount)
+	return 0.0
+
+
+func can_attack_target(target: Node3D) -> bool:
+	var combat := combat_component as ActorCombatComponent
+	if combat != null:
+		return combat.can_attack(target)
+	return false
+
+
+func try_attack_target(target: Node3D) -> bool:
+	var combat := combat_component as ActorCombatComponent
+	if combat != null:
+		return combat.try_attack(target)
+	return false
+
+
+func is_person_alive() -> bool:
+	var health := health_component as ActorHealthComponent
+	if health != null:
+		return health.is_alive()
+	return true
+
+
+func get_person_health_fraction() -> float:
+	var health := health_component as ActorHealthComponent
+	if health != null:
+		return health.get_health_fraction()
+	return 1.0
 
 
 func set_person_speaker_name(value: String) -> void:
@@ -331,6 +473,92 @@ func _apply_profile_from_record(record: Dictionary) -> void:
 	_apply_definition_to_children()
 
 
+func _wire_phase_one_components() -> void:
+	var health := health_component as ActorHealthComponent
+	if health != null and definition is PersonDefinition:
+		health.set_max_health(definition.max_health, true)
+	var combat := combat_component as ActorCombatComponent
+	if combat != null and health != null:
+		combat.bind_health_component(health)
+	var combat_ai := combat_ai_component as ActorCombatAIComponent
+	if combat_ai != null:
+		combat_ai.bind_components(combat, health)
+
+
+func _bind_weapon_placeholder_feedback() -> void:
+	var combat := combat_component as ActorCombatComponent
+	if combat == null:
+		return
+	var on_attack := Callable(self, "_on_combat_attack_performed")
+	if not combat.attack_performed.is_connected(on_attack):
+		combat.attack_performed.connect(on_attack)
+
+
+func _on_combat_attack_performed(_target: Node3D, _damage: float) -> void:
+	if weapon_placeholder_visual == null:
+		return
+	_weapon_recoil_offset = maxf(_weapon_recoil_offset, maxf(weapon_recoil_distance_meters, 0.0))
+
+
+func _update_weapon_placeholder_feedback(delta: float) -> void:
+	if weapon_placeholder_visual == null:
+		return
+	var return_speed := maxf(weapon_recoil_return_speed, 0.01)
+	_weapon_recoil_offset = move_toward(_weapon_recoil_offset, 0.0, return_speed * delta)
+	var next_position := _weapon_placeholder_rest_position
+	next_position.z += _weapon_recoil_offset
+	weapon_placeholder_visual.position = next_position
+
+
+func _validate_capability_contract_runtime() -> void:
+	# Surface missing capability nodes as explicit warnings instead of silent no-op behavior.
+	if require_interactable_person and interactable_person_component == null:
+		push_warning("Person '%s' expected 'InteractablePerson' child node but none was found." % name)
+	if require_movement_ai and movement_ai_component == null:
+		push_warning("Person '%s' expected 'ActorMovementAIComponent' child node but none was found." % name)
+	if require_health_component and health_component == null:
+		push_warning("Person '%s' expected 'ActorHealthComponent' child node but none was found." % name)
+	if require_combat_component and combat_component == null:
+		push_warning("Person '%s' expected 'ActorCombatComponent' child node but none was found." % name)
+	if require_combat_ai_component and combat_ai_component == null:
+		push_warning("Person '%s' expected 'ActorCombatAIComponent' child node but none was found." % name)
+
+
+func _try_bind_runtime_player_target() -> void:
+	var movement_ai := movement_ai_component as ActorMovementAIComponent
+	if movement_ai == null:
+		return
+	if movement_ai.has_target():
+		return
+	var scene_root := get_tree().current_scene
+	if scene_root == null:
+		return
+	var runtime_player := scene_root.find_child("Player", true, false) as Node3D
+	if runtime_player == null:
+		return
+	set_person_target(runtime_player)
+
+
+func _apply_movement_ai_velocity(delta: float) -> void:
+	var movement_ai := movement_ai_component as ActorMovementAIComponent
+	# Editor placeholder nodes cannot service script method calls; skip until instance is valid.
+	if movement_ai == null:
+		return
+	var desired_direction := movement_ai.get_desired_direction()
+	var speed := movement_ai.move_speed_meters_per_sec
+	if desired_direction.is_zero_approx() or speed <= 0.0:
+		# Smoothly bleed off momentum when target is gone or speed is zero.
+		velocity.x = move_toward(velocity.x, 0.0, maxf(speed, 1.0) * delta * 4.0)
+		velocity.z = move_toward(velocity.z, 0.0, maxf(speed, 1.0) * delta * 4.0)
+	else:
+		velocity.x = desired_direction.x * speed
+		velocity.z = desired_direction.z * speed
+	move_and_slide()
+	if not desired_direction.is_zero_approx():
+		# Keep actor facing movement direction without forcing persistence writes every frame.
+		look_at(global_position + desired_direction, Vector3.UP, true)
+
+
 func _apply_definition_to_children() -> void:
 	# No definition means there is nothing to propagate to child components.
 	if definition == null:
@@ -348,6 +576,7 @@ func _apply_definition_to_children() -> void:
 	if sprite:
 		sprite.texture = definition.portrait_texture
 		sprite.scale = definition.sprite_scale
+		sprite.modulate = definition.sprite_tint
 		var texture_height := sprite.texture.get_height() if sprite.texture else 0
 		var scaled_height_factor: float = definition.sprite_scale.y if not is_zero_approx(definition.sprite_scale.y) else 1.0
 		var world_height := 0.0
@@ -364,6 +593,21 @@ func _apply_definition_to_children() -> void:
 			sprite_position.y = world_height * 0.5
 			sprite.position = sprite_position
 			collision_target_height = world_height
+	var health := health_component as ActorHealthComponent
+	if health != null:
+		health.set_max_health(definition.max_health)
+	var combat := combat_component as ActorCombatComponent
+	if combat != null:
+		combat.attack_range_meters = definition.attack_range_meters
+		combat.base_damage = definition.base_damage
+		combat.attack_cooldown_seconds = definition.attack_cooldown_seconds
+	var movement_ai := movement_ai_component as ActorMovementAIComponent
+	if movement_ai != null:
+		movement_ai.set_move_speed(definition.move_speed_meters_per_sec)
+	var combat_ai := combat_ai_component as ActorCombatAIComponent
+	if combat_ai != null:
+		combat_ai.engage_distance_meters = definition.combat_engage_distance_meters
+		combat_ai.disengage_distance_meters = definition.combat_disengage_distance_meters
 	_apply_collision_shape_from_height(collision_target_height)
 	person_profile_changed.emit(self)
 
