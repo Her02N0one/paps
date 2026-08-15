@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://systems/zone_management/gateway.gd" id="2_gateway"]
 [ext_resource type="Script" uid="uid://bgr41enmgqgrw" path="res://entities/items/pickup_item/pickup_item.gd" id="3_pickup"]
 [ext_resource type="Script" uid="uid://cti50m6boyxq4" path="res://systems/interaction/interactable_panel.gd" id="4_panel"]
-[ext_resource type="PackedScene" uid="uid://dksh37sfg0mxf" path="res://scenes/maps/playground.tscn" id="5_gnacr"]
 [ext_resource type="Resource" uid="uid://5w7n3ilymovv" path="res://systems/inventory/items/desert_stone.tres" id="5_stone"]
 [ext_resource type="Resource" uid="uid://dlxjw0kwohu2s" path="res://systems/inventory/items/sand_crystal.tres" id="6_crystal"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://systems/zone_management/base_level.gd" id="7_level"]
@@ -97,8 +96,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3994236, -5)
 use_collision = true
 size = Vector3(60, 5, 60)
 material = SubResource("StandardMaterial3D_floor")
+metadata/_edit_lock_ = true
 
 [node name="Walls" type="Node3D" parent="." unique_id=208244824]
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="WallNorth" type="CSGBox3D" parent="Walls" unique_id=1140623589]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -28)

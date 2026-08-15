@@ -2,10 +2,12 @@
 class_name InteractablePerson
 extends Interactable
 
-var person_definition: PersonDefinition:
-	set(value):
-		person_definition = value
-		_update_label()
+var person_definition: PersonDefinition
+
+
+func set_person_definition(value: PersonDefinition) -> void:
+	person_definition = value
+	_update_label()
 
 
 func _ready() -> void:

@@ -25,23 +25,8 @@ background_mode = 2
 sky = SubResource("Sky_1")
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_red"]
-albedo_color = Color(0.14999998, 1, 0.16416663, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rlvb3"]
-albedo_color = Color(0.69, 0.18411502, 0.11730001, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_purple"]
-albedo_color = Color(0.6021669, 0.23000002, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
-albedo_color = Color(1, 0.5503334, 0.29000002, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
-albedo_color = Color(0.35000002, 0.5883334, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_walls"]
-albedo_color = Color(0.33, 0.21846001, 0.072600015, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
+size = Vector3(4, 3, 2)
 
 [sub_resource type="Shader" id="Shader_0aksm"]
 code = "shader_type spatial;
@@ -73,6 +58,24 @@ shader_parameter/grid_color = Color(0.105, 0.42, 0.24675001, 1)
 shader_parameter/grid_size = 2.00000009174012
 shader_parameter/line_thickness = 0.02
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_red"]
+albedo_color = Color(0.14999998, 1, 0.16416663, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rlvb3"]
+albedo_color = Color(0.69, 0.18411502, 0.11730001, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_purple"]
+albedo_color = Color(0.6021669, 0.23000002, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
+albedo_color = Color(1, 0.5503334, 0.29000002, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
+albedo_color = Color(0.35000002, 0.5883334, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_walls"]
+albedo_color = Color(0.33, 0.21846001, 0.072600015, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pickup"]
 albedo_color = Color(1, 0.85, 0.1, 1)
 
@@ -92,9 +95,6 @@ size = Vector3(1.5, 1, 0.08)
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
 size = Vector3(1.5, 1, 0.08)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
-size = Vector3(4, 3, 2)
-
 [node name="Playground" type="Node3D" unique_id=978182345]
 script = ExtResource("9_level")
 
@@ -113,75 +113,125 @@ apply_debug_overrides = true
 starting_health = 500.0
 
 [node name="Static" type="Node3D" parent="." unique_id=1465666467]
-metadata/_edit_lock_ = true
+
+[node name="GatewayDesert" type="Area3D" parent="Static" unique_id=295775223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.436537, 4.024372, -14.657814)
+collision_layer = 0
+script = ExtResource("3_gateway")
+target_scene_path = "res://scenes/maps/zone_b.tscn"
+target_gateway_id = "GatewaySouth"
 metadata/_edit_group_ = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Static" unique_id=592230053]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.941832, 3.2278671, -16.204933)
-use_collision = true
-size = Vector3(3.8681946, 2.0786743, 3.4606628)
-material = SubResource("StandardMaterial3D_red")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/GatewayDesert" unique_id=1271753247]
+shape = SubResource("BoxShape3D_gw")
 
-[node name="CSGBox3D6" type="CSGBox3D" parent="Static" unique_id=990144887]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.102163, 3.8648696, -21.168129)
-use_collision = true
-size = Vector3(3.8681946, 2.0786743, 3.4606628)
-material = SubResource("StandardMaterial3D_rlvb3")
+[node name="WalkStart" type="Marker3D" parent="Static/GatewayDesert" unique_id=1299488598]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 
-[node name="CSGBox3D7" type="CSGBox3D" parent="Static" unique_id=1203707170]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.223175, 3.5572433, -22.863075)
-use_collision = true
-size = Vector3(18.192871, 2.7374268, 16)
-material = SubResource("StandardMaterial3D_purple")
+[node name="WalkEnd" type="Marker3D" parent="Static/GatewayDesert" unique_id=828887241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
-[node name="CSGBox3D8" type="CSGBox3D" parent="Static" unique_id=1970722837]
+[node name="Label3D" type="Label3D" parent="Static/GatewayDesert" unique_id=1732914241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0011883)
+text = "The Desert"
+font_size = 88
+
+[node name="GatewayScaletest" type="Area3D" parent="Static" unique_id=1051147903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7831326, 4.024372, -14.657814)
+collision_layer = 0
+script = ExtResource("3_gateway")
+target_scene_path = "res://scenes/maps/scale_test.tscn"
+target_gateway_id = "GatewayPlayground"
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/GatewayScaletest" unique_id=1454040722]
+shape = SubResource("BoxShape3D_gw")
+
+[node name="WalkStart" type="Marker3D" parent="Static/GatewayScaletest" unique_id=1428984795]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="WalkEnd" type="Marker3D" parent="Static/GatewayScaletest" unique_id=453702980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="Label3D" type="Label3D" parent="Static/GatewayScaletest" unique_id=737494292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0011883)
+text = "Scale Test
+"
+font_size = 88
+
+[node name="Obelisk" type="CSGBox3D" parent="Static" unique_id=1970722837]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.6193, 24.862751, 30.814367)
 material_override = ExtResource("1_mat")
 use_collision = true
 size = Vector3(22, 48, 23)
 material = ExtResource("1_mat")
 
-[node name="CSGBox3D9" type="CSGBox3D" parent="Static" unique_id=595354231]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.334557, 2.68853, -1.8792267)
-use_collision = true
-size = Vector3(6, 1, 6)
-material = SubResource("StandardMaterial3D_orange")
-
-[node name="CSGBox3D10" type="CSGBox3D" parent="Static" unique_id=1518266725]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.611479, 3.0256424, -9.57386)
-use_collision = true
-size = Vector3(6, 1.6742249, 6)
-material = SubResource("StandardMaterial3D_blue")
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="Static" unique_id=2055352354]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, -47.929867)
-use_collision = true
-size = Vector3(100, 10, 2)
-material = SubResource("StandardMaterial3D_walls")
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="Static" unique_id=888244480]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.920677, 7.1520567, 0.9852791)
-use_collision = true
-size = Vector3(2, 10, 100)
-material = SubResource("StandardMaterial3D_walls")
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="Static" unique_id=1626314853]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.086464, 7.1520567, 0.9852791)
-use_collision = true
-size = Vector3(2, 10, 100)
-material = SubResource("StandardMaterial3D_walls")
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="Static" unique_id=754414785]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, 48.434296)
-use_collision = true
-size = Vector3(100, 10, 2)
-material = SubResource("StandardMaterial3D_walls")
-
 [node name="Floor" type="CSGBox3D" parent="Static" unique_id=641538841]
 use_collision = true
 size = Vector3(100, 5, 100)
 material = SubResource("ShaderMaterial_brwlm")
 metadata/_edit_lock_ = true
+
+[node name="Blocks" type="Node3D" parent="Static" unique_id=599463662]
+metadata/_edit_lock_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Static/Blocks" unique_id=592230053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.941832, 3.2278671, -16.204933)
+use_collision = true
+size = Vector3(3.8681946, 2.0786743, 3.4606628)
+material = SubResource("StandardMaterial3D_red")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Static/Blocks" unique_id=990144887]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.102163, 3.8648696, -21.168129)
+use_collision = true
+size = Vector3(3.8681946, 2.0786743, 3.4606628)
+material = SubResource("StandardMaterial3D_rlvb3")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Static/Blocks" unique_id=1203707170]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.223175, 3.5572433, -22.863075)
+use_collision = true
+size = Vector3(18.192871, 2.7374268, 16)
+material = SubResource("StandardMaterial3D_purple")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Static/Blocks" unique_id=595354231]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.334557, 2.68853, -1.8792267)
+use_collision = true
+size = Vector3(6, 1, 6)
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Static/Blocks" unique_id=1518266725]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.611479, 3.0256424, -9.57386)
+use_collision = true
+size = Vector3(6, 1.6742249, 6)
+material = SubResource("StandardMaterial3D_blue")
+
+[node name="Walls" type="Node3D" parent="Static" unique_id=342929325]
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Static/Walls" unique_id=2055352354]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, -47.929867)
+use_collision = true
+size = Vector3(100, 10, 2)
+material = SubResource("StandardMaterial3D_walls")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Static/Walls" unique_id=888244480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.920677, 7.1520567, 0.9852791)
+use_collision = true
+size = Vector3(2, 10, 100)
+material = SubResource("StandardMaterial3D_walls")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Static/Walls" unique_id=1626314853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.086464, 7.1520567, 0.9852791)
+use_collision = true
+size = Vector3(2, 10, 100)
+material = SubResource("StandardMaterial3D_walls")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Static/Walls" unique_id=754414785]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, 48.434296)
+use_collision = true
+size = Vector3(100, 10, 2)
+material = SubResource("StandardMaterial3D_walls")
 
 [node name="Props" type="Node" parent="." unique_id=2094624501]
 
@@ -257,48 +307,3 @@ shape = SubResource("BoxShape3D_panel")
 
 [node name="PersonJerry" parent="." unique_id=244855065 instance=ExtResource("11_osidk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6258743, 15.169888)
-
-[node name="GatewayDesert" type="Area3D" parent="." unique_id=295775223]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.436537, 4.024372, -14.657814)
-collision_layer = 0
-script = ExtResource("3_gateway")
-target_scene_path = "res://scenes/maps/zone_b.tscn"
-target_gateway_id = "GatewaySouth"
-metadata/_edit_group_ = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayDesert" unique_id=1271753247]
-shape = SubResource("BoxShape3D_gw")
-
-[node name="WalkStart" type="Marker3D" parent="GatewayDesert" unique_id=1299488598]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-
-[node name="WalkEnd" type="Marker3D" parent="GatewayDesert" unique_id=828887241]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-
-[node name="Label3D" type="Label3D" parent="GatewayDesert" unique_id=1732914241]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0011883)
-text = "The Desert"
-font_size = 88
-
-[node name="GatewayScaletest" type="Area3D" parent="." unique_id=1051147903]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7831326, 4.024372, -14.657814)
-collision_layer = 0
-script = ExtResource("3_gateway")
-target_scene_path = "res://scenes/maps/scale_test.tscn"
-target_gateway_id = "GatewayPlayground"
-metadata/_edit_group_ = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayScaletest" unique_id=1454040722]
-shape = SubResource("BoxShape3D_gw")
-
-[node name="WalkStart" type="Marker3D" parent="GatewayScaletest" unique_id=1428984795]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-
-[node name="WalkEnd" type="Marker3D" parent="GatewayScaletest" unique_id=453702980]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-
-[node name="Label3D" type="Label3D" parent="GatewayScaletest" unique_id=737494292]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0011883)
-text = "Scale Test
-"
-font_size = 88

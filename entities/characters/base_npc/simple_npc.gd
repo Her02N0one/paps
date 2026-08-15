@@ -61,5 +61,5 @@ func _apply_definition() -> void:
 	if health_component != null:
 		health_component.apply_person_definition(definition)
 		
-	if interactable != null:
-		interactable.person_definition = definition
+	if interactable != null and not Engine.is_editor_hint():
+		interactable.set_person_definition(definition)
