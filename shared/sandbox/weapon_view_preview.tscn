@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bupmychyv6jxu"]
+
+[ext_resource type="PackedScene" uid="uid://c6qvv7tpv12qy" path="res://entities/weapons/starter_blaster/starter_blaster_view.tscn" id="1_weapon_view"]
+
+[node name="WeaponViewPreview" type="Node3D" unique_id=1508241090]
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1279190208]
+transform = Transform3D(0.81915206, -0.35312894, 0.45198444, 0, 0.7880108, 0.6156615, -0.57357645, -0.5043204, 0.64550066, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1549582181]
+current = true
+near = 0.01
+metadata/_edit_lock_ = true
+
+[node name="WeaponSwayPivot" type="Node3D" parent="Camera3D" unique_id=545474483]
+
+[node name="PreviewWeapon" parent="Camera3D/WeaponSwayPivot" unique_id=165246266 instance=ExtResource("1_weapon_view")]

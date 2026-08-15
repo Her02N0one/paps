@@ -1,0 +1,152 @@
+[gd_scene format=3 uid="uid://btuglcom8u6x"]
+
+[ext_resource type="Script" uid="uid://briy4haxjbg4w" path="res://systems/inventory/inventory_panel.gd" id="1_panel"]
+[ext_resource type="PackedScene" path="res://systems/inventory/inventory_slot.tscn" id="2_slot"]
+
+[node name="InventoryPanel" type="PanelContainer" unique_id=556432279]
+process_mode = 3
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_panel")
+slot_scene = ExtResource("2_slot")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=873372912]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=1213365366]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Margin/Layout" unique_id=388294792]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Margin/Layout/Header" unique_id=1571480567]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Inventory"
+
+[node name="Summary" type="Label" parent="Margin/Layout/Header" unique_id=890064470]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0 slots, 0 items"
+
+[node name="Close" type="Button" parent="Margin/Layout/Header" unique_id=1005459545]
+layout_mode = 2
+text = "Close"
+
+[node name="Content" type="HSplitContainer" parent="Margin/Layout" unique_id=22802920]
+layout_mode = 2
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(520)
+split_offset = 520
+
+[node name="Slots" type="PanelContainer" parent="Margin/Layout/Content" unique_id=977740983]
+custom_minimum_size = Vector2(360, 260)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SlotMargin" type="MarginContainer" parent="Margin/Layout/Content/Slots" unique_id=488368338]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="SlotStack" type="VBoxContainer" parent="Margin/Layout/Content/Slots/SlotMargin" unique_id=1109965324]
+layout_mode = 2
+
+[node name="EmptyLabel" type="Label" parent="Margin/Layout/Content/Slots/SlotMargin/SlotStack" unique_id=1654830290]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Inventory is empty."
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/Layout/Content/Slots/SlotMargin/SlotStack" unique_id=605601183]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SlotGrid" type="GridContainer" parent="Margin/Layout/Content/Slots/SlotMargin/SlotStack/Scroll" unique_id=1888851556]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="Details" type="PanelContainer" parent="Margin/Layout/Content" unique_id=777985721]
+custom_minimum_size = Vector2(280, 260)
+layout_mode = 2
+
+[node name="DetailMargin" type="MarginContainer" parent="Margin/Layout/Content/Details" unique_id=166963344]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="DetailStack" type="VBoxContainer" parent="Margin/Layout/Content/Details/DetailMargin" unique_id=1832303582]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DetailIcon" type="TextureRect" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack" unique_id=1807204915]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="DetailName" type="Label" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack" unique_id=1206151516]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No item selected"
+
+[node name="DetailDescription" type="Label" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack" unique_id=249907542]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Select an inventory slot to view its details."
+autowrap_mode = 3
+
+[node name="DetailQuantity" type="Label" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack" unique_id=1007992788]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack" unique_id=1314314837]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="UseButton" type="Button" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack/Actions" unique_id=1699765743]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Use"
+
+[node name="DropButton" type="Button" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack/Actions" unique_id=55363161]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Drop"
+
+[node name="StatusLabel" type="Label" parent="Margin/Layout/Content/Details/DetailMargin/DetailStack" unique_id=1658597707]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Help" type="Label" parent="Margin/Layout" unique_id=896202521]
+layout_mode = 2
+text = "I or Esc closes inventory"
+
+[connection signal="pressed" from="Margin/Layout/Header/Close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="Margin/Layout/Content/Details/DetailMargin/DetailStack/Actions/UseButton" to="." method="_on_use_pressed"]
+[connection signal="pressed" from="Margin/Layout/Content/Details/DetailMargin/DetailStack/Actions/DropButton" to="." method="_on_drop_pressed"]

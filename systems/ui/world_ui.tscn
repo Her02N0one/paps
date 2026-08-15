@@ -1,0 +1,111 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bd4qp8q813n2f" path="res://systems/ui/game_ui_controller.gd" id="1_ui_controller"]
+
+[ext_resource type="PackedScene" path="res://shared/debug_layer.tscn" id="4_debug"]
+[ext_resource type="PackedScene" path="res://systems/ui/intro_panel.tscn" id="5_intro_panel"]
+[ext_resource type="PackedScene" path="res://systems/ui/pause_panel.tscn" id="6_pause_panel"]
+[ext_resource type="PackedScene" path="res://systems/ui/examine_panel.tscn" id="7_examine_panel"]
+[ext_resource type="PackedScene" path="res://systems/dialogue/dialogue_panel.tscn" id="8_dialogue_panel"]
+[ext_resource type="PackedScene" path="res://systems/inventory/inventory_panel.tscn" id="9_inventory_panel"]
+[ext_resource type="PackedScene" path="res://systems/scrapping/scrapping_panel.tscn" id="10_scrapping_panel"]
+[ext_resource type="PackedScene" path="res://systems/ui/load_menu_panel.tscn" id="11_load_menu_panel"]
+
+
+[node name="WorldUI" type="Node"]
+process_mode = 3
+script = ExtResource("1_ui_controller")
+hud_path = NodePath("HUDLayer/HUD")
+intro_panel_path = NodePath("MenuLayer/MenuUI/IntroPanel")
+pause_panel_path = NodePath("MenuLayer/MenuUI/PausePanel")
+interact_hint_path = NodePath("HUDLayer/HUD/InteractHint")
+crosshair_path = NodePath("HUDLayer/HUD/CrossHair")
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+process_mode = 1
+layer = 10
+
+[node name="HUD" type="Control" parent="HUDLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InteractHint" type="Label" parent="HUDLayer/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.75
+anchor_right = 0.5
+anchor_bottom = 0.75
+offset_left = -120.0
+offset_right = 120.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+
+[node name="CrossHair" type="Label" parent="HUDLayer/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 20
+
+[node name="MenuUI" type="Control" parent="MenuLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="IntroPanel" parent="MenuLayer/MenuUI" instance=ExtResource("5_intro_panel")]
+
+[node name="PausePanel" parent="MenuLayer/MenuUI" instance=ExtResource("6_pause_panel")]
+
+[node name="LoadMenuPanel" parent="MenuLayer/MenuUI" instance=ExtResource("11_load_menu_panel")]
+
+
+[node name="GamePanelsLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 35
+
+[node name="ExaminePanel" parent="GamePanelsLayer" instance=ExtResource("7_examine_panel")]
+
+[node name="DialoguePanel" parent="GamePanelsLayer" instance=ExtResource("8_dialogue_panel")]
+visible = false
+modal_id = &"dialogue"
+
+[node name="InventoryPanel" parent="GamePanelsLayer" instance=ExtResource("9_inventory_panel")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+modal_id = &"inventory"
+
+[node name="ScrappingPanel" parent="GamePanelsLayer" instance=ExtResource("10_scrapping_panel")]
+visible = false
+
+[node name="DebugLayer" parent="." instance=ExtResource("4_debug")]
+

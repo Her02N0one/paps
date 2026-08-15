@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b7ihykmxms7ht"]
+
+[ext_resource type="Shader" uid="uid://cvfcjss15psku" path="res://assets/shaders/ground.gdshader" id="1_2p03s"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2p03s")
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/time_scale = 1.0
