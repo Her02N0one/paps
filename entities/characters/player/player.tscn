@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://dl7mdn35ogwuu"]
+
+[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://entities/characters/player/player.gd" id="1_ffvwl"]
+[ext_resource type="Script" uid="uid://dq5sv5g34pc6u" path="res://entities/characters/player/actor_movement_component.gd" id="3_wxsjw"]
+[ext_resource type="Script" uid="uid://mj5dua6omd51" path="res://systems/interaction/interaction_sensor_component.gd" id="4_mgft0"]
+[ext_resource type="Script" uid="uid://gnc245sle255" path="res://systems/inventory/inventory_holder_component.gd" id="5_l1vaj"]
+[ext_resource type="Script" uid="uid://3h4acjalio4p" path="res://systems/health/actor_health_component.gd" id="8_u5v4m"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
+radius = 0.3132
+height = 1.74
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.3132
+height = 1.74
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interaction"]
+radius = 0.55
+
+[node name="Player" type="CharacterBody3D" groups=["player"] unique_id=1702401823]
+script = ExtResource("1_ffvwl")
+standing_height_meters = 1.8
+eye_height_ratio = 0.9
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=739217968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=32480970]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="ActorMovementComponent" type="Node" parent="." unique_id=2056943079 node_paths=PackedStringArray("body", "facing_reference")]
+script = ExtResource("3_wxsjw")
+body = NodePath("..")
+facing_reference = NodePath("../Head")
+
+[node name="InteractionSensorComponent" type="Node" parent="." unique_id=874721218 node_paths=PackedStringArray("shape_cast")]
+script = ExtResource("4_mgft0")
+shape_cast = NodePath("../Head/Camera3D/InteractCast")
+
+[node name="InventoryHolderComponent" type="Node" parent="." unique_id=1659816402]
+script = ExtResource("5_l1vaj")
+
+[node name="ActorHealthComponent" type="Node" parent="." unique_id=101155948]
+script = ExtResource("8_u5v4m")
+
+[node name="CameraAnchor" type="Marker3D" parent="." unique_id=1843297417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6182, 0)
+
+[node name="Head" type="Node3D" parent="." unique_id=1655268507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6182, 0)
+top_level = true
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=273559578]
+
+[node name="WeaponSwayPivot" type="Node3D" parent="Head/Camera3D" unique_id=810220347]
+
+[node name="InteractCast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1733465904]
+shape = SubResource("SphereShape3D_interaction")
+target_position = Vector3(0, 0, -4)
+max_results = 8
+collision_mask = 2
