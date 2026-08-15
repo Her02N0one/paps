@@ -8,8 +8,9 @@ func _initialize() -> void:
 	panel.content = "Keep out."
 	var station := ScrappingStation.new()
 	var person := InteractablePerson.new()
-	person.speaker_name = "Mara"
-	person.opening_text = "Need something?"
+	var person_def := PersonDefinition.new()
+	person_def.speaker_name = "Mara"
+	person.person_definition = person_def
 
 	var requests: Array = []
 	for interactable in [panel, station, person]:

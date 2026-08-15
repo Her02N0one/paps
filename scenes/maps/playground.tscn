@@ -1,0 +1,304 @@
+[gd_scene format=3 uid="uid://dksh37sfg0mxf"]
+
+[ext_resource type="Material" uid="uid://b7ihykmxms7ht" path="res://assets/materials/weird_material.tres" id="1_mat"]
+[ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://systems/zone_management/gateway.gd" id="3_gateway"]
+[ext_resource type="Script" uid="uid://bgr41enmgqgrw" path="res://entities/items/pickup_item/pickup_item.gd" id="4_pickup"]
+[ext_resource type="Script" uid="uid://cti50m6boyxq4" path="res://systems/interaction/interactable_panel.gd" id="5_panel"]
+[ext_resource type="Resource" uid="uid://wa2kqxbi17gw" path="res://systems/inventory/items/mysterious_key.tres" id="6_key"]
+[ext_resource type="Resource" uid="uid://c223ay5hjh8yo" path="res://systems/inventory/items/old_coin.tres" id="7_coin"]
+[ext_resource type="Resource" path="res://systems/inventory/items/strange_gem.tres" id="8_gem"]
+[ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://systems/zone_management/base_level.gd" id="9_level"]
+[ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="10_interactable"]
+[ext_resource type="PackedScene" uid="uid://c83jerryscn01" path="res://entities/characters/jerry/person_jerry.tscn" id="11_osidk"]
+[ext_resource type="PackedScene" uid="uid://ca77wwyefwgdl" path="res://entities/interfacables/scrapping_station/scrapping_station.tscn" id="11_scrapping_station"]
+[ext_resource type="Script" uid="uid://ce3liopcmdigw" path="res://systems/zone_management/new_game_spawn_point.gd" id="18_new_game_spawn"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mrac1"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_mrac1")
+
+[sub_resource type="Environment" id="Environment_2q4k0"]
+background_mode = 2
+sky = SubResource("Sky_1")
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_red"]
+albedo_color = Color(0.14999998, 1, 0.16416663, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rlvb3"]
+albedo_color = Color(0.69, 0.18411502, 0.11730001, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_purple"]
+albedo_color = Color(0.6021669, 0.23000002, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
+albedo_color = Color(1, 0.5503334, 0.29000002, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
+albedo_color = Color(0.35000002, 0.5883334, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_walls"]
+albedo_color = Color(0.33, 0.21846001, 0.072600015, 1)
+
+[sub_resource type="Shader" id="Shader_0aksm"]
+code = "shader_type spatial;
+
+uniform vec3 base_color : source_color = vec3(0.15, 0.15, 0.15);
+uniform vec3 grid_color : source_color = vec3(0.25, 0.25, 0.25);
+uniform float grid_size : hint_range(0.1, 10.0) = 1.0;
+uniform float line_thickness : hint_range(0.001, 0.5) = 0.05;
+
+void fragment() {
+	vec2 pos = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xz;
+	vec2 grid = fract(pos / grid_size);
+	
+	// Create lines on the edges of the grid cells
+	float x_line = step(grid.x, line_thickness) + step(1.0 - line_thickness, grid.x);
+	float y_line = step(grid.y, line_thickness) + step(1.0 - line_thickness, grid.y);
+	
+	float is_line = clamp(x_line + y_line, 0.0, 1.0);
+	
+	ALBEDO = mix(base_color, grid_color, is_line);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_brwlm"]
+render_priority = 0
+shader = SubResource("Shader_0aksm")
+shader_parameter/base_color = Color(0.1325, 0.53, 0.311375, 1)
+shader_parameter/grid_color = Color(0.105, 0.42, 0.24675001, 1)
+shader_parameter/grid_size = 2.00000009174012
+shader_parameter/line_thickness = 0.02
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pickup"]
+albedo_color = Color(1, 0.85, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_pickup"]
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pickup"]
+radius = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_panel"]
+albedo_color = Color(0.55, 0.35, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+size = Vector3(1.5, 1, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
+size = Vector3(1.5, 1, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
+size = Vector3(4, 3, 2)
+
+[node name="Playground" type="Node3D" unique_id=978182345]
+script = ExtResource("9_level")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1579395349]
+transform = Transform3D(0.96077913, 0.23869641, -0.1411647, 0, 0.50904155, 0.860742, 0.2773147, -0.826983, 0.48907647, 0, 285.14883, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1502202385]
+environment = SubResource("Environment_2q4k0")
+
+[node name="NewGameSpawn" type="Marker3D" parent="." unique_id=1770430194]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.750229, 4.4496098, 5.2984276)
+script = ExtResource("18_new_game_spawn")
+marker_id = &"playground_main"
+apply_debug_overrides = true
+starting_health = 500.0
+
+[node name="Static" type="Node3D" parent="." unique_id=1465666467]
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Static" unique_id=592230053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.941832, 3.2278671, -16.204933)
+use_collision = true
+size = Vector3(3.8681946, 2.0786743, 3.4606628)
+material = SubResource("StandardMaterial3D_red")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Static" unique_id=990144887]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.102163, 3.8648696, -21.168129)
+use_collision = true
+size = Vector3(3.8681946, 2.0786743, 3.4606628)
+material = SubResource("StandardMaterial3D_rlvb3")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Static" unique_id=1203707170]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.223175, 3.5572433, -22.863075)
+use_collision = true
+size = Vector3(18.192871, 2.7374268, 16)
+material = SubResource("StandardMaterial3D_purple")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Static" unique_id=1970722837]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.6193, 24.862751, 30.814367)
+material_override = ExtResource("1_mat")
+use_collision = true
+size = Vector3(22, 48, 23)
+material = ExtResource("1_mat")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Static" unique_id=595354231]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.334557, 2.68853, -1.8792267)
+use_collision = true
+size = Vector3(6, 1, 6)
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Static" unique_id=1518266725]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.611479, 3.0256424, -9.57386)
+use_collision = true
+size = Vector3(6, 1.6742249, 6)
+material = SubResource("StandardMaterial3D_blue")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Static" unique_id=2055352354]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, -47.929867)
+use_collision = true
+size = Vector3(100, 10, 2)
+material = SubResource("StandardMaterial3D_walls")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Static" unique_id=888244480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.920677, 7.1520567, 0.9852791)
+use_collision = true
+size = Vector3(2, 10, 100)
+material = SubResource("StandardMaterial3D_walls")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Static" unique_id=1626314853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.086464, 7.1520567, 0.9852791)
+use_collision = true
+size = Vector3(2, 10, 100)
+material = SubResource("StandardMaterial3D_walls")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Static" unique_id=754414785]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1520567, 48.434296)
+use_collision = true
+size = Vector3(100, 10, 2)
+material = SubResource("StandardMaterial3D_walls")
+
+[node name="Floor" type="CSGBox3D" parent="Static" unique_id=641538841]
+use_collision = true
+size = Vector3(100, 5, 100)
+material = SubResource("ShaderMaterial_brwlm")
+metadata/_edit_lock_ = true
+
+[node name="Props" type="Node" parent="." unique_id=2094624501]
+
+[node name="ScrappingWorkbench" parent="Props" unique_id=811432334 instance=ExtResource("11_scrapping_station")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9061604, 3.05, 1.5506439)
+
+[node name="MysteriousKey" type="StaticBody3D" parent="Props" unique_id=1364982528]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.348454, 11.768281, -7.5755634)
+script = ExtResource("4_pickup")
+item_data = ExtResource("6_key")
+persistent_id = "mysterious_key"
+
+[node name="Interactable" type="Node" parent="Props/MysteriousKey" unique_id=318024023]
+script = ExtResource("10_interactable")
+interact_label = "Pick up Mysterious Key"
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/MysteriousKey" unique_id=1579642779]
+material_override = SubResource("StandardMaterial3D_pickup")
+mesh = SubResource("SphereMesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/MysteriousKey" unique_id=2051888301]
+shape = SubResource("SphereShape3D_pickup")
+
+[node name="OldCoin" type="StaticBody3D" parent="Props" unique_id=2124244298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.249477, 6.195006, -22.68526)
+script = ExtResource("4_pickup")
+item_data = ExtResource("7_coin")
+persistent_id = "old_coin"
+
+[node name="Interactable" type="Node" parent="Props/OldCoin" unique_id=1560848670]
+script = ExtResource("10_interactable")
+interact_label = "Pick up Old Coin"
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/OldCoin" unique_id=1676321129]
+material_override = SubResource("StandardMaterial3D_pickup")
+mesh = SubResource("SphereMesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/OldCoin" unique_id=784704944]
+shape = SubResource("SphereShape3D_pickup")
+
+[node name="StrangeGem" type="StaticBody3D" parent="Props" unique_id=1776735549]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.71871, 2.6040785, 46.889847)
+script = ExtResource("4_pickup")
+item_data = ExtResource("8_gem")
+persistent_id = "strange_gem"
+
+[node name="Interactable" type="Node" parent="Props/StrangeGem" unique_id=874775171]
+script = ExtResource("10_interactable")
+interact_label = "Pick up Strange Gem"
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/StrangeGem" unique_id=1479149688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0034012794, 0)
+material_override = SubResource("StandardMaterial3D_pickup")
+mesh = SubResource("SphereMesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/StrangeGem" unique_id=1919313261]
+shape = SubResource("SphereShape3D_pickup")
+
+[node name="NoticeBoard" type="StaticBody3D" parent="Props" unique_id=758349772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.992878, 4.5521836, 47.41507)
+
+[node name="InteractablePanel" type="Node" parent="Props/NoticeBoard" unique_id=1743613910]
+script = ExtResource("5_panel")
+panel_title = "Notice Board"
+content = "If you're reading this you have 157 hours."
+
+[node name="Mesh" type="MeshInstance3D" parent="Props/NoticeBoard" unique_id=757351653]
+material_override = SubResource("StandardMaterial3D_panel")
+mesh = SubResource("BoxMesh_panel")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/NoticeBoard" unique_id=2059450871]
+shape = SubResource("BoxShape3D_panel")
+
+[node name="PersonJerry" parent="." unique_id=244855065 instance=ExtResource("11_osidk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6258743, 15.169888)
+
+[node name="GatewayDesert" type="Area3D" parent="." unique_id=295775223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.436537, 4.024372, -14.657814)
+collision_layer = 0
+script = ExtResource("3_gateway")
+target_scene_path = "res://scenes/maps/zone_b.tscn"
+target_gateway_id = "GatewaySouth"
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayDesert" unique_id=1271753247]
+shape = SubResource("BoxShape3D_gw")
+
+[node name="WalkStart" type="Marker3D" parent="GatewayDesert" unique_id=1299488598]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="WalkEnd" type="Marker3D" parent="GatewayDesert" unique_id=828887241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="Label3D" type="Label3D" parent="GatewayDesert" unique_id=1732914241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0011883)
+text = "The Desert"
+font_size = 88
+
+[node name="GatewayScaletest" type="Area3D" parent="." unique_id=1051147903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7831326, 4.024372, -14.657814)
+collision_layer = 0
+script = ExtResource("3_gateway")
+target_scene_path = "res://scenes/maps/scale_test.tscn"
+target_gateway_id = "GatewayPlayground"
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayScaletest" unique_id=1454040722]
+shape = SubResource("BoxShape3D_gw")
+
+[node name="WalkStart" type="Marker3D" parent="GatewayScaletest" unique_id=1428984795]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="WalkEnd" type="Marker3D" parent="GatewayScaletest" unique_id=453702980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="Label3D" type="Label3D" parent="GatewayScaletest" unique_id=737494292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0011883)
+text = "Scale Test
+"
+font_size = 88

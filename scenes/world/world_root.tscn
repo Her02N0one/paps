@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bworldscene01"]
 
-[ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://scripts/features/world/world.gd" id="1_world"]
+[ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://systems/zone_management/world.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://scenes/world/world_systems.tscn" id="2_systems"]
 [ext_resource type="PackedScene" path="res://scenes/world/world_gameplay.tscn" id="3_gameplay"]
-[ext_resource type="PackedScene" path="res://scenes/world/ui/world_ui.tscn" id="4_world_ui"]
+[ext_resource type="PackedScene" path="res://systems/ui/world_ui.tscn" id="4_world_ui"]
 
 [node name="World" type="Node3D" unique_id=1226249983]
 process_mode = 3

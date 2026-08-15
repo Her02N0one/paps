@@ -1,0 +1,231 @@
+[gd_resource type="Resource" script_class="DialogueConversation" format=3 uid="uid://1lcf4l7xxbd0"]
+
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://systems/dialogue/dialogue_conversation.gd" id="1_conversation"]
+[ext_resource type="Script" uid="uid://20p6xacrl8mk" path="res://systems/dialogue/dialogue_speaker_profile.gd" id="1_dsokh"]
+[ext_resource type="Script" uid="uid://cglee7piovdkl" path="res://systems/dialogue/dialogue_node.gd" id="2_node"]
+[ext_resource type="Script" uid="uid://cf55a2xa12rru" path="res://systems/dialogue/dialogue_choice.gd" id="3_choice"]
+[ext_resource type="Script" uid="uid://b51n58cliyl8y" path="res://systems/dialogue/conditions/dialogue_condition.gd" id="3_toghu"]
+[ext_resource type="Script" uid="uid://csmaafbbesflr" path="res://systems/dialogue/effects/dialogue_set_flag_effect.gd" id="4_effect"]
+[ext_resource type="Script" uid="uid://dn068bjcmik5e" path="res://systems/dialogue/effects/dialogue_effect.gd" id="4_pxv5l"]
+[ext_resource type="Resource" path="res://systems/inventory/items/strange_gem.tres" id="6_o8bvo"]
+[ext_resource type="Script" uid="uid://dxakpptdkhb30" path="res://systems/dialogue/conditions/dialogue_has_item_condition.gd" id="7_il7qn"]
+[ext_resource type="Script" uid="uid://dg73sp8xj03oy" path="res://systems/dialogue/conditions/dialogue_flag_condition.gd" id="8_flagcond"]
+[ext_resource type="Resource" uid="uid://bj1kjdmahug3t" path="res://systems/inventory/items/scrap.tres" id="8_tybiy"]
+[ext_resource type="Script" uid="uid://chaobkaulcivc" path="res://systems/dialogue/conditions/dialogue_item_inequality_condition.gd" id="9_e5enf"]
+[ext_resource type="Texture2D" uid="uid://crmlefy4e5n21" path="res://icon.svg" id="10_il7qn"]
+[ext_resource type="Script" uid="uid://b76w2fxvbm865" path="res://systems/inventory/data/item_data.gd" id="10_ub8vl"]
+[ext_resource type="Script" uid="uid://c3fuss2tp4opr" path="res://systems/dialogue/effects/dialogue_give_item_effect.gd" id="11_eiemq"]
+[ext_resource type="Texture2D" uid="uid://b676q0vvc22c8" path="res://icon.png" id="14_ofwu7"]
+
+[sub_resource type="Resource" id="Resource_bdtxa"]
+script = ExtResource("1_dsokh")
+metadata/_custom_type_script = "uid://20p6xacrl8mk"
+
+[sub_resource type="Resource" id="ChoiceIdentity"]
+script = ExtResource("3_choice")
+text = "Who are you?"
+next_node_id = &"identity"
+
+[sub_resource type="Resource" id="ChoiceWork"]
+script = ExtResource("3_choice")
+text = "What do you do?"
+next_node_id = &"work"
+
+[sub_resource type="Resource" id="Resource_yf5fn"]
+script = ExtResource("7_il7qn")
+item = ExtResource("6_o8bvo")
+
+[sub_resource type="Resource" id="CondNotToldJerry"]
+script = ExtResource("8_flagcond")
+flag = &"told_jerry_about_gem"
+expected_value = false
+
+[sub_resource type="Resource" id="Resource_g4v7s"]
+script = ExtResource("3_choice")
+text = "[Show Strange Gem] What is this?"
+next_node_id = &"gem"
+conditions = Array[ExtResource("3_toghu")]([SubResource("Resource_yf5fn"), SubResource("CondNotToldJerry")])
+
+[sub_resource type="Resource" id="CondToldJerry"]
+script = ExtResource("8_flagcond")
+flag = &"told_jerry_about_gem"
+
+[sub_resource type="Resource" id="ChoiceQuestGraph"]
+script = ExtResource("3_choice")
+text = "Ask about the Gem's secret curse..."
+target_conversation_id = &"gem_quest"
+conditions = Array[ExtResource("3_toghu")]([SubResource("CondToldJerry")])
+
+[sub_resource type="Resource" id="ChoiceLeave"]
+script = ExtResource("3_choice")
+text = "Goodbye."
+next_node_id = &"goodbye"
+conditions = Array[ExtResource("3_toghu")]([SubResource("CondNotToldJerry")])
+
+[sub_resource type="Resource" id="Resource_cjxld"]
+script = ExtResource("9_e5enf")
+item = ExtResource("8_tybiy")
+anchor = 50
+inequality = ">"
+metadata/_custom_type_script = "uid://chaobkaulcivc"
+
+[sub_resource type="Resource" id="Resource_5tb7a"]
+script = ExtResource("3_choice")
+text = "[Show Scrap] I scrapped it..."
+next_node_id = &"scrapped_cure"
+conditions = Array[ExtResource("3_toghu")]([SubResource("Resource_cjxld")])
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="ChoiceLeavePostGem"]
+script = ExtResource("3_choice")
+text = "Goodbye."
+next_node_id = &"goodbye_warned"
+conditions = Array[ExtResource("3_toghu")]([SubResource("CondToldJerry")])
+
+[sub_resource type="Resource" id="EffectMet"]
+script = ExtResource("4_effect")
+flag = &"met_jerry"
+
+[sub_resource type="Resource" id="NodeStart"]
+script = ExtResource("2_node")
+id = &"start"
+speaker = "Jerry"
+text = "[wave amp=25.0 freq=4.0]What's love Doctor Do-[/wave]
+[i]Doctor Do-little?[/i]"
+choices = Array[ExtResource("3_choice")]([SubResource("ChoiceIdentity"), SubResource("ChoiceWork"), SubResource("Resource_g4v7s"), SubResource("ChoiceQuestGraph"), SubResource("ChoiceLeave"), SubResource("Resource_5tb7a"), SubResource("ChoiceLeavePostGem")])
+effects = Array[ExtResource("4_pxv5l")]([SubResource("EffectMet")])
+
+[sub_resource type="Resource" id="Resource_0oncu"]
+script = ExtResource("2_node")
+id = &"identity"
+speaker = "Jerry"
+text = "I'm [b]Jerry.[/b] 
+[color=#FFD700]Jerry Smith.[/color]"
+expression = &"torso"
+
+[sub_resource type="Resource" id="Resource_fn4oh"]
+script = ExtResource("2_node")
+id = &"work"
+speaker = "Jerry"
+text = "I, [i]Jerry Smith,[/i] am proudly... [shake rate=15.0 level=5.0]unemployed.[/shake]"
+expression = &"surprised"
+
+[sub_resource type="Resource" id="Resource_d0u6y"]
+script = ExtResource("2_node")
+id = &"gem"
+speaker = "Jerry"
+text = "[shake rate=25.0 level=10.0]Oh great, now you're cursed too...[/shake]
+I told you not to touch that!"
+expression = &"surprised"
+next_node_id = &"gem2"
+
+[sub_resource type="Resource" id="Resource_il7qn"]
+script = ExtResource("3_choice")
+text = "Who's Beth?"
+next_node_id = &"wife"
+
+[sub_resource type="Resource" id="Resource_ub8vl"]
+script = ExtResource("3_choice")
+text = "Okay..."
+
+[sub_resource type="Resource" id="Resource_7numd"]
+script = ExtResource("10_ub8vl")
+id = &"curse_away"
+display_name = "CurseAway"
+description = "Some weird anti-curse device"
+icon = ExtResource("10_il7qn")
+consumed_on_use = true
+scrap_yield = 995
+
+[sub_resource type="Resource" id="Resource_fcnqv"]
+script = ExtResource("11_eiemq")
+item = SubResource("Resource_7numd")
+
+[sub_resource type="Resource" id="EffectToldAboutGem"]
+script = ExtResource("4_effect")
+flag = &"told_jerry_about_gem"
+
+[sub_resource type="Resource" id="Resource_3gngh"]
+script = ExtResource("2_node")
+id = &"gem2"
+speaker = "Jerry"
+text = "Here, take this [color=#87CEEB]CurseAway[/color]. 
+[color=#FFD700]Beth's dad[/color] made them."
+expression = &"torso"
+choices = Array[ExtResource("3_choice")]([SubResource("Resource_il7qn"), SubResource("Resource_ub8vl")])
+effects = Array[ExtResource("4_pxv5l")]([SubResource("Resource_fcnqv"), SubResource("EffectToldAboutGem")])
+
+[sub_resource type="Resource" id="Resource_eiemq"]
+script = ExtResource("2_node")
+id = &"wife"
+speaker = "Jerry"
+text = "She's...
+[rainbow freq=0.8 sat=0.8 val=0.9]*mah wife.*[/rainbow]"
+expression = &"surprised"
+
+[sub_resource type="Resource" id="Resource_toghu"]
+script = ExtResource("2_node")
+id = &"goodbye"
+speaker = "Jerry"
+text = "Whatever you do, [wave amp=30.0 freq=4.0]don't go behind[/wave] that weird obelisk."
+expression = &"torso"
+
+[sub_resource type="Resource" id="NodeGoodbyeWarned"]
+script = ExtResource("2_node")
+id = &"goodbye_warned"
+speaker = "Jerry"
+text = "I'm sure it'll be fine.
+[i]Probably...[/i]"
+expression = &"surprised"
+
+[sub_resource type="Resource" id="Resource_ofwu7"]
+script = ExtResource("3_choice")
+text = "My Bad"
+next_node_id = &"tough_luck"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_dsokh"]
+script = ExtResource("3_choice")
+text = "[Point gun] Give me yours"
+next_node_id = &"threaten"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_e5enf"]
+script = ExtResource("2_node")
+id = &"scrapped_cure"
+speaker = "Jerry"
+text = "Why would you do that? I only had one!"
+choices = Array[ExtResource("3_choice")]([SubResource("Resource_ofwu7"), SubResource("Resource_dsokh")])
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[sub_resource type="Resource" id="Resource_0u0po"]
+script = ExtResource("10_ub8vl")
+display_name = "CurseAway"
+description = "There's something wrong with it."
+icon = ExtResource("14_ofwu7")
+stackable = true
+max_stack = 9999
+consumed_on_use = true
+scrap_yield = 99
+metadata/_custom_type_script = "uid://b76w2fxvbm865"
+
+[sub_resource type="Resource" id="Resource_0ovxt"]
+script = ExtResource("11_eiemq")
+item = SubResource("Resource_0u0po")
+quantity = 9999
+metadata/_custom_type_script = "uid://c3fuss2tp4opr"
+
+[sub_resource type="Resource" id="Resource_4ewvf"]
+script = ExtResource("2_node")
+id = &"threaten"
+speaker = "Jerry"
+text = "[shake rate=30.0 level=15.0]Okay fine you can have mine, Just leave me alone.[/shake]"
+effects = Array[ExtResource("4_pxv5l")]([SubResource("Resource_0ovxt")])
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[resource]
+script = ExtResource("1_conversation")
+id = &"jerry_intro"
+entry_node_id = &"start"
+default_speaker_profile = SubResource("Resource_bdtxa")
+nodes = Array[ExtResource("2_node")]([SubResource("NodeStart"), SubResource("Resource_0oncu"), SubResource("Resource_fn4oh"), SubResource("Resource_d0u6y"), SubResource("Resource_3gngh"), SubResource("Resource_eiemq"), SubResource("Resource_toghu"), SubResource("NodeGoodbyeWarned"), SubResource("Resource_e5enf"), SubResource("Resource_4ewvf")])

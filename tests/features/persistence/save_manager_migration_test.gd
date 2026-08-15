@@ -1,7 +1,7 @@
 extends SceneTree
 
 const SLOT := 0
-const TARGET_AREA := "res://scenes/docs/gym.tscn"
+const TARGET_AREA := "res://shared/sandbox/gym.tscn"
 
 
 func _initialize() -> void:

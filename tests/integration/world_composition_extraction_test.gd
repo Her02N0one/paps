@@ -1,8 +1,8 @@
 extends SceneTree
 
 const WORLD_SCENE := preload("res://scenes/world/world_root.tscn")
-const TARGET_AREA := "res://scenes/docs/gym.tscn"
-const SCRAP := preload("res://resources/items/scrap.tres")
+const TARGET_AREA := "res://shared/sandbox/gym.tscn"
+const SCRAP := preload("res://systems/inventory/items/scrap.tres")
 
 
 func _initialize() -> void:
@@ -26,7 +26,7 @@ func _run() -> void:
 	game_state.enter_area(TARGET_AREA)
 	var dynamic_id := game_state.add_dynamic_pickup(TARGET_AREA, SCRAP, 2, Transform3D(Basis.IDENTITY, Vector3(4.0, 1.0, 1.5)))
 	var person_id := StringName("jerry")
-	game_state.register_person_if_missing(person_id, TARGET_AREA, "res://scenes/world/entities/person.tscn", Transform3D(Basis.IDENTITY, Vector3(1.5, 0.0, 2.5)), {})
+	game_state.register_person_if_missing(person_id, TARGET_AREA, "res://entities/characters/jerry/person_jerry.tscn", Transform3D(Basis.IDENTITY, Vector3(1.5, 0.0, 2.5)), {})
 
 	var world := WORLD_SCENE.instantiate() as World
 	world.bind_services(game_manager, game_state, save_manager)

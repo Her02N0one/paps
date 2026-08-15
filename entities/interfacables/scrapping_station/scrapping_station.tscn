@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://ca77wwyefwgdl"]
+
+[ext_resource type="Script" uid="uid://kajjfrmqb3b" path="res://entities/interfacables/scrapping_station/scrapping_station.gd" id="1_station"]
+
+[sub_resource type="StandardMaterial3D" id="WorkbenchMaterial"]
+albedo_color = Color(0.22, 0.26, 0.24, 1)
+metallic = 0.45
+roughness = 0.62
+
+[sub_resource type="BoxMesh" id="WorkbenchMesh"]
+material = SubResource("WorkbenchMaterial")
+size = Vector3(2.2, 1.1, 1.2)
+
+[sub_resource type="BoxShape3D" id="WorkbenchShape"]
+size = Vector3(2.2, 1.1, 1.2)
+
+[node name="ScrappingWorkbench" type="StaticBody3D" unique_id=2143476978]
+
+[node name="ScrappingStation" type="Node" parent="." unique_id=42411383]
+script = ExtResource("1_station")
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=281177063]
+mesh = SubResource("WorkbenchMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=409276564]
+shape = SubResource("WorkbenchShape")

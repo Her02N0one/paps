@@ -1,20 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://bd4qp8q813n2f" path="res://scripts/features/ui/game_ui_controller.gd" id="1_ui_controller"]
-[ext_resource type="Script" uid="uid://de0s0bg2esg2y" path="res://scripts/features/ui/modal_state_controller.gd" id="2_modal_state"]
 
 [node name="Systems" type="Node"]
 process_mode = 3
 
-[node name="ModalStateController" type="Node" parent="."]
-script = ExtResource("2_modal_state")
 
-[node name="WorldUIController" type="Node" parent="."]
-process_mode = 3
-script = ExtResource("1_ui_controller")
-player_path = NodePath("../../GameplayWorld/EntityRoot/Player")
-hud_path = NodePath("../../WorldUI/HUDLayer/HUD")
-intro_panel_path = NodePath("../../WorldUI/MenuLayer/MenuUI/IntroPanel")
-pause_panel_path = NodePath("../../WorldUI/MenuLayer/MenuUI/PausePanel")
-interact_hint_path = NodePath("../../WorldUI/HUDLayer/HUD/InteractHint")
-crosshair_path = NodePath("../../WorldUI/HUDLayer/HUD/CrossHair")

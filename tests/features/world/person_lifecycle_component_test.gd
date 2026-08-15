@@ -1,6 +1,6 @@
 extends SceneTree
 
-const PERSON_COMPONENT_SCRIPT := preload("res://scripts/features/world/person_lifecycle_component.gd")
+const PERSON_COMPONENT_SCRIPT := preload("res://entities/characters/base_npc/person_lifecycle_component.gd")
 
 
 func _initialize() -> void:
@@ -18,10 +18,10 @@ func _run() -> void:
 	var level := BaseLevel.new()
 	root.add_child(level)
 
-	var area_path := "res://scenes/docs/gym.tscn"
+	var area_path := "res://shared/sandbox/gym.tscn"
 	var person_id := StringName("jerry")
 	game_state.enter_area(area_path)
-	game_state.register_person_if_missing(person_id, area_path, "res://scenes/world/entities/person.tscn", Transform3D(Basis.IDENTITY, Vector3(1.0, 0.0, 2.0)), {})
+	game_state.register_person_if_missing(person_id, area_path, "res://entities/characters/jerry/person_jerry.tscn", Transform3D(Basis.IDENTITY, Vector3(1.0, 0.0, 2.0)), {})
 
 	var component = PERSON_COMPONENT_SCRIPT.new()
 	component.configure(game_state, entity_root)

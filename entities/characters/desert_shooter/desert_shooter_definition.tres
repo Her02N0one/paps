@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PersonDefinition" format=3 uid="uid://bxn2kten2nplg"]
+
+[ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://entities/characters/base_npc/person_definition.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+speaker_name = "Desert Shooter"
+height_meters = 1.8
+max_health = 120.0
+base_damage = 15.0
+attack_range_meters = 12.0
+attack_cooldown_seconds = 1.2
+move_speed_meters_per_sec = 4.0
+combat_engage_distance_meters = 12.0
+combat_disengage_distance_meters = 18.0
+is_hostile = true
