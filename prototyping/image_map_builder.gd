@@ -121,23 +121,22 @@ func _build_map() -> void:
 			var feat_color = img_feat.get_pixel(x, z)
 			var item_id = 0 # Default to Wasteland
 			
+			
 			if feat_color.a > 0.5:
-				if _color_match(feat_color, Color.BLACK):
-					item_id = 1 # Road
-				elif _color_match(feat_color, Color.GREEN):
-					item_id = 2 # Building
-				elif _color_match(feat_color, Color.BLUE):
-					item_id = 3
+				for feature in features:
+					if not _color_match(feat_color, feature):
+						return
+					item_id += 1
 			
 			# Place the surface block (with collision)
 			grid_map.set_cell_item(Vector3i(x, y_level, z), item_id)
 			
 			# Find the lowest neighbor height so we only fill the visible cliff faces
 			var min_neighbor_y = y_level
-			if x > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x-1, z))
-			if x < width - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x+1, z))
-			if z > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z-1))
-			if z < height - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z+1))
+			#if x > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x-1, z))
+			#if x < width - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x+1, z))
+			#if z > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z-1))
+			#if z < height - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z+1))
 			
 			# Fill downwards only as far as the lowest neighbor, using NON-COLLIDING filler blocks
 			for fill_y in range(min_neighbor_y, y_level):

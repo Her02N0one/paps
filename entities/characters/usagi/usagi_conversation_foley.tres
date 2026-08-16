@@ -1,0 +1,108 @@
+[gd_resource type="Resource" script_class="DialogueConversation" format=3 uid="uid://cfua3vtse3e45"]
+
+[ext_resource type="Resource" uid="uid://b7t4aiuqdqgxm" path="res://entities/characters/usagi/usagi_speaker_profile.tres" id="1_vlmun"]
+[ext_resource type="Script" uid="uid://cglee7piovdkl" path="res://systems/dialogue/dialogue_node.gd" id="2_7kjuc"]
+[ext_resource type="Script" uid="uid://cf55a2xa12rru" path="res://systems/dialogue/dialogue_choice.gd" id="3_g7sd6"]
+[ext_resource type="Script" uid="uid://b51n58cliyl8y" path="res://systems/dialogue/conditions/dialogue_condition.gd" id="4_m5pmt"]
+[ext_resource type="Script" uid="uid://dn068bjcmik5e" path="res://systems/dialogue/effects/dialogue_effect.gd" id="5_jy4p2"]
+[ext_resource type="AudioStream" uid="uid://dr4o7upbfpy52" path="res://entities/characters/usagi/voice_lines/lasernoisespitched.wav" id="6_uhy7l"]
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://systems/dialogue/dialogue_conversation.gd" id="7_ulnbd"]
+
+[sub_resource type="Resource" id="Resource_m6rps"]
+script = ExtResource("3_g7sd6")
+text = "Foley?"
+next_node_id = &"foley"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_ri6b7"]
+script = ExtResource("3_g7sd6")
+text = "I don't care"
+next_node_id = &"fu"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_n08tw"]
+script = ExtResource("2_7kjuc")
+id = &"hello"
+speaker = "Usagi"
+text = "Hello there! I'm [wave amp=30.0 freq=5.0][color=#FF69B4]Usagi[/color][/wave]!
+I'm the [shake rate=20.0 level=5 connected=1]master[/shake] [wave amp=25.0 freq=4.0]Foley Artist[/wave]!"
+choices = Array[ExtResource("3_g7sd6")]([SubResource("Resource_m6rps"), SubResource("Resource_ri6b7")])
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[sub_resource type="Resource" id="Resource_ov8qe"]
+script = ExtResource("2_7kjuc")
+id = &"fu"
+speaker = "Usagi"
+text = "[shake rate=40.0 level=10 connected=1][color=#FF0000]Alright well fuck you chud, get bent.[/color][/shake]"
+expression = &"fat"
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[sub_resource type="Resource" id="Resource_jkr81"]
+script = ExtResource("3_g7sd6")
+text = "Absolutely"
+next_node_id = &"laser_foley"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_omqb8"]
+script = ExtResource("3_g7sd6")
+text = "Hell no"
+next_node_id = &"fu"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_x453x"]
+script = ExtResource("2_7kjuc")
+id = &"foley"
+speaker = "Usagi"
+text = "Yes, [wave amp=20.0 freq=6.0]Foley[/wave]!
+I've [rainbow freq=0.5 sat=0.8 val=1.0]perfected[/rainbow] the art of sound.
+Do you want to hear my [tornado radius=3.0 freq=2.0][color=#00FFFF]laser[/color][/tornado] sound effect?"
+choices = Array[ExtResource("3_g7sd6")]([SubResource("Resource_jkr81"), SubResource("Resource_omqb8")])
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[sub_resource type="Resource" id="Resource_6c67f"]
+script = ExtResource("3_g7sd6")
+text = "That was terrible"
+next_node_id = &"terrible"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_iyy3j"]
+script = ExtResource("3_g7sd6")
+text = "Sound's really convincing"
+next_node_id = &"convincing"
+metadata/_custom_type_script = "uid://cf55a2xa12rru"
+
+[sub_resource type="Resource" id="Resource_ugi88"]
+script = ExtResource("2_7kjuc")
+id = &"laser_foley"
+speaker = "Usagi"
+text = "...................................................................................................... ...
+[wave amp=15.0 freq=3.0]So... what did you think?[/wave]"
+voice_line = ExtResource("6_uhy7l")
+allow_skip = false
+choices = Array[ExtResource("3_g7sd6")]([SubResource("Resource_6c67f"), SubResource("Resource_iyy3j")])
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[sub_resource type="Resource" id="Resource_lxdxb"]
+script = ExtResource("2_7kjuc")
+id = &"terrible"
+speaker = "Usagi"
+text = "I knew it...
+[shake rate=10.0 level=3 connected=1]my family was right...[/shake]"
+expression = &"surprised"
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[sub_resource type="Resource" id="Resource_36drl"]
+script = ExtResource("2_7kjuc")
+id = &"convincing"
+speaker = "Usagi"
+text = "Tch! [wave amp=20.0 freq=5.0]Yeah, I know.[/wave]
+I'm the [rainbow freq=0.5 sat=0.8 val=1.0]best[/rainbow] there is."
+metadata/_custom_type_script = "uid://cglee7piovdkl"
+
+[resource]
+script = ExtResource("7_ulnbd")
+id = &"usagi_foley"
+entry_node_id = &"hello"
+default_speaker_profile = ExtResource("1_vlmun")
+nodes = Array[ExtResource("2_7kjuc")]([SubResource("Resource_n08tw"), SubResource("Resource_ov8qe"), SubResource("Resource_x453x"), SubResource("Resource_ugi88"), SubResource("Resource_lxdxb"), SubResource("Resource_36drl")])
+metadata/_custom_type_script = "uid://c4ge5f0amdtmm"

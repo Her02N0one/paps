@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://systems/zone_management/gateway.tscn" id="2_tp8jt"]
 [ext_resource type="Script" uid="uid://4er8v8jgguer" path="res://prototyping/image_map_builder.gd" id="3_builder"]
 [ext_resource type="PackedScene" uid="uid://protominimap" path="res://prototyping/minimap.tscn" id="4_minimap"]
+[ext_resource type="Script" uid="uid://brbk530mw84km" path="res://prototyping/proto_tile_data.gd" id="4_qa0cu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tp8jt"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -16,6 +17,10 @@ sky_material = SubResource("ProceduralSkyMaterial_tp8jt")
 background_mode = 2
 sky = SubResource("Sky_qa0cu")
 glow_enabled = true
+
+[sub_resource type="Resource" id="Resource_ri6b7"]
+script = ExtResource("4_qa0cu")
+metadata/_custom_type_script = "uid://brbk530mw84km"
 
 [node name="ScaleTest" type="Node3D" unique_id=1237203677]
 script = ExtResource("1_level")
@@ -40,8 +45,10 @@ script = ExtResource("3_builder")
 elevation_layer = "res://prototyping/maps/elevation.png"
 features_layer = "res://prototyping/maps/features.png"
 grid_map = NodePath("../GridMap")
+wasteland = SubResource("Resource_ri6b7")
 
 [node name="Minimap" parent="." unique_id=279661070 instance=ExtResource("4_minimap")]
+default_map_path = "res://prototyping/maps/elevation.png"
 
 [node name="Ruler" type="Node3D" parent="." unique_id=2109275507]
 metadata/_edit_group_ = true
