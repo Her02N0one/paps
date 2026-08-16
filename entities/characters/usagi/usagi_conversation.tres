@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="DialogueSpeakerProfile" format=3 uid="uid://b7t4aiuqdqgxm"]
+
+[ext_resource type="Script" uid="uid://20p6xacrl8mk" path="res://systems/dialogue/dialogue_speaker_profile.gd" id="1_wmrs6"]
+
+[resource]
+script = ExtResource("1_wmrs6")
+display_name = "Usagi"
+metadata/_custom_type_script = "uid://20p6xacrl8mk"

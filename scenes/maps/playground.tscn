@@ -9,10 +9,11 @@
 [ext_resource type="Resource" path="res://systems/inventory/items/strange_gem.tres" id="8_gem"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://systems/zone_management/base_level.gd" id="9_level"]
 [ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="10_interactable"]
-[ext_resource type="PackedScene" uid="uid://simple_npc" path="res://entities/characters/base_npc/simple_npc.tscn" id="11_osidk"]
-[ext_resource type="Resource" uid="uid://c83jerrydef01" path="res://entities/characters/jerry/jerry_definition.tres" id="jerry_def"]
+[ext_resource type="PackedScene" path="res://entities/characters/base_npc/simple_npc.tscn" id="11_osidk"]
 [ext_resource type="PackedScene" uid="uid://ca77wwyefwgdl" path="res://entities/interfacables/scrapping_station/scrapping_station.tscn" id="11_scrapping_station"]
+[ext_resource type="Resource" uid="uid://byahsnnggd78a" path="res://entities/characters/usagi/usagi_definition.tres" id="14_ri6b7"]
 [ext_resource type="Script" uid="uid://ce3liopcmdigw" path="res://systems/zone_management/new_game_spawn_point.gd" id="18_new_game_spawn"]
+[ext_resource type="Resource" uid="uid://c83jerrydef01" path="res://entities/characters/jerry/jerry_definition.tres" id="jerry_def"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mrac1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -307,6 +308,11 @@ mesh = SubResource("BoxMesh_panel")
 shape = SubResource("BoxShape3D_panel")
 
 [node name="PersonJerry" parent="." unique_id=244855065 instance=ExtResource("11_osidk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6258743, 15.169888)
 person_id = &"jerry"
 definition = ExtResource("jerry_def")
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6258743, 15.169888)
+
+[node name="PersonUsagi" parent="." unique_id=1083009464 instance=ExtResource("11_osidk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.223322, 2.5000002, -30.767853)
+person_id = &"usagi"
+definition = ExtResource("14_ri6b7")
