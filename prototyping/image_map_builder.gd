@@ -11,6 +11,8 @@ const default_tile_size = 10
 @export var wasteland: ProtoTileData = ProtoTileData.new()
 @export var features: Dictionary[Color, ProtoTileData]
 
+var _filler_item_id: int = 0
+
 @export_group("Elevation Mapping")
 @export var base_elevation_step: float = 0.5 ## Height in meters of a single walkable band
 @export var cliff_threshold_band: int = 16 ## Grayscale band (0-31) where terrain turns into cliffs
@@ -55,9 +57,9 @@ func _build_mesh_library() -> void:
 	for feature in features:
 		var feature_data = features[feature]
 		var mat = base_mat.duplicate()
-		mat.set_shader_paramter("base_color", feature_data.base_color)
-		mat.set_shader_paramter("grid_color", feature_data.base_color)
-		mat.set_shader_paramter("grid_size", feature_data.grid_size)
+		mat.set_shader_parameter("base_color", feature_data.base_color)
+		mat.set_shader_parameter("grid_color", feature_data.base_color)
+		mat.set_shader_parameter("grid_size", feature_data.grid_size)
 		var mesh = BoxMesh.new()
 		mesh.size = Vector3(default_tile_size, base_elevation_step * feature_data.elevation_multiplier, default_tile_size)
 		mesh.material = mat
@@ -71,8 +73,9 @@ func _build_mesh_library() -> void:
 	# Last Item: Filler Wasteland (No Collision)
 	lib.create_item(count)
 	lib.set_item_mesh(count, mesh_waste)
-	# Purposely NO shapes for item 3 so Jolt Physics isn't overwhelmed by underground blocks
-	
+	# Purposely NO shapes for the filler item so Jolt Physics isn't overwhelmed by underground blocks
+	_filler_item_id = count
+
 	grid_map.mesh_library = lib
 
 
@@ -120,27 +123,28 @@ func _build_map() -> void:
 			
 			var feat_color = img_feat.get_pixel(x, z)
 			var item_id = 0 # Default to Wasteland
-			
-			
+
 			if feat_color.a > 0.5:
+				var idx = 1
 				for feature in features:
-					if not _color_match(feat_color, feature):
-						return
-					item_id += 1
-			
+					if _color_match(feat_color, feature):
+						item_id = idx
+						break
+					idx += 1
+
 			# Place the surface block (with collision)
 			grid_map.set_cell_item(Vector3i(x, y_level, z), item_id)
-			
+
 			# Find the lowest neighbor height so we only fill the visible cliff faces
 			var min_neighbor_y = y_level
-			#if x > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x-1, z))
-			#if x < width - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x+1, z))
-			#if z > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z-1))
-			#if z < height - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z+1))
-			
+			if x > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x-1, z))
+			if x < width - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x+1, z))
+			if z > 0: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z-1))
+			if z < height - 1: min_neighbor_y = min(min_neighbor_y, _get_y_level(img_elev, x, z+1))
+
 			# Fill downwards only as far as the lowest neighbor, using NON-COLLIDING filler blocks
 			for fill_y in range(min_neighbor_y, y_level):
-				grid_map.set_cell_item(Vector3i(x, fill_y, z), 3)
+				grid_map.set_cell_item(Vector3i(x, fill_y, z), _filler_item_id)
 
 func _color_match(c1: Color, c2: Color, tolerance: float = 0.1) -> bool:
 	return abs(c1.r - c2.r) < tolerance and abs(c1.g - c2.g) < tolerance and abs(c1.b - c2.b) < tolerance
