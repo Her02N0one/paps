@@ -1,16 +1,22 @@
 [gd_scene format=3 uid="uid://bworldscene01"]
 
 [ext_resource type="Script" uid="uid://b8ctn72b0kkv7" path="res://systems/zone_management/world.gd" id="1_world"]
-[ext_resource type="PackedScene" path="res://scenes/world/world_systems.tscn" id="2_systems"]
-[ext_resource type="PackedScene" path="res://scenes/world/world_gameplay.tscn" id="3_gameplay"]
-[ext_resource type="PackedScene" path="res://systems/ui/world_ui.tscn" id="4_world_ui"]
+[ext_resource type="PackedScene" uid="uid://dp6b6256fbbw5" path="res://systems/ui/world_ui.tscn" id="4_world_ui"]
 
 [node name="World" type="Node3D" unique_id=1226249983]
 process_mode = 3
 script = ExtResource("1_world")
 
-[node name="Systems" parent="." unique_id=913152789 instance=ExtResource("2_systems")]
+[node name="Systems" type="Node" parent="."]
+process_mode = 3
 
-[node name="GameplayWorld" parent="." unique_id=873819573 instance=ExtResource("3_gameplay")]
+[node name="GameplayWorld" type="Node3D" parent="."]
+process_mode = 1
+
+[node name="LevelRoot" type="Node3D" parent="GameplayWorld"]
+
+[node name="EntityRoot" type="Node3D" parent="GameplayWorld"]
+
+[node name="EffectRoot" type="Node3D" parent="GameplayWorld"]
 
 [node name="WorldUI" parent="." unique_id=1513472492 instance=ExtResource("4_world_ui")]
