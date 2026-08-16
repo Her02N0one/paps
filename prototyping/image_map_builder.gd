@@ -1,17 +1,21 @@
 class_name ImageMapBuilder
 extends Node3D
 
+
+const default_tile_size = 10
+
 @export_file("*.png") var elevation_layer: String
 @export_file("*.png") var features_layer: String
 @export var grid_map: GridMap
+
+@export var wasteland: ProtoTileData = ProtoTileData.new()
+@export var features: Dictionary[Color, ProtoTileData]
 
 @export_group("Elevation Mapping")
 @export var base_elevation_step: float = 0.5 ## Height in meters of a single walkable band
 @export var cliff_threshold_band: int = 16 ## Grayscale band (0-31) where terrain turns into cliffs
 @export var cliff_band_multiplier: int = 4 ## How many base steps a cliff band jumps
 
-## (Deprecated) This was used for linear elevation.
-## The map now uses a non-linear banding system (0-128 = 0.4m steps, 128-255 = 3.6m steps)
 
 
 func _ready() -> void:
@@ -25,6 +29,8 @@ func _ready() -> void:
 	_build_mesh_library()
 	_build_map()
 
+
+
 func _build_mesh_library() -> void:
 	var lib = MeshLibrary.new()
 	
@@ -36,41 +42,35 @@ func _build_mesh_library() -> void:
 	mat_waste.set_shader_parameter("grid_color", Color(0.3, 0.3, 0.3))
 	mat_waste.set_shader_parameter("grid_size", 1)
 	var mesh_waste = BoxMesh.new()
-	mesh_waste.size = Vector3(10, base_elevation_step, 10)
+	mesh_waste.size = Vector3(default_tile_size, base_elevation_step, default_tile_size)
 	mesh_waste.material = mat_waste
 	lib.create_item(0)
 	lib.set_item_mesh(0, mesh_waste)
 	var shape_waste = BoxShape3D.new()
-	shape_waste.size = Vector3(10, base_elevation_step, 10)
+	shape_waste.size = Vector3(default_tile_size, base_elevation_step, default_tile_size)
 	lib.set_item_shapes(0, [shape_waste, Transform3D.IDENTITY])
 	
-	# Item 1: Road (Dark Grey)
-	var mat_road = base_mat.duplicate()
-	mat_road.set_shader_parameter("base_color", Color(0.15, 0.15, 0.15))
-	mat_road.set_shader_parameter("grid_color", Color(0.1, 0.1, 0.1))
-	var mesh_road = BoxMesh.new()
-	mesh_road.size = Vector3(10, base_elevation_step, 10)
-	mesh_road.material = mat_road
-	lib.create_item(1)
-	lib.set_item_mesh(1, mesh_road)
-	lib.set_item_shapes(1, [shape_waste, Transform3D.IDENTITY])
+	var count = 1
+
+	for feature in features:
+		var feature_data = features[feature]
+		var mat = base_mat.duplicate()
+		mat.set_shader_paramter("base_color", feature_data.base_color)
+		mat.set_shader_paramter("grid_color", feature_data.base_color)
+		mat.set_shader_paramter("grid_size", feature_data.grid_size)
+		var mesh = BoxMesh.new()
+		mesh.size = Vector3(default_tile_size, base_elevation_step * feature_data.elevation_multiplier, default_tile_size)
+		mesh.material = mat
+		lib.create_item(count)
+		lib.set_item_mesh(count, mesh)
+		var shape = BoxShape3D.new()
+		shape.size = Vector3(default_tile_size, base_elevation_step * feature_data.elevation_multiplier, default_tile_size)
+		lib.set_item_shapes(count, [shape, Transform3D.IDENTITY])
+		count += 1
 	
-	# Item 2: Building (Blue/Grey)
-	var mat_bldg = base_mat.duplicate()
-	mat_bldg.set_shader_parameter("base_color", Color(0.2, 0.3, 0.4))
-	mat_bldg.set_shader_parameter("grid_color", Color(0.15, 0.25, 0.35))
-	var mesh_bldg = BoxMesh.new()
-	mesh_bldg.size = Vector3(10, 30, 10) # 30m tall building block
-	mesh_bldg.material = mat_bldg
-	lib.create_item(2)
-	lib.set_item_mesh(2, mesh_bldg)
-	var shape_bldg = BoxShape3D.new()
-	shape_bldg.size = Vector3(10, 30, 10)
-	lib.set_item_shapes(2, [shape_bldg, Transform3D(Basis(), Vector3(0, 15, 0))])
-	
-	# Item 3: Filler Wasteland (No Collision)
-	lib.create_item(3)
-	lib.set_item_mesh(3, mesh_waste)
+	# Last Item: Filler Wasteland (No Collision)
+	lib.create_item(count)
+	lib.set_item_mesh(count, mesh_waste)
 	# Purposely NO shapes for item 3 so Jolt Physics isn't overwhelmed by underground blocks
 	
 	grid_map.mesh_library = lib
@@ -124,8 +124,10 @@ func _build_map() -> void:
 			if feat_color.a > 0.5:
 				if _color_match(feat_color, Color.BLACK):
 					item_id = 1 # Road
-				elif _color_match(feat_color, Color.BLUE):
+				elif _color_match(feat_color, Color.GREEN):
 					item_id = 2 # Building
+				elif _color_match(feat_color, Color.BLUE):
+					item_id = 3
 			
 			# Place the surface block (with collision)
 			grid_map.set_cell_item(Vector3i(x, y_level, z), item_id)

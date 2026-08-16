@@ -8,7 +8,9 @@
 [ext_resource type="Resource" uid="uid://dlxjw0kwohu2s" path="res://systems/inventory/items/sand_crystal.tres" id="6_crystal"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://systems/zone_management/base_level.gd" id="7_level"]
 [ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="8_interactable"]
+[ext_resource type="PackedScene" path="res://entities/items/pickup_item/pickup_item.tscn" id="10_hi4sg"]
 [ext_resource type="Script" uid="uid://ce3liopcmdigw" path="res://systems/zone_management/new_game_spawn_point.gd" id="10_new_game_spawn"]
+[ext_resource type="Resource" uid="uid://lf601ywhblno" path="res://systems/inventory/items/dirty_dirty_magazine.tres" id="11_gnacr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n5nep"]
 sky_top_color = Color(0.497509, 0.45307195, 0.1831828, 1)
@@ -190,3 +192,7 @@ mesh = SubResource("SphereMesh_pickup")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Node/SandCrystal" unique_id=824257884]
 shape = SubResource("SphereShape3D_pickup")
+
+[node name="PickupItem" parent="Node" unique_id=1901460803 instance=ExtResource("10_hi4sg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.699677, 2.699999, 11.705898)
+item_data = ExtResource("11_gnacr")

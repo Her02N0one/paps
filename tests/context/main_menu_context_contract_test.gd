@@ -8,10 +8,10 @@ class TestSaveManager extends SaveManager:
 	var load_success := false
 	var load_requests := 0
 
-	func has_save(_slot: int = DEFAULT_SLOT) -> bool:
+	func has_save() -> bool:
 		return has_save_value
 
-	func load_game(_slot: int = DEFAULT_SLOT) -> bool:
+	func load_game(filename: String = "") -> bool:
 		load_requests += 1
 		return load_success
 

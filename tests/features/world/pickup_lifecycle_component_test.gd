@@ -10,7 +10,7 @@ class TestSaveManager:
 
 	var save_calls := 0
 
-	func save_game(_slot: int = 0) -> bool:
+	func save_game(type: String, save_name: String = "") -> bool:
 		save_calls += 1
 		return true
 

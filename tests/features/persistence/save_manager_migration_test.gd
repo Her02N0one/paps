@@ -23,7 +23,7 @@ func _run() -> void:
 		quit(1)
 		return
 
-	var loaded := save_manager.load_game(SLOT)
+	var loaded := save_manager.load_game("")
 	var migrated_flag: bool = bool(game_state.get_global_flag(&"legacy_flag", false))
 	var migrated_area: bool = game_state.current_area == TARGET_AREA
 

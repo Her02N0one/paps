@@ -21,9 +21,7 @@ func _run() -> void:
 	intro_panel.name = "IntroPanel"
 	host.add_child(intro_panel)
 
-	var modal_state := ModalStateController.new()
-	modal_state.name = "ModalStateController"
-	host.add_child(modal_state)
+	# modal_state was removed, GameUIController handles it directly.
 
 	var controller := GameUIController.new()
 	controller.name = "WorldUIController"
@@ -44,18 +42,18 @@ func _run() -> void:
 	panel.modal_id = &"test_modal"
 	host.add_child(panel)
 	await process_frame
-	modal_state.open(&"test_modal")
-	var opened := modal_state.active_modal == &"test_modal" and panel.visible
+	controller.open(&"test_modal")
+	var opened := controller.active_modal == &"test_modal" and panel.visible
 
 	panel.close_panel()
-	var closed := modal_state.active_modal == ModalStateController.NONE and not panel.visible
+	var closed := controller.active_modal == controller.NONE and not panel.visible
 
 	controller.start_world_session(false)
-	var session_started := controller.can_pause and modal_state.active_modal == ModalStateController.NONE
+	var session_started := controller.can_pause and controller.active_modal == controller.NONE
 	controller.start_world_session(true)
-	var intro_opened := not controller.can_pause and modal_state.active_modal == controller.MODAL_INTRO
+	var intro_opened := not controller.can_pause and controller.active_modal == controller.MODAL_INTRO
 	intro_panel.continue_pressed.emit()
-	var intro_closed := controller.can_pause and modal_state.active_modal == ModalStateController.NONE
+	var intro_closed := controller.can_pause and controller.active_modal == controller.NONE
 
 	host.queue_free()
 	await process_frame

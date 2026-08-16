@@ -7,11 +7,11 @@ class TestSaveManager extends SaveManager:
 	var new_game_requests: Array[String] = []
 	var save_requests := 0
 
-	func start_new_game(initial_area: String, _slot: int = DEFAULT_SLOT) -> bool:
+	func start_new_game(initial_area: String) -> bool:
 		new_game_requests.append(initial_area)
 		return true
 
-	func save_game(_slot: int = DEFAULT_SLOT) -> bool:
+	func save_game(type: String, save_name: String = "") -> bool:
 		save_requests += 1
 		return true
 
