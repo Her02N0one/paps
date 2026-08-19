@@ -21,7 +21,7 @@ const FALLBACK_ICON := preload("res://icon.png")
 var _selected_slot_id := -1
 var _action_user: Node
 var _inventory: InventoryStore
-var _slot_widgets: Array[InventorySlotWidget] = []
+var _slot_widgets: Array[ItemStackWidget] = []
 
 
 func open_panel() -> void:
@@ -64,14 +64,14 @@ func toggle_panel() -> void:
 		open_panel()
 
 
-func _refresh(slots: Array[InventorySlot]) -> void:
+func _refresh(slots: Array[ItemStack]) -> void:
 	_clear_slots()
 	# Rebuild widgets from snapshots while preserving the selected slot whenever it still exists.
-	var selected_slot: InventorySlot
+	var selected_slot: ItemStack
 	var total_items := 0
 	for slot in slots:
 		total_items += slot.quantity
-		var widget: InventorySlotWidget = slot_scene.instantiate()
+		var widget: ItemStackWidget = slot_scene.instantiate()
 		widget.bind(slot)
 		widget.selected.connect(_select_slot)
 		slot_grid.add_child(widget)
@@ -105,16 +105,16 @@ func _select_slot(slot_id: int) -> void:
 	_show_details(_inventory.get_slot(slot_id) if _inventory else null)
 
 
-func _show_details(slot: InventorySlot) -> void:
+func _show_details(slot: ItemStack) -> void:
 	var has_selection := slot != null
 	detail_icon.visible = has_selection
-	detail_icon.texture = (slot.data.icon if slot.data.icon else FALLBACK_ICON) if has_selection else null
-	detail_name.text = slot.data.display_name if has_selection else "No item selected"
-	detail_description.text = slot.data.description if has_selection else "Select an inventory slot to view its details."
+	detail_icon.texture = (slot.definition.icon if slot.definition.icon else FALLBACK_ICON) if has_selection else null
+	detail_name.text = slot.definition.display_name if has_selection else "No item selected"
+	detail_description.text = slot.definition.description if has_selection else "Select an inventory slot to view its details."
 	detail_quantity.text = "Quantity: %d" % slot.quantity if has_selection else ""
 	# Actions are gated by both selection state and item capabilities.
-	use_button.disabled = not has_selection or not slot.data.can_use(_action_user)
-	drop_button.disabled = not has_selection or not slot.data.droppable
+	use_button.disabled = not has_selection or not slot.definition.can_use(_action_user)
+	drop_button.disabled = not has_selection or not slot.definition.droppable
 	for widget in _slot_widgets:
 		widget.set_selected(has_selection and widget.slot_id == slot.id)
 

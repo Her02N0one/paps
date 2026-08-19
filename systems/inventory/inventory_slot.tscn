@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ce521tvos1mcg" path="res://systems/inventory/inventory_slot_widget.gd" id="1_slot"]
 
-[node name="InventorySlot" type="Button" unique_id=1019383611]
+[node name="ItemStack" type="Button" unique_id=1019383611]
 custom_minimum_size = Vector2(112, 112)
 size_flags_horizontal = 3
 toggle_mode = true

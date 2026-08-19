@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://dlxjw0kwohu2s"]
+
+[ext_resource type="Script" path="res://shared/items/item_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"sand_crystal"
+display_name = "Sand Crystal"
+description = "Formed over centuries in the desert heat."
+scrap_yield = 4

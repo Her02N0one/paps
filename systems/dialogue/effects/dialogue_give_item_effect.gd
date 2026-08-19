@@ -2,7 +2,7 @@
 class_name DialogueGiveItemEffect
 extends DialogueEffect
 
-@export var item: ItemData
+@export var item: ItemDefinition
 @export var quantity := 1
 
 

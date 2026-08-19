@@ -2,7 +2,7 @@
 class_name DialogueItemInequalityCondition
 extends DialogueCondition
 
-@export var item: ItemData
+@export var item: ItemDefinition
 @export var anchor := 1
 @export var inequality: String
 

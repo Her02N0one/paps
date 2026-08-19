@@ -5,7 +5,7 @@ extends StaticBody3D
 
 signal collected(persistent_id: String, dynamic_id: String)
 
-@export var item_data: ItemData
+@export var item_definition: ItemDefinition
 @export var quantity: int = 1
 @export var persistent_id: String = ""
 
@@ -31,8 +31,8 @@ func _ready() -> void:
 		if gs and gs.is_static_pickup_collected(gs.current_area, persistent_id):
 			queue_free()
 			return
-	if item_data:
-		interaction.set("interact_label", "Pick up " + item_data.display_name)
+	if item_definition:
+		interaction.set("interact_label", "Pick up " + item_definition.display_name)
 	else:
 		interaction.set("interact_label", "Pick up " + item_name)
 
@@ -41,8 +41,8 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
 	if get_node_or_null("Interactable") == null:
 		warnings.append("PickupItem requires an Interactable child node.")
-	if item_data == null and item_name.strip_edges().is_empty():
-		warnings.append("PickupItem should provide item_data or a non-empty fallback item_name.")
+	if item_definition == null and item_name.strip_edges().is_empty():
+		warnings.append("PickupItem should provide item_definition or a non-empty fallback item_name.")
 	if persistent_id.is_empty():
 		warnings.append("PickupItem has no persistent_id and will always respawn after area reloads unless spawned as a dynamic pickup.")
 	return warnings
@@ -51,7 +51,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 func _on_interacted(actor: Node3D) -> void:
 	var inventory_holder := InventoryHolderComponent.find_on(actor)
 	# Collection succeeds only when both item data and inventory target are valid.
-	if item_data == null or inventory_holder == null or not inventory_holder.add_item(item_data, quantity):
+	if item_definition == null or inventory_holder == null or not inventory_holder.add_item(item_definition, quantity):
 		return
 	collected.emit(persistent_id, dynamic_id)
 	queue_free()

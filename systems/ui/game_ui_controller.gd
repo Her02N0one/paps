@@ -30,6 +30,7 @@ var pause_panel: Control
 var load_menu_panel: Control
 var interact_hint: Label
 var crosshair: Label
+var time_label: Label
 var active_modal: StringName = NONE
 var _panels: Dictionary[StringName, GamePanel] = {}
 
@@ -48,6 +49,12 @@ func _ready() -> void:
 		hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if not Engine.is_editor_hint():
 		_setup_internal_controllers()
+		var tm = get_node_or_null("/root/TimeManager")
+		if tm and time_label:
+			tm.time_changed.connect(_on_time_changed)
+			var gs = get_tree().get_first_node_in_group("game_state") as GameState
+			if gs:
+				_on_time_changed(gs.current_day, gs.current_time_minutes)
 	_register_interaction_handlers()
 	_warn_if_player_missing.call_deferred()
 
@@ -300,6 +307,7 @@ func _resolve_scene_nodes() -> void:
 		load_menu_panel = get_node_or_null(load_menu_panel_path) as Control
 	interact_hint = _strict_resolve(interact_hint_path, "InteractHint") as Label
 	crosshair = _strict_resolve(crosshair_path, "CrossHair") as Label
+	time_label = hud.get_node_or_null("TimeLabel") if hud else null
 
 func _strict_resolve(path: NodePath, debug_name: String) -> Node:
 	if path.is_empty():
@@ -375,3 +383,9 @@ func _refresh_interact_hint() -> void:
 	if player == null:
 		return
 	_on_interactable_changed(player.get_current_interactable())
+
+func _on_time_changed(day: int, minutes: float) -> void:
+	if time_label:
+		var hours := int(minutes) / 60
+		var mins := int(minutes) % 60
+		time_label.text = "DAY %d, %02d:%02d" % [day, hours, mins]

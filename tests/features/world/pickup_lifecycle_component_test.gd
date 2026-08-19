@@ -2,7 +2,7 @@ extends SceneTree
 
 const PICKUP_COMPONENT_SCRIPT := preload("res://entities/items/pickup_item/pickup_lifecycle_component.gd")
 const PICKUP_SCENE := preload("res://entities/items/pickup_item/pickup_item.tscn")
-const SCRAP := preload("res://systems/inventory/items/scrap.tres")
+const SCRAP := preload("res://shared/items/scrap.tres")
 
 
 class TestSaveManager:

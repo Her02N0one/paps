@@ -1,8 +1,8 @@
-## Dialogue condition that checks item quantity on the interacting actor.
+ ## Dialogue condition that checks item quantity on the interacting actor.
 class_name DialogueHasItemCondition
 extends DialogueCondition
 
-@export var item: ItemData
+@export var item: ItemDefinition
 @export var quantity := 1
 
 

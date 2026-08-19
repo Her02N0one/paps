@@ -87,3 +87,7 @@ common/physics_interpolation=true
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+
+[autoload]
+
+TimeManager="*res://systems/time/time_manager.gd"

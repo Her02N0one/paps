@@ -1,7 +1,7 @@
 extends SceneTree
 
-const SCRAP := preload("res://systems/inventory/items/scrap.tres")
-const OLD_COIN := preload("res://systems/inventory/items/old_coin.tres")
+const SCRAP := preload("res://shared/items/scrap.tres")
+const OLD_COIN := preload("res://shared/items/old_coin.tres")
 
 
 func _initialize() -> void:
@@ -11,7 +11,7 @@ func _initialize() -> void:
 	var coin_slot := inventory.get_slots()[0]
 	var converted := ScrappingService.scrap_slot(inventory, coin_slot.id, 2, SCRAP)
 	var valid_result := converted and inventory.get_quantity(OLD_COIN) == 1 and inventory.get_quantity(SCRAP) == 2
-	var scrap_slot = inventory.get_slots().filter(func(slot): return slot.data == SCRAP)[0]
+	var scrap_slot = inventory.get_slots().filter(func(slot): return slot.definition == SCRAP)[0]
 	var refused_scrap := not ScrappingService.scrap_slot(inventory, scrap_slot.id, 1, SCRAP)
 	if not valid_result or not refused_scrap:
 		push_error("Scrapping service regression detected.")

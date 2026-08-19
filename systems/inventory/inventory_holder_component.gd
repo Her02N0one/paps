@@ -9,10 +9,10 @@ func configure(store: InventoryStore) -> void:
 	inventory = store
 
 
-func add_item(data: ItemData, quantity: int = 1) -> bool:
-	if inventory == null or data == null or quantity <= 0:
+func add_item(definition: ItemDefinition, quantity: int = 1) -> bool:
+	if inventory == null or definition == null or quantity <= 0:
 		return false
-	inventory.add_item(data, quantity)
+	inventory.add_item(definition, quantity)
 	return true
 
 

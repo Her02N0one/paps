@@ -1,10 +1,10 @@
-## Add to any scene to auto-lay out every ItemData in res://systems/inventory/items/ as a
+## Add to any scene to auto-lay out every ItemDefinition in res://shared/items/ as a
 ## display tile showing the real in-game item mesh, color-coded by item type.
 @tool
 class_name ItemZooGenerator
 extends Node3D
 
-const _ITEMS_DIR    := "res://systems/inventory/items/"
+const _ITEMS_DIR    := "res://shared/items/"
 const _PICKUP_SCENE := preload("res://entities/items/pickup_item/pickup_item.tscn")
 const _COLS         := 4
 const _COL_SPACING  := 4.0
@@ -48,8 +48,8 @@ func generate_zoo() -> void:
 	print("[ItemZoo] Placed %d items." % items.size())
 
 
-func _load_all_items() -> Array[ItemData]:
-	var result: Array[ItemData] = []
+func _load_all_items() -> Array[ItemDefinition]:
+	var result: Array[ItemDefinition] = []
 	var dir := DirAccess.open(_ITEMS_DIR)
 	if dir == null:
 		push_error("ItemZooGenerator: cannot open %s" % _ITEMS_DIR)
@@ -58,7 +58,7 @@ func _load_all_items() -> Array[ItemData]:
 	var file := dir.get_next()
 	while not file.is_empty():
 		if not dir.current_is_dir() and file.ends_with(".tres"):
-			var item := load(_ITEMS_DIR + file) as ItemData
+			var item := load(_ITEMS_DIR + file) as ItemDefinition
 			if item:
 				result.append(item)
 		file = dir.get_next()
@@ -106,7 +106,7 @@ func _scale_post(base_pos: Vector3) -> void:
 	_add(lbl)
 
 
-func _place_tile(item: ItemData, pos: Vector3, index: int) -> void:
+func _place_tile(item: ItemDefinition, pos: Vector3, index: int) -> void:
 	var base_color := _platform_color(item)
 
 	var mi := MeshInstance3D.new()
@@ -120,7 +120,7 @@ func _place_tile(item: ItemData, pos: Vector3, index: int) -> void:
 	_add(mi)
 
 	var pickup: PickupItem = _PICKUP_SCENE.instantiate()
-	pickup.item_data = item
+	pickup.item_definition = item
 	pickup.dynamic_id = "zoo_%d" % index
 	pickup.position = pos + Vector3(0.0, 0.12, 0.6)
 	_add(pickup)
@@ -143,14 +143,14 @@ func _place_tile(item: ItemData, pos: Vector3, index: int) -> void:
 	_label(pos + Vector3(0.0, 1.05, 0.0), "id: &\"%s\"" % item.id, 18, Color(0.5, 0.65, 0.5))
 
 
-func _platform_color(item: ItemData) -> Color:
+func _platform_color(item: ItemDefinition) -> Color:
 	if item.consumed_on_use: return _COLOR_CONSUMABLE
 	if not item.droppable:   return _COLOR_KEY_ITEM
 	if item.scrap_yield > 0: return _COLOR_SCRAPPABLE
 	return _COLOR_DEFAULT
 
 
-func _stats(item: ItemData) -> String:
+func _stats(item: ItemDefinition) -> String:
 	var parts: PackedStringArray = []
 	parts.append("stack: %d" % item.max_stack if item.stackable else "not stackable")
 	if item.scrap_yield > 0:

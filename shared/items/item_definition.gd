@@ -1,5 +1,5 @@
 ## Authoring resource for item metadata and optional use behavior hooks.
-class_name ItemData
+class_name ItemDefinition
 extends Resource
 
 @export var id: StringName = &""

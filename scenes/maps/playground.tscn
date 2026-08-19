@@ -1,19 +1,35 @@
 [gd_scene format=3 uid="uid://dksh37sfg0mxf"]
 
 [ext_resource type="Material" uid="uid://b7ihykmxms7ht" path="res://assets/materials/weird_material.tres" id="1_mat"]
+[ext_resource type="Script" uid="uid://d1m48bhjy3bwp" path="res://systems/time/day_night_cycle.gd" id="2_x453x"]
 [ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://systems/zone_management/gateway.gd" id="3_gateway"]
 [ext_resource type="Script" uid="uid://bgr41enmgqgrw" path="res://entities/items/pickup_item/pickup_item.gd" id="4_pickup"]
 [ext_resource type="Script" uid="uid://cti50m6boyxq4" path="res://systems/interaction/interactable_panel.gd" id="5_panel"]
-[ext_resource type="Resource" uid="uid://wa2kqxbi17gw" path="res://systems/inventory/items/mysterious_key.tres" id="6_key"]
-[ext_resource type="Resource" uid="uid://c223ay5hjh8yo" path="res://systems/inventory/items/old_coin.tres" id="7_coin"]
-[ext_resource type="Resource" path="res://systems/inventory/items/strange_gem.tres" id="8_gem"]
+[ext_resource type="Resource" uid="uid://wa2kqxbi17gw" path="res://shared/items/mysterious_key.tres" id="6_key"]
+[ext_resource type="Resource" uid="uid://c223ay5hjh8yo" path="res://shared/items/old_coin.tres" id="7_coin"]
+[ext_resource type="Resource" path="res://shared/items/strange_gem.tres" id="8_gem"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://systems/zone_management/base_level.gd" id="9_level"]
 [ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="10_interactable"]
 [ext_resource type="PackedScene" path="res://entities/characters/base_npc/simple_npc.tscn" id="11_osidk"]
 [ext_resource type="PackedScene" uid="uid://ca77wwyefwgdl" path="res://entities/interfacables/scrapping_station/scrapping_station.tscn" id="11_scrapping_station"]
+[ext_resource type="Resource" uid="uid://dph0e8jva15yy" path="res://shared/items/clean_dirty_magazine.tres" id="13_ov8qe"]
+[ext_resource type="PackedScene" path="res://entities/items/pickup_item/pickup_item.tscn" id="13_yubad"]
 [ext_resource type="Resource" uid="uid://byahsnnggd78a" path="res://entities/characters/usagi/usagi_definition.tres" id="14_ri6b7"]
 [ext_resource type="Script" uid="uid://ce3liopcmdigw" path="res://systems/zone_management/new_game_spawn_point.gd" id="18_new_game_spawn"]
+[ext_resource type="PackedScene" uid="uid://d1a28xhpinwn2" path="res://entities/interfacables/campfire/campfire.tscn" id="campfire_scene"]
 [ext_resource type="Resource" uid="uid://c83jerrydef01" path="res://entities/characters/jerry/jerry_definition.tres" id="jerry_def"]
+
+[sub_resource type="Gradient" id="Gradient_jkr81"]
+offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
+colors = PackedColorArray(0.05, 0.05, 0.15, 1, 0.05, 0.05, 0.15, 1, 1, 0.5, 0.2, 1, 1, 1, 1, 1, 1, 0.5, 0.2, 1)
+
+[sub_resource type="Curve" id="Curve_omqb8"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0.5), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.5), 0.0, 0.0, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 7
+
+[sub_resource type="Gradient" id="Gradient_ugi88"]
+offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
+colors = PackedColorArray(0.01, 0.01, 0.05, 1, 0.01, 0.01, 0.05, 1, 0.6, 0.3, 0.1, 1, 0.4, 0.6, 1, 1, 0.6, 0.3, 0.1, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mrac1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -97,12 +113,28 @@ size = Vector3(1.5, 1, 0.08)
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
 size = Vector3(1.5, 1, 0.08)
 
+[sub_resource type="Gradient" id="Gradient_fk7ew"]
+offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
+colors = PackedColorArray(0.05, 0.05, 0.15, 1, 0.05, 0.05, 0.15, 1, 1, 0.5, 0.2, 1, 1, 1, 1, 1, 1, 0.5, 0.2, 1)
+
+[sub_resource type="Curve" id="Curve_7iiy4"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0.5), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.5), 0.0, 0.0, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 7
+
+[sub_resource type="Gradient" id="Gradient_g5lew"]
+offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
+colors = PackedColorArray(0.01, 0.01, 0.05, 1, 0.01, 0.01, 0.05, 1, 0.6, 0.3, 0.1, 1, 0.4, 0.6, 1, 1, 0.6, 0.3, 0.1, 1)
+
 [node name="Playground" type="Node3D" unique_id=978182345]
 script = ExtResource("9_level")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1579395349]
 transform = Transform3D(0.96077913, 0.23869641, -0.1411647, 0, 0.50904155, 0.860742, 0.2773147, -0.826983, 0.48907647, 0, 285.14883, 0)
 shadow_enabled = true
+script = ExtResource("2_x453x")
+sun_color = SubResource("Gradient_jkr81")
+sun_energy_curve = SubResource("Curve_omqb8")
+sky_color = SubResource("Gradient_ugi88")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1502202385]
 environment = SubResource("Environment_2q4k0")
@@ -243,7 +275,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9061604, 3.05, 1.5506439)
 [node name="MysteriousKey" type="StaticBody3D" parent="Props" unique_id=1364982528]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.348454, 11.768281, -7.5755634)
 script = ExtResource("4_pickup")
-item_data = ExtResource("6_key")
+item_definition = ExtResource("6_key")
 persistent_id = "mysterious_key"
 
 [node name="Interactable" type="Node" parent="Props/MysteriousKey" unique_id=318024023]
@@ -260,7 +292,7 @@ shape = SubResource("SphereShape3D_pickup")
 [node name="OldCoin" type="StaticBody3D" parent="Props" unique_id=2124244298]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.249477, 6.195006, -22.68526)
 script = ExtResource("4_pickup")
-item_data = ExtResource("7_coin")
+item_definition = ExtResource("7_coin")
 persistent_id = "old_coin"
 
 [node name="Interactable" type="Node" parent="Props/OldCoin" unique_id=1560848670]
@@ -277,7 +309,7 @@ shape = SubResource("SphereShape3D_pickup")
 [node name="StrangeGem" type="StaticBody3D" parent="Props" unique_id=1776735549]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.71871, 2.6040785, 46.889847)
 script = ExtResource("4_pickup")
-item_data = ExtResource("8_gem")
+item_definition = ExtResource("8_gem")
 persistent_id = "strange_gem"
 
 [node name="Interactable" type="Node" parent="Props/StrangeGem" unique_id=874775171]
@@ -307,12 +339,28 @@ mesh = SubResource("BoxMesh_panel")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/NoticeBoard" unique_id=2059450871]
 shape = SubResource("BoxShape3D_panel")
 
+[node name="DirtyMag" parent="Props" unique_id=16393704 instance=ExtResource("13_yubad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.266727, 2.7, -6.6902266)
+item_definition = ExtResource("13_ov8qe")
+persistent_id = "dirty_mag"
+
 [node name="PersonJerry" parent="." unique_id=244855065 instance=ExtResource("11_osidk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6258743, 15.169888)
 person_id = &"jerry"
 definition = ExtResource("jerry_def")
+active_start_hour = 8.0
+active_end_hour = 20.0
 
 [node name="PersonUsagi" parent="." unique_id=1083009464 instance=ExtResource("11_osidk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.223322, 2.5000002, -30.767853)
 person_id = &"usagi"
 definition = ExtResource("14_ri6b7")
+
+[node name="DayNightCycle" type="Node" parent="." unique_id=1357122527]
+script = ExtResource("2_x453x")
+sun_color = SubResource("Gradient_fk7ew")
+sun_energy_curve = SubResource("Curve_7iiy4")
+sky_color = SubResource("Gradient_g5lew")
+
+[node name="Campfire" parent="." unique_id=50324823 instance=ExtResource("campfire_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.7, 5)

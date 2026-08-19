@@ -2,7 +2,7 @@ extends SceneTree
 
 const WORLD_SCENE := preload("res://scenes/world/world_root.tscn")
 const TARGET_AREA := "res://shared/sandbox/gym.tscn"
-const SCRAP := preload("res://systems/inventory/items/scrap.tres")
+const SCRAP := preload("res://shared/items/scrap.tres")
 
 
 func _initialize() -> void:

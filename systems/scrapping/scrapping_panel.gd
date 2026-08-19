@@ -6,7 +6,7 @@ extends GamePanel
 const FALLBACK_ICON := preload("res://icon.png")
 
 @export var slot_scene: PackedScene
-@export var scrap_item: ItemData
+@export var scrap_item: ItemDefinition
 
 @onready var input_slots: GridContainer = %InputSlots
 @onready var empty_label: Label = %EmptyLabel
@@ -21,10 +21,10 @@ const FALLBACK_ICON := preload("res://icon.png")
 
 var _inventory: InventoryStore
 var _selected_slot_id := -1
-var _slot_widgets: Array[InventorySlotWidget] = []
+var _slot_widgets: Array[ItemStackWidget] = []
 ## Currently shown selection. Read by _update_preview(), which also runs independently
 ## from the quantity spinner, so this needs to be stored rather than passed through.
-var _selected_slot: InventorySlot
+var _selected_slot: ItemStack
 
 
 func show_inventory(inventory: InventoryStore) -> void:
@@ -56,14 +56,14 @@ func _bind_inventory(inventory: InventoryStore) -> void:
 		_inventory.changed.connect(_refresh)
 
 
-func _refresh(slots: Array[InventorySlot]) -> void:
+func _refresh(slots: Array[ItemStack]) -> void:
 	_clear_slots()
-	var selected_slot: InventorySlot
+	var selected_slot: ItemStack
 	for slot in slots:
 		# Only show slots that can produce scrap output under current rules.
 		if not ScrappingService.can_scrap(slot, scrap_item):
 			continue
-		var widget: InventorySlotWidget = slot_scene.instantiate()
+		var widget: ItemStackWidget = slot_scene.instantiate()
 		widget.bind(slot)
 		widget.selected.connect(_select_slot)
 		input_slots.add_child(widget)
@@ -90,11 +90,11 @@ func _select_slot(slot_id: int) -> void:
 	_show_selection(_inventory.get_slot(slot_id) if _inventory else null)
 
 
-func _show_selection(slot: InventorySlot) -> void:
+func _show_selection(slot: ItemStack) -> void:
 	_selected_slot = slot
 	var has_selection := ScrappingService.can_scrap(slot, scrap_item)
-	selected_name.text = slot.data.display_name if has_selection else "No scrappable item selected"
-	selected_icon.texture = (slot.data.icon if slot.data.icon else FALLBACK_ICON) if has_selection else null
+	selected_name.text = slot.definition.display_name if has_selection else "No scrappable item selected"
+	selected_icon.texture = (slot.definition.icon if slot.definition.icon else FALLBACK_ICON) if has_selection else null
 	selected_icon.visible = has_selection
 	quantity_input.editable = has_selection
 	quantity_input.max_value = slot.quantity if has_selection else 1
@@ -110,7 +110,7 @@ func _update_preview() -> void:
 	var output_quantity := ScrappingService.get_output_quantity(slot, int(quantity_input.value))
 	# Preview is valid only when the selected slot is scrappable and produces non-zero output.
 	var has_output := ScrappingService.can_scrap(slot, scrap_item) and output_quantity > 0
-	yield_label.text = "%d Scrap each" % slot.data.scrap_yield if has_output else "Select an item to dismantle"
+	yield_label.text = "%d Scrap each" % slot.definition.scrap_yield if has_output else "Select an item to dismantle"
 	output_icon.texture = (scrap_item.icon if scrap_item.icon else FALLBACK_ICON) if has_output else null
 	output_icon.visible = has_output
 	output_label.text = "%d x %s" % [output_quantity, scrap_item.display_name] if has_output else "No output"

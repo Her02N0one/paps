@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://d1a28xhpinwn2"]
+
+[ext_resource type="Script" uid="uid://drdi7y43r5irh" path="res://entities/interfacables/campfire/campfire.gd" id="1_campfire"]
+[ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="2_interactable"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bounds"]
+height = 0.5
+radius = 0.8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_logs"]
+top_radius = 0.7
+bottom_radius = 0.7
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_logs"]
+albedo_color = Color(0.35, 0.2, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fire"]
+albedo_color = Color(1, 0.5, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.5, 0, 1)
+emission_energy_multiplier = 2.0
+
+[node name="Campfire" type="StaticBody3D" unique_id=1077097124]
+script = ExtResource("1_campfire")
+
+[node name="Interactable" type="Node" parent="." unique_id=1860543880]
+script = ExtResource("2_interactable")
+interact_label = "Rest at Campfire (Skip 8 Hours)"
+outline_color = Color(1, 0.5, 0, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1205652551]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("CylinderShape3D_bounds")
+
+[node name="LogsMesh" type="MeshInstance3D" parent="." unique_id=903955412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("CylinderMesh_logs")
+surface_material_override/0 = SubResource("StandardMaterial3D_logs")
+
+[node name="FireMesh" type="MeshInstance3D" parent="." unique_id=901779016]
+transform = Transform3D(0.5, 0, 0, 0, 1.5, 0, 0, 0, 0.5, 0, 0.35, 0)
+mesh = SubResource("CylinderMesh_logs")
+surface_material_override/0 = SubResource("StandardMaterial3D_fire")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1429864980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+light_color = Color(1, 0.647059, 0, 1)
+light_energy = 2.0
+shadow_enabled = true
+omni_range = 10.0

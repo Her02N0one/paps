@@ -158,8 +158,8 @@ func _on_quit_game_requested() -> void:
 	get_tree().quit()
 
 
-func _on_item_dropped(data: ItemData, quantity: int) -> void:
-	_pickup_lifecycle.drop_item_from_player(data, quantity, player)
+func _on_item_dropped(definition: ItemDefinition, quantity: int) -> void:
+	_pickup_lifecycle.drop_item_from_player(definition, quantity, player)
 
 
 func _on_gateway_travel_requested(target_scene: String, gateway_id: String, reversed: bool) -> void:

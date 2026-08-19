@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cyjixcu1v6gvr" path="res://systems/scrapping/scrapping_panel.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://systems/inventory/inventory_slot.tscn" id="2_slot"]
-[ext_resource type="Resource" uid="uid://bj1kjdmahug3t" path="res://systems/inventory/items/scrap.tres" id="3_scrap"]
+[ext_resource type="Resource" uid="uid://bj1kjdmahug3t" path="res://shared/items/scrap.tres" id="3_scrap"]
 
 [node name="ScrappingPanel" type="PanelContainer"]
 anchors_preset = 15

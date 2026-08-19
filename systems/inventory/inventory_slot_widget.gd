@@ -1,5 +1,5 @@
 ## Button-based slot presenter used by inventory and scrapping grids.
-class_name InventorySlotWidget
+class_name ItemStackWidget
 extends Button
 
 signal selected(slot_id: int)
@@ -9,12 +9,12 @@ const FALLBACK_ICON := preload("res://icon.png")
 var slot_id := -1
 
 
-func bind(slot: InventorySlot) -> void:
+func bind(slot: ItemStack) -> void:
 	# Stores only snapshot data; the panel resolves live slot state on interaction.
 	slot_id = slot.id
-	text = "%s\nx%d" % [slot.data.display_name, slot.quantity]
-	icon = slot.data.icon if slot.data.icon else FALLBACK_ICON
-	tooltip_text = slot.data.description
+	text = "%s\nx%d" % [slot.definition.display_name, slot.quantity]
+	icon = slot.definition.icon if slot.definition.icon else FALLBACK_ICON
+	tooltip_text = slot.definition.description
 
 
 func set_selected(value: bool) -> void:
