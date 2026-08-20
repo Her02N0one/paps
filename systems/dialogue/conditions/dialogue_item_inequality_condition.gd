@@ -10,6 +10,8 @@ extends DialogueCondition
 func is_met(context: DialogueContext) -> bool:
 	var holder := InventoryHolderComponent.find_on(context.actor)
 	# Condition fails cleanly when no inventory holder exists on the actor.
+	if holder == null or holder.inventory == null:
+		return false
 	var quantity = holder.inventory.get_quantity(item)
 	
 	if inequality == ">":
