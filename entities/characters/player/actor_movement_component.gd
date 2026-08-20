@@ -172,7 +172,7 @@ func reset_facing_reference() -> void:
 
 
 func _sync_body_look_if_supported() -> void:
-	if body != null and body.has_method("sync_look_to_body_yaw"):
-		body.call("sync_look_to_body_yaw")
-	if body != null and body.has_method("sync_camera_to_body_anchor"):
-		body.call("sync_camera_to_body_anchor")
+	var player := body as Player
+	if player:
+		player.sync_look_to_body_yaw()
+		player.sync_camera_to_body_anchor()

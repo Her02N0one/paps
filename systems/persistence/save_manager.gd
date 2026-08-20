@@ -40,7 +40,8 @@ func has_save() -> bool:
 
 func save_game(type: String, save_name: String = "") -> bool:
 	var world := get_tree().get_first_node_in_group("world")
-	if world != null and world.has_method("capture_player_transform_for_save"):
+	var w := world as World
+	if w:
 		world.call("capture_player_transform_for_save")
 		
 	if _game_state == null or _game_state.current_area.is_empty():
@@ -49,7 +50,7 @@ func save_game(type: String, save_name: String = "") -> bool:
 		
 	if save_name.is_empty():
 		var area_name = _game_state.current_area.get_file().get_basename().capitalize() if not _game_state.current_area.is_empty() else "Unknown"
-		var time_str = _game_state.get_in_game_time_string() if _game_state.has_method("get_in_game_time_string") else "DAY 1, 12-00"
+		var time_str = _game_state.get_in_game_time_string()
 		if type == "auto":
 			save_name = "AUTOSAVE, %s, %s" % [area_name, time_str]
 		elif type == "quick":

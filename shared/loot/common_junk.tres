@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://bv51kfcado22p"]
+
+[ext_resource type="Script" uid="uid://oil3wfct67r1" path="res://systems/loot/loot_pool.gd" id="1_uj2um"]
+[ext_resource type="Script" uid="uid://cxtnf24ng2q6r" path="res://systems/loot/loot_entry.gd" id="2_46ga6"]
+[ext_resource type="Resource" uid="uid://bj1kjdmahug3t" path="res://shared/items/scrap.tres" id="3_jwp1o"]
+[ext_resource type="Script" uid="uid://vum06lquueat" path="res://systems/loot/payloads/item_payload.gd" id="4_dp31a"]
+[ext_resource type="Resource" uid="uid://c223ay5hjh8yo" path="res://shared/items/old_coin.tres" id="5_5cca5"]
+[ext_resource type="Script" uid="uid://bgi0jbjeotxp4" path="res://systems/loot/loot_table.gd" id="6_yitk5"]
+
+[sub_resource type="Resource" id="Resource_gx2v2"]
+script = ExtResource("4_dp31a")
+item_definition = ExtResource("3_jwp1o")
+quantity_max = 3
+metadata/_custom_type_script = "uid://vum06lquueat"
+
+[sub_resource type="Resource" id="Resource_i8r28"]
+script = ExtResource("2_46ga6")
+weight = 80
+payload = SubResource("Resource_gx2v2")
+metadata/_custom_type_script = "uid://cxtnf24ng2q6r"
+
+[sub_resource type="Resource" id="Resource_r4a3e"]
+script = ExtResource("4_dp31a")
+item_definition = ExtResource("5_5cca5")
+quantity_max = 2
+metadata/_custom_type_script = "uid://vum06lquueat"
+
+[sub_resource type="Resource" id="Resource_kk0um"]
+script = ExtResource("2_46ga6")
+weight = 20
+payload = SubResource("Resource_r4a3e")
+metadata/_custom_type_script = "uid://cxtnf24ng2q6r"
+
+[sub_resource type="Resource" id="Resource_3jcpg"]
+script = ExtResource("1_uj2um")
+rolls_max = 3
+entries = Array[ExtResource("2_46ga6")]([SubResource("Resource_i8r28"), SubResource("Resource_kk0um")])
+metadata/_custom_type_script = "uid://oil3wfct67r1"
+
+[resource]
+script = ExtResource("6_yitk5")
+pools = Array[ExtResource("1_uj2um")]([SubResource("Resource_3jcpg")])
+metadata/_custom_type_script = "uid://bgi0jbjeotxp4"

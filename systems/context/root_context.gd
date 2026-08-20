@@ -85,11 +85,12 @@ func _mount_main_menu_context() -> void:
 	if menu == null:
 		push_error("Failed to instantiate MainMenuContext scene.")
 		return
-	if not menu.has_method("bind_services"):
-		# Fail fast when scene contracts drift from expected service API.
-		push_error("MainMenuContext scene root is missing bind_services(game_manager, save_manager).")
+	var main_menu := menu as MainMenuContext
+	if main_menu:
+		main_menu.bind_services(game_manager, save_manager)
+	else:
+		push_error("RootContext: Instantiated MainMenuContext scene is not a MainMenuContext.")
 		return
-	menu.call("bind_services", game_manager, save_manager)
 	add_child(menu)
 	_set_active_context(CONTEXT_MAIN_MENU, menu)
 

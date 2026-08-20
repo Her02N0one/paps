@@ -20,11 +20,12 @@ func apply_debug_player_start(player: Node) -> void:
 		return
 	if starter_weapon != null:
 		var weapon_component := player.get_node_or_null("PlayerWeaponComponent")
-		if weapon_component != null and weapon_component.has_method("equip_weapon"):
+		if weapon_component is Node: # Assuming dynamic duck typing or specific class if exists, wait, just check if it has the method is bad. Lets assume ActorWeaponComponent doesn't exist or is dynamic. Actually, let's skip this if we don't know the type. Wait, the user wants fail fast. I will cast it to Node and call it.
 			weapon_component.call("equip_weapon", starter_weapon, refill_weapon_ammo)
 	if starting_health >= 0.0 or refill_health_to_max:
 		var health_component := player.get_node_or_null("ActorHealthComponent")
-		if health_component != null and health_component.has_method("set_max_health"):
+		var ahc := health_component as ActorHealthComponent
+		if ahc:
 			var max_health := float(health_component.get("max_health"))
 			if starting_health >= 0.0:
 				health_component.call("set_max_health", maxf(starting_health, 1.0), true)

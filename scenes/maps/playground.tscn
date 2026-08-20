@@ -3,48 +3,42 @@
 [ext_resource type="Material" uid="uid://b7ihykmxms7ht" path="res://assets/materials/weird_material.tres" id="1_mat"]
 [ext_resource type="Script" uid="uid://d1m48bhjy3bwp" path="res://systems/time/day_night_cycle.gd" id="2_x453x"]
 [ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://systems/zone_management/gateway.gd" id="3_gateway"]
-[ext_resource type="Script" uid="uid://bgr41enmgqgrw" path="res://entities/items/pickup_item/pickup_item.gd" id="4_pickup"]
 [ext_resource type="Script" uid="uid://cti50m6boyxq4" path="res://systems/interaction/interactable_panel.gd" id="5_panel"]
-[ext_resource type="Resource" uid="uid://wa2kqxbi17gw" path="res://shared/items/mysterious_key.tres" id="6_key"]
-[ext_resource type="Resource" uid="uid://c223ay5hjh8yo" path="res://shared/items/old_coin.tres" id="7_coin"]
-[ext_resource type="Resource" path="res://shared/items/strange_gem.tres" id="8_gem"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://systems/zone_management/base_level.gd" id="9_level"]
-[ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="10_interactable"]
+[ext_resource type="Resource" uid="uid://iet2hk5u5bqy" path="res://shared/loot/default_sky.tres" id="11_omqb8"]
 [ext_resource type="PackedScene" path="res://entities/characters/base_npc/simple_npc.tscn" id="11_osidk"]
 [ext_resource type="PackedScene" uid="uid://ca77wwyefwgdl" path="res://entities/interfacables/scrapping_station/scrapping_station.tscn" id="11_scrapping_station"]
-[ext_resource type="Resource" uid="uid://dph0e8jva15yy" path="res://shared/items/clean_dirty_magazine.tres" id="13_ov8qe"]
 [ext_resource type="PackedScene" path="res://entities/items/pickup_item/pickup_item.tscn" id="13_yubad"]
 [ext_resource type="Resource" uid="uid://byahsnnggd78a" path="res://entities/characters/usagi/usagi_definition.tres" id="14_ri6b7"]
 [ext_resource type="Script" uid="uid://ce3liopcmdigw" path="res://systems/zone_management/new_game_spawn_point.gd" id="18_new_game_spawn"]
+[ext_resource type="Resource" uid="uid://bv51kfcado22p" path="res://shared/loot/common_junk.tres" id="22_7iiy4"]
+[ext_resource type="Script" uid="uid://oil3wfct67r1" path="res://systems/loot/loot_pool.gd" id="22_xdwkp"]
+[ext_resource type="Script" uid="uid://dcn0scmmpx8qn" path="res://systems/loot/spawners/scatter_area_3d.gd" id="23_r2bbi"]
+[ext_resource type="Script" uid="uid://cxtnf24ng2q6r" path="res://systems/loot/loot_entry.gd" id="23_tvwdx"]
+[ext_resource type="Script" uid="uid://cnxg64kffs31j" path="res://systems/loot/payloads/spawn_payload.gd" id="26_xdwkp"]
+[ext_resource type="Script" uid="uid://bgi0jbjeotxp4" path="res://systems/loot/loot_table.gd" id="27_a72v8"]
 [ext_resource type="PackedScene" uid="uid://d1a28xhpinwn2" path="res://entities/interfacables/campfire/campfire.tscn" id="campfire_scene"]
 [ext_resource type="Resource" uid="uid://c83jerrydef01" path="res://entities/characters/jerry/jerry_definition.tres" id="jerry_def"]
 
-[sub_resource type="Gradient" id="Gradient_jkr81"]
-offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
-colors = PackedColorArray(0.05, 0.05, 0.15, 1, 0.05, 0.05, 0.15, 1, 1, 0.5, 0.2, 1, 1, 1, 1, 1, 1, 0.5, 0.2, 1)
-
-[sub_resource type="Curve" id="Curve_omqb8"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0.5), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.5), 0.0, 0.0, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 7
-
-[sub_resource type="Gradient" id="Gradient_ugi88"]
-offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
-colors = PackedColorArray(0.01, 0.01, 0.05, 1, 0.01, 0.01, 0.05, 1, 0.6, 0.3, 0.1, 1, 0.4, 0.6, 1, 1, 0.6, 0.3, 0.1, 1)
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mrac1"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_omqb8"]
+sky_top_color = Color(0.26666668, 0.43333334, 0.6666667, 1)
+sky_horizon_color = Color(0.7, 0.5, 0.43333337, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 
-[sub_resource type="Sky" id="Sky_1"]
-sky_material = SubResource("ProceduralSkyMaterial_mrac1")
+[sub_resource type="Sky" id="Sky_ugi88"]
+sky_material = SubResource("ProceduralSkyMaterial_omqb8")
 
-[sub_resource type="Environment" id="Environment_2q4k0"]
+[sub_resource type="Environment" id="Environment_fk7ew"]
 background_mode = 2
-sky = SubResource("Sky_1")
+sky = SubResource("Sky_ugi88")
 glow_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gw"]
 size = Vector3(4, 3, 2)
+
+[sub_resource type="Gradient" id="Gradient_ugi88"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.5, 0.75, 0.8, 1)
+colors = PackedColorArray(0.02, 0.02, 0.05, 1, 0.02, 0.02, 0.05, 1, 0.8, 0.4, 0.2, 1, 0.5, 0.7, 0.9, 1, 0.7, 0.3, 0.5, 1, 0.02, 0.02, 0.05, 1, 0.02, 0.02, 0.05, 1)
 
 [sub_resource type="Shader" id="Shader_0aksm"]
 code = "shader_type spatial;
@@ -91,18 +85,12 @@ albedo_color = Color(1, 0.5503334, 0.29000002, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
 albedo_color = Color(0.35000002, 0.5883334, 1, 1)
 
+[sub_resource type="Gradient" id="Gradient_fk7ew"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.5, 0.75, 0.8, 1)
+colors = PackedColorArray(0, 0, 0.02, 1, 0, 0, 0.02, 1, 0.3, 0.4, 0.6, 1, 0.2, 0.5, 0.8, 1, 0.2, 0.2, 0.4, 1, 0, 0, 0.02, 1, 0, 0, 0.02, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_walls"]
 albedo_color = Color(0.33, 0.21846001, 0.072600015, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pickup"]
-albedo_color = Color(1, 0.85, 0.1, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_pickup"]
-radius = 0.2
-height = 0.4
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_pickup"]
-radius = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_panel"]
 albedo_color = Color(0.55, 0.35, 0.15, 1)
@@ -113,31 +101,59 @@ size = Vector3(1.5, 1, 0.08)
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
 size = Vector3(1.5, 1, 0.08)
 
-[sub_resource type="Gradient" id="Gradient_fk7ew"]
-offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
-colors = PackedColorArray(0.05, 0.05, 0.15, 1, 0.05, 0.05, 0.15, 1, 1, 0.5, 0.2, 1, 1, 1, 1, 1, 1, 0.5, 0.2, 1)
+[sub_resource type="Resource" id="Resource_xdwkp"]
+script = ExtResource("26_xdwkp")
+base_scene = ExtResource("13_yubad")
+injected_table = ExtResource("22_7iiy4")
+metadata/_custom_type_script = "uid://cnxg64kffs31j"
 
-[sub_resource type="Curve" id="Curve_7iiy4"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0.5), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.5), 0.0, 0.0, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 7
+[sub_resource type="Resource" id="Resource_i8r28"]
+script = ExtResource("23_tvwdx")
+weight = 70
+payload = SubResource("Resource_xdwkp")
+metadata/_custom_type_script = "uid://cxtnf24ng2q6r"
 
-[sub_resource type="Gradient" id="Gradient_g5lew"]
-offsets = PackedFloat32Array(0, 1, 0.25, 0.5, 0.75)
-colors = PackedColorArray(0.01, 0.01, 0.05, 1, 0.01, 0.01, 0.05, 1, 0.6, 0.3, 0.1, 1, 0.4, 0.6, 1, 1, 0.6, 0.3, 0.1, 1)
+[sub_resource type="Resource" id="Resource_gx2v2"]
+script = ExtResource("23_tvwdx")
+weight = 30
+metadata/_custom_type_script = "uid://cxtnf24ng2q6r"
+
+[sub_resource type="Resource" id="Resource_3jcpg"]
+script = ExtResource("22_xdwkp")
+rolls_min = 15
+rolls_max = 20
+entries = Array[ExtResource("23_tvwdx")]([SubResource("Resource_i8r28"), SubResource("Resource_gx2v2")])
+metadata/_custom_type_script = "uid://oil3wfct67r1"
+
+[sub_resource type="Resource" id="Resource_5tb7a"]
+script = ExtResource("27_a72v8")
+pools = Array[ExtResource("22_xdwkp")]([SubResource("Resource_3jcpg")])
+metadata/_custom_type_script = "uid://bgi0jbjeotxp4"
 
 [node name="Playground" type="Node3D" unique_id=978182345]
 script = ExtResource("9_level")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1579395349]
-transform = Transform3D(0.96077913, 0.23869641, -0.1411647, 0, 0.50904155, 0.860742, 0.2773147, -0.826983, 0.48907647, 0, 285.14883, 0)
-shadow_enabled = true
-script = ExtResource("2_x453x")
-sun_color = SubResource("Gradient_jkr81")
-sun_energy_curve = SubResource("Curve_omqb8")
-sky_color = SubResource("Gradient_ugi88")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1660518858]
+environment = SubResource("Environment_fk7ew")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1502202385]
-environment = SubResource("Environment_2q4k0")
+[node name="SunLight" type="DirectionalLight3D" parent="." unique_id=1579395349]
+transform = Transform3D(0.7071067, -0.35355338, 0.61237234, 0, 0.8660254, 0.49999994, -0.7071067, -0.35355338, 0.61237234, 0, 0, 0)
+light_color = Color(1, 0.6666667, 0.4666667, 1)
+light_energy = 0.6296297
+shadow_enabled = true
+
+[node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=1196002038]
+transform = Transform3D(0.7071067, 0.3535534, -0.61237234, 0, -0.8660254, -0.5, -0.7071067, 0.3535534, -0.61237234, 0, 0, 0)
+light_color = Color(0.62755966, 0.71139336, 0.91326356, 1)
+light_energy = 6e-45
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.0
+shadow_enabled = true
+
+[node name="MoonSprite" type="Sprite3D" parent="MoonLight" unique_id=1610897161]
+transform = Transform3D(75, 0, 0, 0, 75, 0, 0, 0, 75, 0, 0, 400)
+cast_shadow = 0
 
 [node name="NewGameSpawn" type="Marker3D" parent="." unique_id=1770430194]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.750229, 4.4496098, 5.2984276)
@@ -272,58 +288,6 @@ material = SubResource("StandardMaterial3D_walls")
 [node name="ScrappingWorkbench" parent="Props" unique_id=811432334 instance=ExtResource("11_scrapping_station")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9061604, 3.05, 1.5506439)
 
-[node name="MysteriousKey" type="StaticBody3D" parent="Props" unique_id=1364982528]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.348454, 11.768281, -7.5755634)
-script = ExtResource("4_pickup")
-item_definition = ExtResource("6_key")
-persistent_id = "mysterious_key"
-
-[node name="Interactable" type="Node" parent="Props/MysteriousKey" unique_id=318024023]
-script = ExtResource("10_interactable")
-interact_label = "Pick up Mysterious Key"
-
-[node name="Mesh" type="MeshInstance3D" parent="Props/MysteriousKey" unique_id=1579642779]
-material_override = SubResource("StandardMaterial3D_pickup")
-mesh = SubResource("SphereMesh_pickup")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/MysteriousKey" unique_id=2051888301]
-shape = SubResource("SphereShape3D_pickup")
-
-[node name="OldCoin" type="StaticBody3D" parent="Props" unique_id=2124244298]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.249477, 6.195006, -22.68526)
-script = ExtResource("4_pickup")
-item_definition = ExtResource("7_coin")
-persistent_id = "old_coin"
-
-[node name="Interactable" type="Node" parent="Props/OldCoin" unique_id=1560848670]
-script = ExtResource("10_interactable")
-interact_label = "Pick up Old Coin"
-
-[node name="Mesh" type="MeshInstance3D" parent="Props/OldCoin" unique_id=1676321129]
-material_override = SubResource("StandardMaterial3D_pickup")
-mesh = SubResource("SphereMesh_pickup")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/OldCoin" unique_id=784704944]
-shape = SubResource("SphereShape3D_pickup")
-
-[node name="StrangeGem" type="StaticBody3D" parent="Props" unique_id=1776735549]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.71871, 2.6040785, 46.889847)
-script = ExtResource("4_pickup")
-item_definition = ExtResource("8_gem")
-persistent_id = "strange_gem"
-
-[node name="Interactable" type="Node" parent="Props/StrangeGem" unique_id=874775171]
-script = ExtResource("10_interactable")
-interact_label = "Pick up Strange Gem"
-
-[node name="Mesh" type="MeshInstance3D" parent="Props/StrangeGem" unique_id=1479149688]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0034012794, 0)
-material_override = SubResource("StandardMaterial3D_pickup")
-mesh = SubResource("SphereMesh_pickup")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/StrangeGem" unique_id=1919313261]
-shape = SubResource("SphereShape3D_pickup")
-
 [node name="NoticeBoard" type="StaticBody3D" parent="Props" unique_id=758349772]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.992878, 4.5521836, 47.41507)
 
@@ -339,11 +303,6 @@ mesh = SubResource("BoxMesh_panel")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Props/NoticeBoard" unique_id=2059450871]
 shape = SubResource("BoxShape3D_panel")
 
-[node name="DirtyMag" parent="Props" unique_id=16393704 instance=ExtResource("13_yubad")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.266727, 2.7, -6.6902266)
-item_definition = ExtResource("13_ov8qe")
-persistent_id = "dirty_mag"
-
 [node name="PersonJerry" parent="." unique_id=244855065 instance=ExtResource("11_osidk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6258743, 15.169888)
 person_id = &"jerry"
@@ -356,11 +315,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.223322, 2.5000002, -30.767
 person_id = &"usagi"
 definition = ExtResource("14_ri6b7")
 
-[node name="DayNightCycle" type="Node" parent="." unique_id=1357122527]
+[node name="DayNightCycle" type="Node" parent="." unique_id=1357122527 node_paths=PackedStringArray("sun_light", "moon_light", "moon_sprite", "world_environment")]
 script = ExtResource("2_x453x")
-sun_color = SubResource("Gradient_fk7ew")
-sun_energy_curve = SubResource("Curve_7iiy4")
-sky_color = SubResource("Gradient_g5lew")
+profile = ExtResource("11_omqb8")
+sun_light = NodePath("../SunLight")
+moon_light = NodePath("../MoonLight")
+moon_sprite = NodePath("../MoonLight/MoonSprite")
+world_environment = NodePath("../WorldEnvironment")
 
 [node name="Campfire" parent="." unique_id=50324823 instance=ExtResource("campfire_scene")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.7, 5)
+
+[node name="PickupItem" parent="." unique_id=265567014 instance=ExtResource("13_yubad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.057379, 2.699999, -0.51073503)
+loot_table = ExtResource("22_7iiy4")
+
+[node name="PickupItem2" parent="." unique_id=1890283326 instance=ExtResource("13_yubad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.057379, 2.699999, -2.791925)
+loot_table = ExtResource("22_7iiy4")
+
+[node name="PickupItem3" parent="." unique_id=546697967 instance=ExtResource("13_yubad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.172207, 2.699999, -2.791925)
+loot_table = ExtResource("22_7iiy4")
+
+[node name="PickupItem4" parent="." unique_id=1328650770 instance=ExtResource("13_yubad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.172207, 2.699999, -0.57137394)
+loot_table = ExtResource("22_7iiy4")
+
+[node name="PickupItem5" parent="." unique_id=248840730 instance=ExtResource("13_yubad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.311853, 2.699999, -1.5577745)
+loot_table = ExtResource("22_7iiy4")
+
+[node name="ScatterTest" type="Marker3D" parent="." unique_id=1823622265]
+transform = Transform3D(0.08282801, 0, -0.99656385, 0, 1, 0, 0.99656385, 0, 0.08282801, 15.496592, 5.0052767, -24.689283)
+script = ExtResource("23_r2bbi")
+loot_table = SubResource("Resource_5tb7a")
+scatter_polygon = PackedVector2Array(6.845, 11.965, 4.72, -4.69, -1.995, -9.05, -4.3, 14.91)

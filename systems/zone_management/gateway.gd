@@ -13,6 +13,10 @@ var gateway_id: String:
 
 @export var target_gateway_id: String = ""
 
+@export_group("Custom Walk Markers")
+@export var custom_walk_start: Node3D
+@export var custom_walk_end: Node3D
+
 func _validate_property(property: Dictionary) -> void:
 	if property.name == "target_gateway_id":
 		var hint_string := ""
@@ -40,6 +44,14 @@ var _line_mesh: ImmediateMesh
 var _line_inst: MeshInstance3D
 
 
+@onready var collision := $CollisionShape3D as CollisionShape3D
+
+func _get_walk_start() -> Node3D:
+	return custom_walk_start if is_instance_valid(custom_walk_start) else get_node_or_null("WalkStart")
+
+func _get_walk_end() -> Node3D:
+	return custom_walk_end if is_instance_valid(custom_walk_end) else get_node_or_null("WalkEnd")
+
 func _ready() -> void:
 	_setup_line()
 	# Keep editor warnings up to date while authoring gateway nodes.
@@ -63,21 +75,20 @@ func _get_configuration_warnings() -> PackedStringArray:
 	if get_node_or_null("CollisionShape3D") == null:
 		warnings.append("Gateway requires a CollisionShape3D child to detect body entry.")
 	# WalkStart/WalkEnd are optional at runtime but expected for smooth entry motion.
-	if get_node_or_null("WalkStart") == null or get_node_or_null("WalkEnd") == null:
-		warnings.append("Gateway should define WalkStart and WalkEnd Marker3D children for scripted entry walking.")
+	if not is_instance_valid(_get_walk_start()) or not is_instance_valid(_get_walk_end()):
+		warnings.append("Gateway should define WalkStart and WalkEnd Marker3D children (or assign custom ones) for scripted entry walking.")
 	return warnings
 
 
 func _build_trigger_visual() -> void:
-	var col := get_node_or_null("CollisionShape3D")
 	# Visual debug box only supports box collision shapes.
-	if not col or not col.shape is BoxShape3D:
+	if not collision or not collision.shape is BoxShape3D:
 		return
 	var inst := MeshInstance3D.new()
 	var mesh := BoxMesh.new()
-	mesh.size = (col.shape as BoxShape3D).size
+	mesh.size = (collision.shape as BoxShape3D).size
 	inst.mesh = mesh
-	inst.position = col.position
+	inst.position = collision.position
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(0.2, 0.2, 0.35, 0.80)
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -103,13 +114,11 @@ func _process(_delta: float) -> void:
 	# Runtime mode skips editor-only lane preview rendering.
 	if not Engine.is_editor_hint() or not _line_mesh:
 		return
-	var ws: Node3D = get_node_or_null("WalkStart")
-	var we: Node3D = get_node_or_null("WalkEnd")
+	var ws = _get_walk_start()
+	var we = _get_walk_end()
 	_line_mesh.clear_surfaces()
-	# Need both endpoints to draw the preview lane.
-	if not ws or not we:
+	if not is_instance_valid(ws) or not is_instance_valid(we):
 		return
-	# Draw the walk lane in local space so transforms stay correct if gateway is moved.
 	_line_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
 	_line_mesh.surface_add_vertex(to_local(ws.global_position))
 	_line_mesh.surface_add_vertex(to_local(we.global_position))
@@ -135,9 +144,8 @@ func _get_available_movement(body: Node3D) -> ActorMovementComponent:
 
 
 func _is_reverse_entry(movement: ActorMovementComponent) -> bool:
-	var walk_start: Node3D = get_node_or_null("WalkStart")
-	# Without WalkStart we cannot infer directional approach, so default to forward.
-	if walk_start == null:
+	var ws: Node3D = _get_walk_start()
+	if not is_instance_valid(ws):
 		return false
-	var approach_direction := (global_position - walk_start.global_position).normalized()
+	var approach_direction: Vector3 = (global_position - ws.global_position).normalized()
 	return movement.get_facing_direction().dot(approach_direction) < 0.0

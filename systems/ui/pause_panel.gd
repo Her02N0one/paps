@@ -3,12 +3,10 @@
 class_name PausePanelSurface
 extends GamePanel
 
-signal resume_pressed
-signal quick_save_pressed
+
 signal load_game_pressed
 signal quit_to_menu_pressed
 signal quit_game_pressed
-signal manual_save_pressed
 
 var status_label: Label
 
@@ -56,15 +54,21 @@ func show_status(text: String) -> void:
 	tw.tween_property(status_label, "modulate:a", 0.0, 2.0).set_delay(1.0)
 
 func _on_manual_save_pressed() -> void:
-	manual_save_pressed.emit()
-
+	var root = get_node("/root/RootContext") as RootContext
+	if root.get_save_manager().save_game("manual"):
+		show_status("GAME SAVED!")
+	else:
+		show_status("SAVE FAILED!")
 
 func _on_resume_pressed() -> void:
-	resume_pressed.emit()
-
+	close_panel()
 
 func _on_quick_save_pressed() -> void:
-	quick_save_pressed.emit()
+	var root = get_node("/root/RootContext") as RootContext
+	if root.get_save_manager().save_game("quick"):
+		show_status("GAME SAVED!")
+	else:
+		show_status("SAVE FAILED!")
 
 
 func _on_load_game_pressed() -> void:

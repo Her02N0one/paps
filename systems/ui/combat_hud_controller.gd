@@ -29,7 +29,7 @@ func setup_nodes(p_crosshair: Label, p_combat_feedback: Label, p_health_readout:
 
 
 func bind_player_combat_signals(player: Player) -> void:
-	var next_weapon := player.get_node_or_null("PlayerWeaponComponent") as PlayerWeaponComponent if player else null
+	var next_weapon := player.get_node_or_null("PlayerWeaponComponent") as PlayerWeaponComponent
 	if _player_weapon_component != null and _player_weapon_component != next_weapon:
 		if _player_weapon_component.weapon_fired.is_connected(_on_player_weapon_fired):
 			_player_weapon_component.weapon_fired.disconnect(_on_player_weapon_fired)
@@ -42,7 +42,7 @@ func bind_player_combat_signals(player: Player) -> void:
 		if not _player_weapon_component.dry_fired.is_connected(_on_player_weapon_dry_fired):
 			_player_weapon_component.dry_fired.connect(_on_player_weapon_dry_fired)
 
-	var next_health := player.get_node_or_null("ActorHealthComponent") as ActorHealthComponent if player else null
+	var next_health := player.get_node("ActorHealthComponent") as ActorHealthComponent
 	if _player_health_component != null and _player_health_component != next_health:
 		if _player_health_component.damaged.is_connected(_on_player_damaged):
 			_player_health_component.damaged.disconnect(_on_player_damaged)

@@ -121,7 +121,8 @@ func _apply_entry_placement(scene_path: String, target_id: String, reversed: boo
 			push_error("Level '%s' is missing a NewGameSpawnPoint marker%s." % [_current_level.name, (" for '%s'" % new_game_marker_id) if not new_game_marker_id.is_empty() else ""])
 			return
 		player_movement.place_at_spawn(new_game_spawn)
-		if new_game_spawn.has_method("apply_debug_player_start"):
+		var spawn_point := new_game_spawn as NewGameSpawnPoint
+		if spawn_point:
 			new_game_spawn.call("apply_debug_player_start", player)
 		_capture_player_transform_for_save_internal(scene_path)
 		return

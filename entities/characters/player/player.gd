@@ -56,9 +56,7 @@ func _ready() -> void:
 
 
 func _apply_first_person_body_visibility() -> void:
-	var body_mesh := get_node_or_null("MeshInstance3D") as MeshInstance3D
-	if body_mesh == null:
-		return
+	var body_mesh := get_node("MeshInstance3D") as MeshInstance3D
 	body_mesh.visible = not hide_body_in_first_person
 
 
@@ -70,8 +68,8 @@ func _sync_physical_profile() -> void:
 	# Keep camera eye line and capsule dimensions derived from one canonical standing height.
 	standing_height_meters = maxf(standing_height_meters, 1.2)
 	if auto_fit_capsule_collision:
-		var collision := get_node_or_null("CollisionShape3D") as CollisionShape3D
-		if collision and collision.shape is CapsuleShape3D:
+		var collision := get_node("CollisionShape3D") as CollisionShape3D
+		if collision.shape is CapsuleShape3D:
 			collision.shape = (collision.shape as CapsuleShape3D).duplicate()
 			var capsule := collision.shape as CapsuleShape3D
 			var target_radius := clampf(standing_height_meters * HEIGHT_TO_RADIUS_RATIO, MIN_CAPSULE_RADIUS, MAX_CAPSULE_RADIUS)
@@ -81,7 +79,7 @@ func _sync_physical_profile() -> void:
 			collision_position.y = standing_height_meters * 0.5
 			collision.position = collision_position
 	if auto_fit_body_mesh:
-		var body_mesh := get_node_or_null("MeshInstance3D") as MeshInstance3D
+		var body_mesh := get_node("MeshInstance3D") as MeshInstance3D
 		if body_mesh:
 			if body_mesh.mesh is CapsuleMesh:
 				body_mesh.mesh = (body_mesh.mesh as CapsuleMesh).duplicate()

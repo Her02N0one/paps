@@ -6,12 +6,15 @@
 [ext_resource type="Script" uid="uid://cti50m6boyxq4" path="res://systems/interaction/interactable_panel.gd" id="4_panel"]
 [ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://systems/zone_management/base_level.gd" id="7_level"]
 [ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="8_interactable"]
+[ext_resource type="Script" uid="uid://d1m48bhjy3bwp" path="res://systems/time/day_night_cycle.gd" id="9_mg21w"]
 [ext_resource type="PackedScene" path="res://entities/items/pickup_item/pickup_item.tscn" id="10_hi4sg"]
+[ext_resource type="Resource" uid="uid://dhf4vqilx5g7" path="res://shared/loot/desert_sky.tres" id="10_igoyi"]
 [ext_resource type="Script" uid="uid://ce3liopcmdigw" path="res://systems/zone_management/new_game_spawn_point.gd" id="10_new_game_spawn"]
+[ext_resource type="PackedScene" uid="uid://d1a28xhpinwn2" path="res://entities/interfacables/campfire/campfire.tscn" id="11_hi4sg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n5nep"]
-sky_top_color = Color(0.497509, 0.45307195, 0.1831828, 1)
-sky_horizon_color = Color(0.68815887, 0.6818614, 0.51408666, 1)
+sky_top_color = Color(1, 0.6666667, 0.4666667, 1)
+sky_horizon_color = Color(0.7, 0.5, 0.43333337, 1)
 sky_curve = 0.45471448
 sky_energy_multiplier = 1.8
 ground_bottom_color = Color(0.25399244, 0.21624544, 0.17379308, 1)
@@ -190,3 +193,33 @@ shape = SubResource("SphereShape3D_pickup")
 
 [node name="PickupItem" parent="Node" unique_id=1901460803 instance=ExtResource("10_hi4sg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.699677, 2.699999, 11.705898)
+
+[node name="SunLight" type="DirectionalLight3D" parent="." unique_id=595288241]
+transform = Transform3D(0.7071067, -0.35355338, 0.6123723, 0, 0.8660254, 0.4999999, -0.7071067, -0.35355338, 0.6123723, 0, 0, 0)
+light_color = Color(1, 0.6666667, 0.4666667, 1)
+light_energy = 0.6296297
+shadow_enabled = true
+
+[node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=802562706]
+transform = Transform3D(0.7071067, 0.3535534, -0.61237234, 0, -0.8660254, -0.5, -0.7071067, 0.3535534, -0.61237234, 0, 0, 0)
+light_color = Color(0.62755966, 0.71139336, 0.91326356, 1)
+light_energy = 6e-45
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.0
+shadow_enabled = true
+
+[node name="MoonSprite" type="Sprite3D" parent="MoonLight" unique_id=309349798]
+transform = Transform3D(75, 0, 0, 0, 75, 0, 0, 0, 75, 0, 0, 400)
+cast_shadow = 0
+
+[node name="DayNightCycle" type="Node" parent="." unique_id=987788486 node_paths=PackedStringArray("sun_light", "moon_light", "moon_sprite", "world_environment")]
+script = ExtResource("9_mg21w")
+profile = ExtResource("10_igoyi")
+sun_light = NodePath("../SunLight")
+moon_light = NodePath("../MoonLight")
+moon_sprite = NodePath("../MoonLight/MoonSprite")
+world_environment = NodePath("../WorldEnvironment")
+
+[node name="Campfire" parent="." unique_id=1077097124 instance=ExtResource("11_hi4sg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.7, 5)

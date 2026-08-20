@@ -28,11 +28,8 @@ func _ready() -> void:
 
 func _bind_save_manager() -> void:
 	# Assume root context has bound SaveManager and we can reach it
-	var root = get_node_or_null("/root/RootContext")
-	if root and root.has_method("get_save_manager"):
-		save_manager = root.get_save_manager()
-	elif get_tree().root.has_node("SaveManager"):
-		save_manager = get_tree().root.get_node("SaveManager")
+	var root_context = get_node("/root/RootContext") as RootContext
+	save_manager = root_context.get_save_manager()
 
 
 func open_panel() -> void:
@@ -110,18 +107,12 @@ func _on_save_selected(filename: String) -> void:
 	if save_manager.load_game(filename):
 		close_panel()
 		# Find GameManager to continue
-		var root = get_node_or_null("/root/RootContext")
-		if root and root.has_method("get_game_manager") and root.get_game_manager():
-			root.get_game_manager().continue_game()
-		else:
-			var game_manager = get_tree().get_first_node_in_group("world").get("_game_manager")
-			if game_manager:
-				game_manager.continue_game()
-			else:
-				push_error("Could not find GameManager to continue game after loading.")
+		var root_context = get_node("/root/RootContext") as RootContext
+		root_context.get_game_manager().continue_game()
 
 
 func _on_delete_pressed(filename: String) -> void:
-	if save_manager and save_manager.has_method("delete_save"):
-		save_manager.delete_save(filename)
+	var sm := save_manager as SaveManager
+	if sm:
+		sm.delete_save(filename)
 		_refresh_list()

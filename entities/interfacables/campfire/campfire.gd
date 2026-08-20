@@ -10,6 +10,5 @@ func _ready() -> void:
 			interactable.interact.connect(_on_interact)
 
 func _on_interact(_actor: Node3D) -> void:
-	var tm = get_node_or_null("/root/TimeManager")
-	if tm and tm.has_method("skip_time"):
-		tm.skip_time(480.0) # Skip 8 hours
+	var tm = get_node("/root/TimeManager") as TimeManager
+	tm.skip_time(60.0) # Skip 1 hour

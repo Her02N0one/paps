@@ -43,9 +43,9 @@ func apply_damage(amount: float, source: Node = null) -> float:
 	health_changed.emit(current_health, max_health)
 	if current_health <= 0.0:
 		defeated.emit(source)
-		var bus := get_tree().get_first_node_in_group("combat_effect_bus")
-		if bus != null and bus.has_method("emit_actor_defeated"):
-			bus.call("emit_actor_defeated", get_parent(), source)
+		# var bus := get_tree().get_first_node_in_group("combat_effect_bus")
+		# if bus:
+		# 	bus.emit_actor_defeated(get_parent(), source)
 	return applied
 
 

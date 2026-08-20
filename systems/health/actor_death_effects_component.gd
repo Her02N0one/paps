@@ -165,8 +165,9 @@ func _schedule_queue_free(node: Node, delay_seconds: float) -> void:
 ## own queue_free() once the disabled state is persisted. Non-Person owners (e.g. the Player,
 ## which should never be auto-retired this way) fall back to a plain queue_free().
 func _retire_owner(owner_node: Node) -> void:
-	if owner_node.has_method("set_person_enabled"):
-		owner_node.call("set_person_enabled", false)
+	var person := owner_node as PersonActor
+	if person:
+		person.set_person_enabled(false)
 	else:
 		owner_node.queue_free()
 

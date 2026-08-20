@@ -26,10 +26,10 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		update_configuration_warnings()
 		return
-	_nose_button = get_node_or_null("MainMenu/Button") as Button
-	_squak_noise = get_node_or_null("MainMenu/Button/SquakNoise") as AudioStreamPlayer
-	var bg_texture := get_node_or_null("MainMenu/TextureRect") as Control
-	var menu_gui := get_node_or_null("MainMenu/MainMenuGUI") as Control
+	_nose_button = get_node("MainMenu/Button") as Button
+	_squak_noise = get_node("MainMenu/Button/SquakNoise") as AudioStreamPlayer
+	var bg_texture := get_node("MainMenu/TextureRect") as Control
+	var menu_gui := get_node("MainMenu/MainMenuGUI") as Control
 	if bg_texture != null:
 		bg_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if menu_gui != null:
@@ -41,14 +41,12 @@ func _ready() -> void:
 		push_error("MainMenu services are not bound. Call bind_services() before adding MainMenu to the tree.")
 		return
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	_continue_button = get_node_or_null("%Continue") as Button
-	_load_game_button = get_node_or_null("%LoadGame") as Button
-	_new_game_button = get_node_or_null("%NewGame") as Button
-	_options_button = get_node_or_null("%Options") as Button
+	_continue_button = get_node("%Continue") as Button
+	_load_game_button = get_node("%LoadGame") as Button
+	_new_game_button = get_node("%NewGame") as Button
+	_options_button = get_node("%Options") as Button
 	# Abort setup if any required action button is missing from the scene contract.
-	if _continue_button == null or _new_game_button == null or _options_button == null or _load_game_button == null:
-		push_error("Main menu buttons are missing. Ensure Continue/LoadGame/NewGame/Options are unique-name nodes.")
-		return
+	assert(_continue_button != null and _new_game_button != null and _options_button != null and _load_game_button != null, "Main menu buttons are missing. Ensure Continue/LoadGame/NewGame/Options are unique-name nodes.")
 	# Connect once so re-entering the scene does not duplicate signal callbacks.
 	if not _new_game_button.pressed.is_connected(_on_new_game_pressed):
 		_new_game_button.pressed.connect(_on_new_game_pressed)
@@ -99,9 +97,8 @@ func _on_continue_pressed() -> void:
 
 
 func _on_load_game_pressed() -> void:
-	var load_menu = get_node_or_null("MainMenu/LoadMenuPanel") as GamePanel
-	if load_menu:
-		load_menu.open_panel()
+	var load_menu = get_node("MainMenu/LoadMenuPanel") as GamePanel
+	load_menu.open_panel()
 
 
 func _on_button_pressed() -> void:
