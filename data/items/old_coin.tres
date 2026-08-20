@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://c223ay5hjh8yo"]
 
-[ext_resource type="Script" uid="uid://boebthtaw3fu0" path="res://shared/items/item_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://boebthtaw3fu0" path="res://data/items/item_definition.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://b676q0vvc22c8" path="res://icon.png" id="1_kx1v5"]
 
 [resource]

@@ -18,7 +18,7 @@ func _run() -> void:
 	var level := BaseLevel.new()
 	root.add_child(level)
 
-	var area_path := "res://shared/sandbox/gym.tscn"
+	var area_path := "res://devtools/sandbox/gym.tscn"
 	var person_id := StringName("jerry")
 	game_state.enter_area(area_path)
 	game_state.register_person_if_missing(person_id, area_path, "res://entities/characters/jerry/person_jerry.tscn", Transform3D(Basis.IDENTITY, Vector3(1.0, 0.0, 2.0)), {})

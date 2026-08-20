@@ -2,7 +2,7 @@ extends SceneTree
 
 const PICKUP_COMPONENT_SCRIPT := preload("res://entities/items/pickup_item/pickup_lifecycle_component.gd")
 const PICKUP_SCENE := preload("res://entities/items/pickup_item/pickup_item.tscn")
-const SCRAP := preload("res://shared/items/scrap.tres")
+const SCRAP := preload("res://data/items/scrap.tres")
 
 
 class TestSaveManager:
@@ -33,7 +33,7 @@ func _run() -> void:
 	var component = PICKUP_COMPONENT_SCRIPT.new()
 	component.configure(game_state, save_manager, entity_root, PICKUP_SCENE)
 
-	var area_path := "res://shared/sandbox/gym.tscn"
+	var area_path := "res://devtools/sandbox/gym.tscn"
 	game_state.enter_area(area_path)
 	var dynamic_id := game_state.add_dynamic_pickup(area_path, SCRAP, 2, Transform3D(Basis.IDENTITY, Vector3(2.0, 1.0, 3.0)))
 

@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://systems/interaction/interactable.gd" id="8_interactable"]
 [ext_resource type="Script" uid="uid://d1m48bhjy3bwp" path="res://systems/time/day_night_cycle.gd" id="9_mg21w"]
 [ext_resource type="PackedScene" path="res://entities/items/pickup_item/pickup_item.tscn" id="10_hi4sg"]
-[ext_resource type="Resource" uid="uid://dhf4vqilx5g7" path="res://shared/loot/desert_sky.tres" id="10_igoyi"]
+[ext_resource type="Resource" uid="uid://dhf4vqilx5g7" path="res://data/sky/desert_sky.tres" id="10_igoyi"]
 [ext_resource type="Script" uid="uid://ce3liopcmdigw" path="res://systems/zone_management/new_game_spawn_point.gd" id="10_new_game_spawn"]
 [ext_resource type="PackedScene" uid="uid://d1a28xhpinwn2" path="res://entities/interfacables/campfire/campfire.tscn" id="11_hi4sg"]
 

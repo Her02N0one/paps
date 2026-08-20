@@ -1,7 +1,7 @@
 extends SceneTree
 
-const SCRAP := preload("res://shared/items/scrap.tres")
-const OLD_COIN := preload("res://shared/items/old_coin.tres")
+const SCRAP := preload("res://data/items/scrap.tres")
+const OLD_COIN := preload("res://data/items/old_coin.tres")
 
 
 func _initialize() -> void:

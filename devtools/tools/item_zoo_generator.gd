@@ -1,10 +1,10 @@
-## Add to any scene to auto-lay out every ItemDefinition in res://shared/items/ as a
+## Add to any scene to auto-lay out every ItemDefinition in res://data/items/ as a
 ## display tile showing the real in-game item mesh, color-coded by item type.
 @tool
 class_name ItemZooGenerator
 extends Node3D
 
-const _ITEMS_DIR    := "res://shared/items/"
+const _ITEMS_DIR    := "res://data/items/"
 const _PICKUP_SCENE := preload("res://entities/items/pickup_item/pickup_item.tscn")
 const _COLS         := 4
 const _COL_SPACING  := 4.0

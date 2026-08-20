@@ -1,7 +1,7 @@
 extends SceneTree
 
 const PANEL_SCENE := preload("res://systems/inventory/inventory_panel.tscn")
-const OLD_COIN := preload("res://shared/items/old_coin.tres")
+const OLD_COIN := preload("res://data/items/old_coin.tres")
 
 
 func _initialize() -> void:
