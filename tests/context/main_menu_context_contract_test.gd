@@ -1,6 +1,6 @@
 extends SceneTree
 
-const MAIN_MENU_SCENE := preload("res://scenes/main/main_menu.tscn")
+const MAIN_MENU_SCENE := preload("res://ui/menus/main_menu.tscn")
 
 
 class TestSaveManager extends SaveManager:
@@ -61,9 +61,9 @@ func _run() -> void:
 	main_menu.call("_on_new_game_pressed")
 	var blocked_invalid_start := game_manager.start_new_game_requests.is_empty()
 
-	main_menu.new_game_start_scene = "res://scenes/maps/playground.tscn"
+	main_menu.new_game_start_scene = "res://levels/maps/playground.tscn"
 	main_menu.call("_on_new_game_pressed")
-	var valid_start_ok := game_manager.start_new_game_requests == ["res://scenes/maps/playground.tscn"]
+	var valid_start_ok := game_manager.start_new_game_requests == ["res://levels/maps/playground.tscn"]
 
 	main_menu.call("_on_continue_pressed")
 	var blocked_continue_ok := game_manager.continue_requests == 0 and save_manager.load_requests == 1

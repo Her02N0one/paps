@@ -35,17 +35,20 @@ const MAX_CAPSULE_RADIUS = 0.45
 @onready var movement: ActorMovementComponent = $ActorMovementComponent
 @onready var interaction_sensor: InteractionSensorComponent = $InteractionSensorComponent
 @onready var inventory_holder: InventoryHolderComponent = $InventoryHolderComponent
+@onready var equipment_holder: EquipmentHolderComponent = $Head/Camera3D/EquipmentHolderComponent
 @onready var health_component: ActorHealthComponent = $ActorHealthComponent
 
 var _target_yaw := 0.0
 var _target_pitch := 0.0
 var _visual_yaw := 0.0
 var _visual_pitch := 0.0
+var _interact_press_time := 0.0
 
 
 func _ready() -> void:
 	_apply_first_person_body_visibility()
 	refresh_body_profile()
+	_current_eye_height = standing_height_meters * eye_height_ratio
 	sync_look_to_body_yaw()
 	# Camera look smoothing runs in _process, so disable physics interpolation to avoid warning spam.
 	if camera != null:
@@ -97,8 +100,20 @@ func _sync_physical_profile() -> void:
 		_sync_camera_rig_transform(true)
 
 
+var _current_eye_height := 0.0
+
 func _process(delta: float) -> void:
 	_apply_interpolated_look(delta)
+	
+	if head and camera_anchor:
+		var target_height = standing_height_meters * eye_height_ratio
+		if movement and movement.is_crouching:
+			target_height *= 0.6
+		
+		_current_eye_height = lerp(_current_eye_height, target_height, delta * 10.0)
+		var anchor_position: Vector3 = camera_anchor.position
+		anchor_position.y = _current_eye_height
+		camera_anchor.position = anchor_position
 
 
 func bind_inventory(inventory: InventoryStore) -> void:
@@ -112,8 +127,23 @@ func _unhandled_input(event):
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
 		return
 	# Interaction consumes the input when activation succeeds.
-	if event.is_action_pressed("interact") and interaction_sensor.activate(self):
+	if event.is_action_pressed("interact"):
+		_interact_press_time = Time.get_ticks_msec() / 1000.0
 		return
+		
+	if event.is_action_released("interact"):
+		var hold_duration = (Time.get_ticks_msec() / 1000.0) - _interact_press_time
+		if hold_duration < 0.2:
+			interaction_sensor.activate(self)
+		return
+		
+	if event.is_action_pressed("fire_weapon"):
+		if equipment_holder:
+			equipment_holder.fire()
+	elif event.is_action_released("fire_weapon"):
+		if equipment_holder:
+			equipment_holder.release_fire()
+			
 	if event is InputEventMouseMotion:
 		_apply_camera_look(event)
 
@@ -131,13 +161,30 @@ func _update_movement_requests() -> void:
 		movement.direction = Vector3.ZERO
 		movement.sprint_requested = false
 		movement.jump_requested = false
+		movement.is_crouching = false
 		return
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	# Movement follows target yaw immediately while render view can smooth independently.
 	var yaw_basis := Basis(Vector3.UP, _target_yaw)
 	movement.direction = (yaw_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	movement.sprint_requested = Input.is_action_pressed("sprint")
+	
+	var sprint_pressed = Input.is_action_pressed("sprint")
+	var crouch_pressed = Input.is_action_pressed("crouch")
+	
+	movement.sprint_requested = sprint_pressed and not crouch_pressed
 	movement.jump_requested = Input.is_action_just_pressed("jump")
+	movement.is_crouching = crouch_pressed
+	
+	if crouch_pressed and Input.is_action_just_pressed("crouch") and sprint_pressed:
+		movement.enter_slide()
+		
+	if Input.is_action_just_pressed("dash"):
+		movement.dash()
+		
+	movement.grapple_boost_requested = Input.is_action_pressed("grapple")
+		
+	if Input.is_action_just_pressed("grapple"):
+		movement.start_grapple(camera.global_position, -camera.global_transform.basis.z)
 
 
 func _update_interaction_sensor() -> void:

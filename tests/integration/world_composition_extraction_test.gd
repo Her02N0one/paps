@@ -1,6 +1,6 @@
 extends SceneTree
 
-const WORLD_SCENE := preload("res://scenes/world/world_root.tscn")
+const WORLD_SCENE := preload("res://levels/world/world_root.tscn")
 const TARGET_AREA := "res://devtools/sandbox/gym.tscn"
 const SCRAP := preload("res://data/items/scrap.tres")
 

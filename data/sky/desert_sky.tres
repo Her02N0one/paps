@@ -1,22 +1,22 @@
 [gd_resource type="Resource" script_class="SkyProfile" format=3 uid="uid://dhf4vqilx5g7"]
 
-[ext_resource type="Texture2D" uid="uid://dxkqbgd3ryjy" path="res://assets/textures/Moon_Phase_1_Alt.png" id="1_7p35j"]
-[ext_resource type="Texture2D" uid="uid://cnejoghlmcpt0" path="res://assets/textures/Moon_Phase_2_Alt.png" id="2_sj8ie"]
-[ext_resource type="Texture2D" uid="uid://dc28ls75blymq" path="res://assets/textures/Moon_Phase_3_Alt.png" id="3_kwfe4"]
-[ext_resource type="Texture2D" uid="uid://cbs5iktq1mqug" path="res://assets/textures/Moon_Phase_4_Alt.png" id="4_0o3re"]
-[ext_resource type="Texture2D" uid="uid://q8lh0f16v0la" path="res://assets/textures/Moon_Phase_5_Alt.png" id="5_b6ml6"]
-[ext_resource type="Texture2D" uid="uid://4ltimcvvvs2u" path="res://assets/textures/Moon_Phase_6_Alt.png" id="6_gn0ad"]
-[ext_resource type="Texture2D" uid="uid://n8kuab0kosna" path="res://assets/textures/Moon_Phase_7_Alt.png" id="7_6ek4n"]
-[ext_resource type="Texture2D" uid="uid://by418hq0wc5t8" path="res://assets/textures/Moon_Phase_8_Alt.png" id="8_pdf61"]
-[ext_resource type="Script" uid="uid://ql0fyowmvnc6" path="res://systems/time/sky_profile.gd" id="9_ev8cm"]
-
-[sub_resource type="Gradient" id="Gradient_top"]
-offsets = PackedFloat32Array(0, 0.2, 0.25, 0.5, 0.75, 0.8, 1)
-colors = PackedColorArray(0.0, 0.0, 0.02, 1, 0.0, 0.0, 0.02, 1, 0.3, 0.4, 0.6, 1, 0.2, 0.5, 0.8, 1, 0.2, 0.2, 0.4, 1, 0.0, 0.0, 0.02, 1, 0.0, 0.0, 0.02, 1)
+[ext_resource type="Texture2D" uid="uid://dxkqbgd3ryjy" path="res://assets/texture/Moon_Phase_1_Alt.png" id="1_7p35j"]
+[ext_resource type="Texture2D" uid="uid://cnejoghlmcpt0" path="res://assets/texture/Moon_Phase_2_Alt.png" id="2_sj8ie"]
+[ext_resource type="Texture2D" uid="uid://dc28ls75blymq" path="res://assets/texture/Moon_Phase_3_Alt.png" id="3_kwfe4"]
+[ext_resource type="Texture2D" uid="uid://cbs5iktq1mqug" path="res://assets/texture/Moon_Phase_4_Alt.png" id="4_0o3re"]
+[ext_resource type="Texture2D" uid="uid://q8lh0f16v0la" path="res://assets/texture/Moon_Phase_5_Alt.png" id="5_b6ml6"]
+[ext_resource type="Texture2D" uid="uid://4ltimcvvvs2u" path="res://assets/texture/Moon_Phase_6_Alt.png" id="6_gn0ad"]
+[ext_resource type="Texture2D" uid="uid://n8kuab0kosna" path="res://assets/texture/Moon_Phase_7_Alt.png" id="7_6ek4n"]
+[ext_resource type="Texture2D" uid="uid://by418hq0wc5t8" path="res://assets/texture/Moon_Phase_8_Alt.png" id="8_pdf61"]
+[ext_resource type="Script" uid="uid://ql0fyowmvnc6" path="res://core/time/sky_profile.gd" id="9_ev8cm"]
 
 [sub_resource type="Gradient" id="Gradient_ugi88"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.5, 0.75, 0.8, 1)
 colors = PackedColorArray(0.02, 0.02, 0.05, 1, 0.02, 0.02, 0.05, 1, 0.8, 0.4, 0.2, 1, 0.5, 0.7, 0.9, 1, 0.7, 0.3, 0.5, 1, 0.02, 0.02, 0.05, 1, 0.02, 0.02, 0.05, 1)
+
+[sub_resource type="Gradient" id="Gradient_top"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.5, 0.75, 0.8, 1)
+colors = PackedColorArray(0, 0, 0.02, 1, 0, 0, 0.02, 1, 0.3, 0.4, 0.6, 1, 0.2, 0.5, 0.8, 1, 0.2, 0.2, 0.4, 1, 0, 0, 0.02, 1, 0, 0, 0.02, 1)
 
 [sub_resource type="Gradient" id="Gradient_7iiy4"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.5, 0.75, 0.8, 1)

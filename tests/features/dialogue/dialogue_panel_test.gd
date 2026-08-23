@@ -1,6 +1,6 @@
 extends SceneTree
 
-const PANEL_SCENE := preload("res://systems/dialogue/dialogue_panel.tscn")
+const PANEL_SCENE := preload("res://features/dialogue/dialogue_panel.tscn")
 
 
 class TestState extends Node:

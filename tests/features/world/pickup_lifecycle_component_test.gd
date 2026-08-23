@@ -1,6 +1,6 @@
 extends SceneTree
 
-const PICKUP_COMPONENT_SCRIPT := preload("res://entities/items/pickup_item/pickup_lifecycle_component.gd")
+const PICKUP_COMPONENT_SCRIPT := preload("res://entities/items/search_object/pickup_lifecycle_component.gd")
 const PICKUP_SCENE := preload("res://entities/items/pickup_item/pickup_item.tscn")
 const SCRAP := preload("res://data/items/scrap.tres")
 
@@ -40,7 +40,7 @@ func _run() -> void:
 	component.restore_dynamic_pickups(area_path)
 	var spawned := entity_root.get_child_count() == 1
 	var restored_pickup := entity_root.get_child(0) as PickupItem
-	var restored_quantity_ok := restored_pickup != null and restored_pickup.quantity == 2
+	var restored_quantity_ok := restored_pickup != null and restored_pickup.instance != null and restored_pickup.instance.quantity == 2
 
 	component.handle_pickup_collected("", dynamic_id)
 	var removed_from_state := not game_state.get_dynamic_pickups(area_path).has(dynamic_id)

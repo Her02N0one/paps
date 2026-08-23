@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://simple_npc"]
 
 [ext_resource type="Script" path="res://entities/characters/base_npc/simple_npc.gd" id="1_script"]
-[ext_resource type="Script" path="res://systems/interaction/interactable_person.gd" id="2_script"]
-[ext_resource type="Script" path="res://systems/health/actor_health_component.gd" id="3_script"]
+[ext_resource type="Script" path="res://features/interaction/interactable_person.gd" id="2_script"]
+[ext_resource type="Script" path="res://features/health/actor_health_component.gd" id="3_script"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.3

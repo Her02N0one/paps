@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="DialogueSpeakerProfile" format=3 uid="uid://b7t4aiuqdqgxm"]
 
-[ext_resource type="Script" uid="uid://20p6xacrl8mk" path="res://systems/dialogue/dialogue_speaker_profile.gd" id="1_6u6po"]
+[ext_resource type="Script" uid="uid://20p6xacrl8mk" path="res://features/dialogue/dialogue_speaker_profile.gd" id="1_6u6po"]
 
 [resource]
 script = ExtResource("1_6u6po")

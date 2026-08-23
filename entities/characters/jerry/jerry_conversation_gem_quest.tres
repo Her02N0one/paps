@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="DialogueConversation" format=3 uid="uid://vhxlivcseese"]
 
-[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://systems/dialogue/dialogue_conversation.gd" id="1_conversation"]
-[ext_resource type="Script" uid="uid://cglee7piovdkl" path="res://systems/dialogue/dialogue_node.gd" id="2_node"]
-[ext_resource type="Script" uid="uid://cf55a2xa12rru" path="res://systems/dialogue/dialogue_choice.gd" id="3_choice"]
-[ext_resource type="Script" uid="uid://b51n58cliyl8y" path="res://systems/dialogue/conditions/dialogue_condition.gd" id="3_sqkae"]
-[ext_resource type="Script" uid="uid://dn068bjcmik5e" path="res://systems/dialogue/effects/dialogue_effect.gd" id="4_filpq"]
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="1_conversation"]
+[ext_resource type="Script" uid="uid://cglee7piovdkl" path="res://features/dialogue/dialogue_node.gd" id="2_node"]
+[ext_resource type="Script" uid="uid://cf55a2xa12rru" path="res://features/dialogue/dialogue_choice.gd" id="3_choice"]
+[ext_resource type="Script" uid="uid://b51n58cliyl8y" path="res://features/dialogue/conditions/dialogue_condition.gd" id="3_sqkae"]
+[ext_resource type="Script" uid="uid://dn068bjcmik5e" path="res://features/dialogue/effects/dialogue_effect.gd" id="4_filpq"]
 
 [sub_resource type="Resource" id="ChoiceReturn"]
 script = ExtResource("3_choice")

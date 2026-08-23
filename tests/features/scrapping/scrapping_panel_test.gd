@@ -1,6 +1,6 @@
 extends SceneTree
 
-const SLOT_SCENE := preload("res://systems/inventory/inventory_slot.tscn")
+const SLOT_SCENE := preload("res://features/inventory/inventory_slot.tscn")
 const SCRAP := preload("res://data/items/scrap.tres")
 const OLD_COIN := preload("res://data/items/old_coin.tres")
 

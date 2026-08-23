@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="PersonDefinition" format=3 uid="uid://byahsnnggd78a"]
 
 [ext_resource type="Texture2D" uid="uid://yy16dq5bklgm" path="res://entities/characters/usagi/textures/usagi_world_standing.png" id="1_h48e4"]
-[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://systems/dialogue/dialogue_conversation.gd" id="2_cht3y"]
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="2_cht3y"]
 [ext_resource type="Resource" uid="uid://cfua3vtse3e45" path="res://entities/characters/usagi/usagi_conversation_foley.tres" id="2_jhwh7"]
 [ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://entities/characters/base_npc/person_definition.gd" id="3_cpb6p"]
 [ext_resource type="Texture2D" uid="uid://dh4wou6rlerfe" path="res://entities/characters/usagi/textures/usagi_talk_neutral.png" id="6_6c67f"]

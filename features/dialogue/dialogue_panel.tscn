@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://c0pxoo8sgymdh"]
+
+[ext_resource type="Script" uid="uid://c8t36cjke5pat" path="res://features/dialogue/dialogue_panel.gd" id="1_dialogue"]
+[ext_resource type="Texture2D" uid="uid://bp11swqui7buo" path="res://entities/characters/jerry/textures/jerrybust.png" id="2_5n300"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_root"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name"]
+content_margin_left = 16.0
+content_margin_top = 5.0
+content_margin_right = 16.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1, 0.08, 0.04, 0.96)
+border_width_bottom = 2
+border_color = Color(0.95, 0.78, 0.3, 0.85)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
+content_margin_left = 20.0
+content_margin_top = 14.0
+content_margin_right = 20.0
+content_margin_bottom = 14.0
+bg_color = Color(0.07, 0.07, 0.1, 0.94)
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="DialoguePanel" type="PanelContainer" unique_id=1020373046]
+process_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -300.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_root")
+script = ExtResource("1_dialogue")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2001145209]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LeftSection" type="VBoxContainer" parent="HBoxContainer" unique_id=9407899]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_constants/separation = 0
+
+[node name="NamePlate" type="PanelContainer" parent="HBoxContainer/LeftSection" unique_id=1094656516]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_name")
+
+[node name="Speaker" type="Label" parent="HBoxContainer/LeftSection/NamePlate" unique_id=180522711]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Speaker"
+
+[node name="DialogueBox" type="PanelContainer" parent="HBoxContainer/LeftSection" unique_id=760853846]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="ContentVBox" type="VBoxContainer" parent="HBoxContainer/LeftSection/DialogueBox" unique_id=891469300]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="DialogueText" type="RichTextLabel" parent="HBoxContainer/LeftSection/DialogueBox/ContentVBox" unique_id=2035325004]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 17
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="Choices" type="VBoxContainer" parent="HBoxContainer/LeftSection/DialogueBox/ContentVBox" unique_id=2069422522]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Portrait" type="TextureRect" parent="HBoxContainer" unique_id=519688887]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+offset_transform_enabled = true
+offset_transform_position_ratio = Vector2(0, 0.09)
+texture = ExtResource("2_5n300")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VoiceLinePlayer" type="AudioStreamPlayer" parent="." unique_id=2107499687]
+unique_name_in_owner = true
+
+[node name="VoiceBlipPlayer" type="AudioStreamPlayer" parent="." unique_id=1016101027]
+unique_name_in_owner = true

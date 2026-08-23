@@ -2,7 +2,7 @@
 class_name PersonLifecycleComponent
 extends RefCounted
 
-const SCENE_SPAWN_SERVICE := preload("res://systems/zone_management/scene_spawn_service.gd")
+const SCENE_SPAWN_SERVICE := preload("res://core/zone_management/scene_spawn_service.gd")
 
 var _game_state: GameState
 var _entity_root: Node3D

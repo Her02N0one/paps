@@ -1,10 +1,10 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://entities/items/pickup_item/pickup_item.gd" id="1_pickup"]
-[ext_resource type="Script" path="res://systems/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" path="res://features/interaction/interactable.gd" id="2_interactable"]
 
 [sub_resource type="StandardMaterial3D" id="PickupMaterial"]
-albedo_color = Color(0.9, 0.72, 0.18, 1)
+albedo_color = Color(0.18, 0.9, 0.3, 1)
 
 [sub_resource type="SphereMesh" id="PickupMesh"]
 material = SubResource("PickupMaterial")
@@ -14,7 +14,8 @@ height = 0.4
 [sub_resource type="SphereShape3D" id="PickupShape"]
 radius = 0.24
 
-[node name="PickupItem" type="StaticBody3D"]
+[node name="PickupItem" type="RigidBody3D"]
+mass = 5.0
 script = ExtResource("1_pickup")
 
 [node name="Interactable" type="Node" parent="."]

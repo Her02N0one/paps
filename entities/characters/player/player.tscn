@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://entities/characters/player/player.gd" id="1_ffvwl"]
 [ext_resource type="Script" uid="uid://dq5sv5g34pc6u" path="res://entities/characters/player/actor_movement_component.gd" id="3_wxsjw"]
-[ext_resource type="Script" uid="uid://mj5dua6omd51" path="res://systems/interaction/interaction_sensor_component.gd" id="4_mgft0"]
-[ext_resource type="Script" uid="uid://gnc245sle255" path="res://systems/inventory/inventory_holder_component.gd" id="5_l1vaj"]
-[ext_resource type="Script" uid="uid://3h4acjalio4p" path="res://systems/health/actor_health_component.gd" id="8_u5v4m"]
+[ext_resource type="Script" uid="uid://mj5dua6omd51" path="res://features/interaction/interaction_sensor_component.gd" id="4_mgft0"]
+[ext_resource type="Script" uid="uid://gnc245sle255" path="res://features/inventory/inventory_holder_component.gd" id="5_l1vaj"]
+[ext_resource type="Script" uid="uid://3h4acjalio4p" path="res://features/health/actor_health_component.gd" id="8_u5v4m"]
+[ext_resource type="Script" uid="uid://qg1iyv8tlgt1" path="res://features/equipment/equipment_holder_component.gd" id="9_eqp"]
+[ext_resource type="Script" uid="uid://bn4vb20fiiqhu" path="res://features/physics_grabber/physics_grabber_component.gd" id="10_pgb"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
 radius = 0.3132
@@ -17,10 +19,8 @@ height = 1.74
 [sub_resource type="SphereShape3D" id="SphereShape3D_interaction"]
 radius = 0.55
 
-[node name="Player" type="CharacterBody3D" groups=["player"] unique_id=1702401823]
+[node name="Player" type="CharacterBody3D" unique_id=1702401823 groups=["player"]]
 script = ExtResource("1_ffvwl")
-standing_height_meters = 1.8
-eye_height_ratio = 0.9
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=739217968]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
@@ -35,6 +35,9 @@ shape = SubResource("CapsuleShape3D_1")
 script = ExtResource("3_wxsjw")
 body = NodePath("..")
 facing_reference = NodePath("../Head")
+grapple_speed = 8.0
+grapple_min_length = 8.0
+grapple_spring_strength = 2.5
 
 [node name="InteractionSensorComponent" type="Node" parent="." unique_id=874721218 node_paths=PackedStringArray("shape_cast")]
 script = ExtResource("4_mgft0")
@@ -62,3 +65,15 @@ shape = SubResource("SphereShape3D_interaction")
 target_position = Vector3(0, 0, -4)
 max_results = 8
 collision_mask = 2
+
+[node name="EquipmentHolderComponent" type="Node3D" parent="Head/Camera3D" unique_id=410065409 node_paths=PackedStringArray("camera")]
+script = ExtResource("9_eqp")
+camera = NodePath("..")
+
+[node name="PhysicsGrabberComponent" type="Node3D" parent="Head/Camera3D" unique_id=410065410 node_paths=PackedStringArray("camera", "grab_anchor")]
+script = ExtResource("10_pgb")
+camera = NodePath("..")
+grab_anchor = NodePath("GrabAnchor")
+
+[node name="GrabAnchor" type="Marker3D" parent="Head/Camera3D/PhysicsGrabberComponent" unique_id=410065411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)

@@ -36,7 +36,7 @@ func _ready() -> void:
 func _build_mesh_library() -> void:
 	var lib = MeshLibrary.new()
 	
-	var base_mat = load("res://scenes/maps/grid_floor.tres") as ShaderMaterial
+	var base_mat = load("res://levels/maps/grid_floor.tres") as ShaderMaterial
 	
 	# Item 0: Wasteland (Grey)
 	var mat_waste = base_mat.duplicate()

@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="DialogueConversation" format=3 uid="uid://cfua3vtse3e45"]
 
 [ext_resource type="Resource" uid="uid://b7t4aiuqdqgxm" path="res://entities/characters/usagi/usagi_speaker_profile.tres" id="1_vlmun"]
-[ext_resource type="Script" uid="uid://cglee7piovdkl" path="res://systems/dialogue/dialogue_node.gd" id="2_7kjuc"]
-[ext_resource type="Script" uid="uid://cf55a2xa12rru" path="res://systems/dialogue/dialogue_choice.gd" id="3_g7sd6"]
-[ext_resource type="Script" uid="uid://b51n58cliyl8y" path="res://systems/dialogue/conditions/dialogue_condition.gd" id="4_m5pmt"]
-[ext_resource type="Script" uid="uid://dn068bjcmik5e" path="res://systems/dialogue/effects/dialogue_effect.gd" id="5_jy4p2"]
+[ext_resource type="Script" uid="uid://cglee7piovdkl" path="res://features/dialogue/dialogue_node.gd" id="2_7kjuc"]
+[ext_resource type="Script" uid="uid://cf55a2xa12rru" path="res://features/dialogue/dialogue_choice.gd" id="3_g7sd6"]
+[ext_resource type="Script" uid="uid://b51n58cliyl8y" path="res://features/dialogue/conditions/dialogue_condition.gd" id="4_m5pmt"]
+[ext_resource type="Script" uid="uid://dn068bjcmik5e" path="res://features/dialogue/effects/dialogue_effect.gd" id="5_jy4p2"]
 [ext_resource type="AudioStream" uid="uid://dr4o7upbfpy52" path="res://entities/characters/usagi/voice_lines/lasernoisespitched.wav" id="6_uhy7l"]
-[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://systems/dialogue/dialogue_conversation.gd" id="7_ulnbd"]
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="7_ulnbd"]
 
 [sub_resource type="Resource" id="Resource_m6rps"]
 script = ExtResource("3_g7sd6")

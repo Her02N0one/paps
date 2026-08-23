@@ -120,7 +120,7 @@ func _place_tile(item: ItemDefinition, pos: Vector3, index: int) -> void:
 	_add(mi)
 
 	var pickup: PickupItem = _PICKUP_SCENE.instantiate()
-	pickup.item_definition = item
+	pickup.instance = ItemInstance.new(item, 1)
 	pickup.dynamic_id = "zoo_%d" % index
 	pickup.position = pos + Vector3(0.0, 0.12, 0.6)
 	_add(pickup)

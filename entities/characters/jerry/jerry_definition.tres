@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://entities/characters/base_npc/person_definition.gd" id="1_def"]
 [ext_resource type="Resource" uid="uid://1lcf4l7xxbd0" path="res://entities/characters/jerry/jerry_conversation.tres" id="2_conv"]
-[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://systems/dialogue/dialogue_conversation.gd" id="3_du4qp"]
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="3_du4qp"]
 [ext_resource type="Texture2D" uid="uid://bnx7ubs03ufgt" path="res://entities/characters/jerry/textures/jerry.png" id="4_body"]
 [ext_resource type="Resource" uid="uid://vhxlivcseese" path="res://entities/characters/jerry/jerry_conversation_gem_quest.tres" id="4_du4qp"]
 [ext_resource type="Texture2D" uid="uid://bp11swqui7buo" path="res://entities/characters/jerry/textures/jerrybust.png" id="5_portrait"]

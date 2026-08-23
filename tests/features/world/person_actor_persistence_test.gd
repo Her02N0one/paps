@@ -1,8 +1,8 @@
 extends SceneTree
 
 const PERSON_SCENE := preload("res://entities/characters/base_npc/simple_npc.tscn")
-const PLAYGROUND_SCENE := "res://scenes/maps/playground.tscn"
-const OTHER_SCENE := "res://scenes/maps/zone_b.tscn"
+const PLAYGROUND_SCENE := "res://levels/maps/playground.tscn"
+const OTHER_SCENE := "res://levels/maps/zone_b.tscn"
 
 
 func _initialize() -> void:

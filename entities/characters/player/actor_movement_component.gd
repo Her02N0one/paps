@@ -12,21 +12,55 @@ signal gateway_requested(target_scene: String, target_gateway_id: String, revers
 @export var jump_velocity := 8.5
 @export var gravity := 32.0
 
+@export var ground_friction := 7.0
+@export var slide_friction := 1.0
+@export var air_drag := 2.0
+@export var dash_impulse := 15.0
+@export var slide_impulse := 8.0
+
+# Vector Pools
+var input_velocity := Vector3.ZERO
+var impulse_velocity := Vector3.ZERO
+var grapple_velocity := Vector3.ZERO
+
+# Inputs & State Flags
 var direction := Vector3.ZERO
 var sprint_requested := false
 var jump_requested := false
+var is_crouching := false
+var is_sliding := false
+var is_grappling := false
+var grapple_boost_requested := false
 
-# Gateway walking temporarily owns horizontal movement until the scripted distance is consumed.
 var _gateway_walking := false
 var _gateway_direction := Vector3.ZERO
 var _gateway_distance_remaining := 0.0
 
+var _grapple_line: MeshInstance3D
 
 func _ready() -> void:
 	if body == null and get_parent() is CharacterBody3D:
 		body = get_parent() as CharacterBody3D
 	if Engine.is_editor_hint():
 		update_configuration_warnings()
+	else:
+		_setup_grapple_visual()
+
+func _setup_grapple_visual() -> void:
+	_grapple_line = MeshInstance3D.new()
+	var mat = StandardMaterial3D.new()
+	mat.albedo_color = Color(1.0, 0.2, 0.2)
+	mat.emission_enabled = true
+	mat.emission = Color(1.0, 0.2, 0.2)
+	mat.emission_energy_multiplier = 4.0
+	
+	var mesh = BoxMesh.new()
+	mesh.size = Vector3(0.04, 0.04, 1.0)
+	_grapple_line.mesh = mesh
+	_grapple_line.material_override = mat
+	_grapple_line.visible = false
+	_grapple_line.top_level = true
+	add_child.call_deferred(_grapple_line)
 
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -39,13 +73,13 @@ func _get_configuration_warnings() -> PackedStringArray:
 func physics_tick(delta: float) -> void:
 	if body == null:
 		return
-	# Two exclusive movement modes: scripted gateway walk or normal player-driven motion.
+		
 	if _gateway_walking:
 		_tick_gateway_walk(delta)
 	else:
 		_tick_free_movement(delta)
+		
 	body.move_and_slide()
-	# Jump input is one-shot; physics consumes it once per frame.
 	jump_requested = false
 
 
@@ -53,6 +87,9 @@ func start_gateway_walk(walk_direction: Vector3, distance: float) -> void:
 	_gateway_walking = true
 	_gateway_direction = walk_direction.normalized()
 	_gateway_distance_remaining = maxf(distance, 0.0)
+	input_velocity = Vector3.ZERO
+	impulse_velocity = Vector3.ZERO
+	grapple_velocity = Vector3.ZERO
 
 
 func place_at_gateway(walk_start: Node3D, walk_end: Node3D, _reversed: bool) -> void:
@@ -60,7 +97,6 @@ func place_at_gateway(walk_start: Node3D, walk_end: Node3D, _reversed: bool) -> 
 		return
 	var walk_direction := (walk_end.global_position - walk_start.global_position).normalized()
 	body.global_position = walk_start.global_position
-	# Always face the direction of travel so the player never moonwalks and gets stuck in a loop.
 	body.rotation.y = atan2(-walk_direction.x, -walk_direction.z)
 	reset_facing_reference()
 	_sync_body_look_if_supported()
@@ -101,78 +137,170 @@ static func find_on(actor: Node) -> ActorMovementComponent:
 	return null
 
 
+# --- Gateway Movement ---
+
 func _tick_gateway_walk(delta: float) -> void:
-	_apply_gateway_vertical_velocity(delta)
-	_apply_gateway_horizontal_velocity()
-	_advance_gateway_walk(delta)
-
-
-func _apply_gateway_vertical_velocity(delta: float) -> void:
 	if not body.is_on_floor():
 		body.velocity.y -= gravity * delta
 	else:
-		# Keep scripted walk grounded on flat surfaces.
 		body.velocity.y = 0.0
-
-
-func _apply_gateway_horizontal_velocity() -> void:
+		
 	body.velocity.x = _gateway_direction.x * walk_speed
 	body.velocity.z = _gateway_direction.z * walk_speed
-
-
-func _advance_gateway_walk(delta: float) -> void:
+	
 	_gateway_distance_remaining -= walk_speed * delta
 	if _gateway_distance_remaining <= 0.0:
-		# Hand control back to free movement as soon as scripted distance is consumed.
 		_gateway_walking = false
+		input_velocity = Vector3(_gateway_direction.x * walk_speed, 0, _gateway_direction.z * walk_speed)
 
+
+@export var grapple_range := 30.0
+@export var grapple_speed := 30.0
+@export var grapple_min_length := 2.0
+@export var grapple_spring_strength := 10.0
+
+var _grapple_target := Vector3.ZERO
+
+func start_grapple(origin: Vector3, dir: Vector3) -> void:
+	if is_grappling:
+		# Toggle off
+		is_grappling = false
+		grapple_velocity = Vector3.ZERO
+		if _grapple_line:
+			_grapple_line.visible = false
+		return
+		
+	var space = body.get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(origin, origin + dir * grapple_range)
+	query.exclude = [body.get_rid()]
+	var result = space.intersect_ray(query)
+	
+	if result:
+		_grapple_target = result.position
+		is_grappling = true
+		body.velocity.y += 4.0 # Give a little hop off the ground
 
 func _tick_free_movement(delta: float) -> void:
-	_apply_free_movement_vertical_velocity(delta)
-	_apply_free_movement_horizontal_velocity(delta)
-
-
-func _apply_free_movement_vertical_velocity(delta: float) -> void:
-	if not body.is_on_floor():
+	var on_floor = body.is_on_floor()
+	var current_friction = air_drag
+	
+	if on_floor:
+		current_friction = slide_friction if is_sliding else ground_friction
+		
+	# 1. Decay impulse velocity over time
+	impulse_velocity.x = lerp(impulse_velocity.x, 0.0, delta * current_friction)
+	impulse_velocity.z = lerp(impulse_velocity.z, 0.0, delta * current_friction)
+	
+	# 2. Process Input Velocity
+	var target_speed = sprint_speed if sprint_requested else walk_speed
+	if is_crouching and not is_sliding:
+		target_speed *= 0.5
+		
+	if is_sliding:
+		# During a slide, input cannot accelerate you forward, but we still allow minor air-strafing like steering
+		input_velocity.x = lerp(input_velocity.x, direction.x * (target_speed * 0.2), delta * current_friction)
+		input_velocity.z = lerp(input_velocity.z, direction.z * (target_speed * 0.2), delta * current_friction)
+	elif direction != Vector3.ZERO:
+		var accel = current_friction if on_floor else air_drag
+		input_velocity.x = lerp(input_velocity.x, direction.x * target_speed, delta * accel)
+		input_velocity.z = lerp(input_velocity.z, direction.z * target_speed, delta * accel)
+	else:
+		# Decelerate
+		var decel = current_friction if on_floor else air_drag
+		input_velocity.x = lerp(input_velocity.x, 0.0, delta * decel)
+		input_velocity.z = lerp(input_velocity.z, 0.0, delta * decel)
+		
+	# 3. Process Grapple
+	if is_grappling:
+		if jump_requested:
+			is_grappling = false
+			if _grapple_line:
+				_grapple_line.visible = false
+		else:
+			var pull_dir = (_grapple_target - body.global_position).normalized()
+			var distance = body.global_position.distance_to(_grapple_target)
+			
+			if distance > grapple_min_length:
+				# Base reel-in is very low, you mainly swing. Holding F boosts it to winch you up.
+				var reel_speed = 5.0
+				if grapple_boost_requested:
+					reel_speed = 60.0
+					
+				var reel_force = pull_dir * reel_speed
+				impulse_velocity += Vector3(reel_force.x, 0, reel_force.z) * delta
+				body.velocity.y += reel_force.y * delta
+				
+				# Perfect Pendulum Constraint
+				# Calculate total intended velocity for this frame (including upcoming gravity)
+				var current_vel = Vector3(input_velocity.x + impulse_velocity.x, body.velocity.y, input_velocity.z + impulse_velocity.z)
+				if not on_floor:
+					current_vel.y -= gravity * delta
+					
+				var outward_speed = -current_vel.dot(pull_dir)
+				if outward_speed > 0:
+					# Apply exact counter-force to negate any velocity moving AWAY from the anchor
+					var correction = pull_dir * outward_speed
+					impulse_velocity += Vector3(correction.x, 0, correction.z)
+					body.velocity.y += correction.y
+				
+			if _grapple_line:
+				_grapple_line.visible = true
+				var start_pos = facing_reference.global_position if facing_reference else body.global_position
+				start_pos.y -= 0.2
+				_grapple_line.global_position = start_pos.lerp(_grapple_target, 0.5)
+				var up = Vector3.UP
+				if abs(start_pos.direction_to(_grapple_target).dot(Vector3.UP)) > 0.99:
+					up = Vector3.RIGHT
+				_grapple_line.look_at(_grapple_target, up)
+				_grapple_line.scale = Vector3(1.0, 1.0, start_pos.distance_to(_grapple_target))
+	elif _grapple_line and _grapple_line.visible:
+		_grapple_line.visible = false
+	
+	# 4. Vertical Velocity (Gravity and Jump)
+	if not on_floor:
 		body.velocity.y -= gravity * delta
-	# Jump gate checks floor contact so buffered jumps do not trigger mid-air.
-	if jump_requested and body.is_on_floor():
+	elif jump_requested:
 		body.velocity.y = jump_velocity
+		is_sliding = false # Jumping breaks a slide
+		# Preserve slide momentum by converting input to impulse
+		impulse_velocity += input_velocity
+		input_velocity = Vector3.ZERO
+
+	# 5. Sum all vectors
+	var combined_horizontal = input_velocity + impulse_velocity
+	body.velocity.x = combined_horizontal.x
+	body.velocity.z = combined_horizontal.z
 
 
-func _apply_free_movement_horizontal_velocity(delta: float) -> void:
-	var speed := sprint_speed if sprint_requested else walk_speed
-	# Ground and air use different acceleration models for responsive but readable control.
-	if body.is_on_floor():
-		_apply_ground_velocity(speed, delta)
-	else:
-		_apply_air_velocity(speed, delta)
+func add_impulse(impulse: Vector3) -> void:
+	impulse_velocity += impulse
+	
+func enter_slide() -> void:
+	if not is_sliding and body.is_on_floor():
+		is_sliding = true
+		# Convert current forward momentum into an impulse, plus a little boost
+		var facing = get_facing_direction()
+		var slide_dir = facing
+		if direction != Vector3.ZERO:
+			slide_dir = direction
+			
+		impulse_velocity += slide_dir * slide_impulse
+		input_velocity = Vector3.ZERO
 
 
-func _apply_ground_velocity(speed: float, delta: float) -> void:
-	if direction:
-		body.velocity.x = direction.x * speed
-		body.velocity.z = direction.z * speed
-	else:
-		# Dampen to stop quickly when no directional input is provided on ground.
-		body.velocity.x = lerp(body.velocity.x, 0.0, delta * 7.0)
-		body.velocity.z = lerp(body.velocity.z, 0.0, delta * 7.0)
+func dash(dash_dir: Vector3 = Vector3.ZERO) -> void:
+	if dash_dir == Vector3.ZERO:
+		dash_dir = get_facing_direction()
+	impulse_velocity += dash_dir * dash_impulse
 
 
-func _apply_air_velocity(speed: float, delta: float) -> void:
-	body.velocity.x = lerp(body.velocity.x, direction.x * speed, delta * 2.0)
-	body.velocity.z = lerp(body.velocity.z, direction.z * speed, delta * 2.0)
-
-
-## Public: World also calls this after directly restoring a saved transform, outside the
-## place_at_gateway()/place_at_spawn() paths that otherwise call it themselves.
 func reset_facing_reference() -> void:
 	if facing_reference != null and facing_reference != body:
 		facing_reference.rotation.y = 0.0
 
 
 func _sync_body_look_if_supported() -> void:
-	var player := body as Player
-	if player:
+	var player = body
+	if player and player.has_method("sync_look_to_body_yaw"):
 		player.sync_look_to_body_yaw()
 		player.sync_camera_to_body_anchor()
