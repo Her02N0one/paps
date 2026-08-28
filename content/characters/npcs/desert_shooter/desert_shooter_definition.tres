@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PersonDefinition" format=3 uid="uid://bxn2kten2nplg"]
+
+[ext_resource type="Texture2D" uid="uid://bnx7ubs03ufgt" path="res://content/characters/npcs/jerry/textures/jerry.png" id="1_1d5lb"]
+[ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://content/characters/npcs/base_npc/person_definition.gd" id="1_def"]
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="2_ipys5"]
+
+[resource]
+script = ExtResource("1_def")
+speaker_name = "Desert Shooter"
+body_texture = ExtResource("1_1d5lb")
+move_speed_meters_per_sec = 4.0
+max_health = 120.0

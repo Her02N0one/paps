@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://dl7mdn35ogwuu"]
+
+[ext_resource type="Script" uid="uid://deh1xpr32wkdd" path="res://content/characters/player/player.gd" id="1_ffvwl"]
+[ext_resource type="Script" uid="uid://cvas1yya111q1" path="res://features/camera/player_camera_system.gd" id="2_cam"]
+[ext_resource type="Script" uid="uid://c3f0gtj80py4p" path="res://features/mobility/actor_movement_system.gd" id="3_wxsjw"]
+[ext_resource type="Script" uid="uid://mj5dua6omd51" path="res://features/interaction/interaction_sensor.gd" id="4_mgft0"]
+[ext_resource type="Script" uid="uid://gnc245sle255" path="res://features/inventory/inventory_holder_component.gd" id="5_l1vaj"]
+[ext_resource type="Script" uid="uid://3h4acjalio4p" path="res://features/health/actor_health_component.gd" id="8_u5v4m"]
+[ext_resource type="Script" uid="uid://qg1iyv8tlgt1" path="res://features/equipment/equipment_holder.gd" id="9_eqp"]
+[ext_resource type="Script" uid="uid://bn4vb20fiiqhu" path="res://features/physics_grabber/physics_grabber.gd" id="10_pgb"]
+[ext_resource type="Script" uid="uid://b7x1ggn1n05rt" path="res://features/mobility/grapple_visual_system.gd" id="11_gvc"]
+[ext_resource type="Script" uid="uid://ba3fku2nq2k7y" path="res://features/mobility/grapple/grapple_system.gd" id="12_grapple"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
+radius = 0.3132
+height = 1.74
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.3132
+height = 1.74
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interaction"]
+radius = 0.55
+
+[node name="Player" type="CharacterBody3D" unique_id=1702401823 groups=["player"]]
+script = ExtResource("1_ffvwl")
+
+[node name="WorldModel" type="Node3D" parent="." unique_id=439424820]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldModel" unique_id=739217968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
+mesh = SubResource("CapsuleMesh_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=32480970]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Systems" type="Node" parent="." unique_id=2034255164]
+
+[node name="PlayerCameraSystem" type="Node" parent="Systems" unique_id=383061319 node_paths=PackedStringArray("head", "camera", "camera_anchor", "movement")]
+script = ExtResource("2_cam")
+head = NodePath("../../Head")
+camera = NodePath("../../Head/Camera3D")
+camera_anchor = NodePath("../../CameraAnchor")
+movement = NodePath("../ActorMovementSystem")
+
+[node name="ActorMovementSystem" type="Node" parent="Systems" unique_id=2056943079 node_paths=PackedStringArray("body", "facing_reference")]
+script = ExtResource("3_wxsjw")
+body = NodePath("../..")
+facing_reference = NodePath("../../Head")
+walk_speed = 5.3
+sprint_speed = 8.6
+jump_velocity = 9.5
+air_drag = 3.0
+air_control_speed = 4.0
+dash_power = 10.0
+
+[node name="GrappleSystem" type="Node" parent="Systems" unique_id=987654321 node_paths=PackedStringArray("movement_component")]
+script = ExtResource("12_grapple")
+movement_component = NodePath("../ActorMovementSystem")
+min_distance = 0.5
+
+[node name="GrappleVisualSystem" type="Node3D" parent="Systems" unique_id=981240182 node_paths=PackedStringArray("grapple_component", "movement_component")]
+script = ExtResource("11_gvc")
+grapple_component = NodePath("../GrappleSystem")
+movement_component = NodePath("../ActorMovementSystem")
+
+[node name="Components" type="Node" parent="." unique_id=286102960]
+
+[node name="InventoryHolderComponent" type="Node" parent="Components" unique_id=1659816402]
+script = ExtResource("5_l1vaj")
+
+[node name="ActorHealthComponent" type="Node" parent="Components" unique_id=101155948]
+script = ExtResource("8_u5v4m")
+
+[node name="CameraAnchor" type="Marker3D" parent="." unique_id=1843297417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6182, 0)
+
+[node name="Head" type="Node3D" parent="." unique_id=1655268507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6182, 0)
+top_level = true
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=273559578]
+
+[node name="WeaponSwayPivot" type="Node3D" parent="Head/Camera3D" unique_id=810220347]
+
+[node name="InteractionSensor" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1733465904]
+shape = SubResource("SphereShape3D_interaction")
+target_position = Vector3(0, 0, -4)
+max_results = 8
+collision_mask = 2
+script = ExtResource("4_mgft0")
+
+[node name="EquipmentHolder" type="Node3D" parent="Head/Camera3D" unique_id=410065409 node_paths=PackedStringArray("camera")]
+script = ExtResource("9_eqp")
+camera = NodePath("..")
+
+[node name="PhysicsGrabber" type="Marker3D" parent="Head/Camera3D" unique_id=410065411 node_paths=PackedStringArray("camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+script = ExtResource("10_pgb")
+camera = NodePath("..")

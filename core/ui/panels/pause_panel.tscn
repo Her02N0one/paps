@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://w6stxdrbgut3"]
+
+[ext_resource type="Script" uid="uid://cqwvghj76mep0" path="res://core/ui/panels/pause_panel.gd" id="1_pause_script"]
+
+[node name="PausePanel" type="PanelContainer" unique_id=1576031363]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -160.0
+offset_right = 220.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pause_script")
+modal_id = &"pause"
+
+[node name="PauseMargin" type="MarginContainer" parent="." unique_id=1602729077]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="PauseVBox" type="VBoxContainer" parent="PauseMargin" unique_id=532633875]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PauseTitle" type="Label" parent="PauseMargin/PauseVBox" unique_id=6187832]
+layout_mode = 2
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="PauseResume" type="Button" parent="PauseMargin/PauseVBox" unique_id=1258116795]
+layout_mode = 2
+text = "Resume"
+
+[node name="PauseQuickSave" type="Button" parent="PauseMargin/PauseVBox"]
+layout_mode = 2
+text = "Quick Save"
+
+[node name="PauseLoadGame" type="Button" parent="PauseMargin/PauseVBox"]
+layout_mode = 2
+text = "Load Game"
+
+[node name="PauseQuitMenu" type="Button" parent="PauseMargin/PauseVBox" unique_id=1278404801]
+layout_mode = 2
+text = "Quit to Menu"
+
+[node name="PauseQuitGame" type="Button" parent="PauseMargin/PauseVBox" unique_id=1322592883]
+layout_mode = 2
+text = "Quit Game"
+
+[connection signal="pressed" from="PauseMargin/PauseVBox/PauseResume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMargin/PauseVBox/PauseQuickSave" to="." method="_on_quick_save_pressed"]
+[connection signal="pressed" from="PauseMargin/PauseVBox/PauseLoadGame" to="." method="_on_load_game_pressed"]
+[connection signal="pressed" from="PauseMargin/PauseVBox/PauseQuitMenu" to="." method="_on_quit_to_menu_pressed"]
+[connection signal="pressed" from="PauseMargin/PauseVBox/PauseQuitGame" to="." method="_on_quit_game_pressed"]

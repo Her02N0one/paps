@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PersonDefinition" format=3 uid="uid://c83jerrydef01"]
+
+[ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://content/characters/npcs/base_npc/person_definition.gd" id="1_def"]
+[ext_resource type="Resource" uid="uid://1lcf4l7xxbd0" path="res://content/characters/npcs/jerry/jerry_conversation.tres" id="2_conv"]
+[ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="3_du4qp"]
+[ext_resource type="Texture2D" uid="uid://bnx7ubs03ufgt" path="res://content/characters/npcs/jerry/textures/jerry.png" id="4_body"]
+[ext_resource type="Resource" uid="uid://vhxlivcseese" path="res://content/characters/npcs/jerry/jerry_conversation_gem_quest.tres" id="4_du4qp"]
+[ext_resource type="Texture2D" uid="uid://bp11swqui7buo" path="res://content/characters/npcs/jerry/textures/jerrybust.png" id="5_portrait"]
+[ext_resource type="Texture2D" uid="uid://drlq8c8v4mmef" path="res://content/characters/npcs/jerry/textures/jerrytorso.png" id="6_torso"]
+
+[resource]
+script = ExtResource("1_def")
+speaker_name = "Jerry"
+body_texture = ExtResource("4_body")
+sprite_scale = Vector3(0.13, 0.13, 0.13)
+portrait = ExtResource("5_portrait")
+portraits = Dictionary[String, Texture2D]({
+"surprised": ExtResource("6_torso"),
+"torso": ExtResource("6_torso")
+})
+conversation = ExtResource("2_conv")
+conversations = Dictionary[String, ExtResource("3_du4qp")]({
+"gem_quest": ExtResource("4_du4qp"),
+"main": ExtResource("2_conv")
+})

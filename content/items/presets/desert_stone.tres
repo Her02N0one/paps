@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://5w7n3ilymovv"]
+
+[ext_resource type="Script" path="res://features/inventory/data/item_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"desert_stone"
+display_name = "Desert Stone"
+description = "Smooth and warm to the touch."
+stackable = true
+max_stack = 20
+scrap_yield = 2

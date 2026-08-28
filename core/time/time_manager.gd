@@ -17,13 +17,15 @@ var _last_hour: int = -1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_game_state = get_tree().get_first_node_in_group("game_state") as GameState
+
+func inject_dependencies(game_state: Node) -> void:
+	_game_state = game_state as GameState
 	if _game_state:
+		@warning_ignore("integer_division")
 		_last_hour = int(_game_state.current_time_minutes) / 60
 
 func _process(delta: float) -> void:
 	if _game_state == null:
-		_game_state = get_tree().get_first_node_in_group("game_state") as GameState
 		return
 		
 	if get_tree().paused:
@@ -51,6 +53,7 @@ func advance_time(minutes: float) -> void:
 		
 	time_changed.emit(_game_state.current_day, _game_state.current_time_minutes)
 	
+	@warning_ignore("integer_division")
 	var current_hour := int(_game_state.current_time_minutes) / 60
 	if current_hour != _last_hour:
 		_last_hour = current_hour

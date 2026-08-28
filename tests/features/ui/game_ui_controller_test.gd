@@ -1,7 +1,7 @@
 extends SceneTree
 
-const PLAYER_SCENE := preload("res://entities/characters/player/player.tscn")
-const INTRO_PANEL_SCENE := preload("res://ui/menus/intro_panel.tscn")
+const PLAYER_SCENE := preload("res://content/characters/player/player.tscn")
+const INTRO_PANEL_SCENE := preload("res://core/ui/panels/intro_panel.tscn")
 
 var _custom_dispatch_count := 0
 

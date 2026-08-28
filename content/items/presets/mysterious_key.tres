@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://wa2kqxbi17gw"]
+
+[ext_resource type="Script" path="res://features/inventory/data/item_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"mysterious_key"
+display_name = "Mysterious Key"
+description = "An old key. What does it open?"
+scrap_yield = 2

@@ -37,12 +37,14 @@ func start_new_game(initial_area: String) -> bool:
 func has_save() -> bool:
 	return get_all_saves().size() > 0
 
+var _world: Node
+
+func set_world(world: Node) -> void:
+	_world = world
 
 func save_game(type: String, save_name: String = "") -> bool:
-	var world := get_tree().get_first_node_in_group("world")
-	var w := world as World
-	if w:
-		world.call("capture_player_transform_for_save")
+	if is_instance_valid(_world):
+		_world.call("capture_player_transform_for_save")
 		
 	if _game_state == null or _game_state.current_area.is_empty():
 		save_completed.emit("", false)

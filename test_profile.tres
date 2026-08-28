@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MobilityProfile" format=3 uid="uid://cry56qtoeua3b"]
+
+[ext_resource type="Script" uid="uid://bayqo8xhskvm6" path="res://features/mobility/mobility_profile.gd" id="1_4r3q3"]
+[ext_resource type="Script" uid="uid://c4m5ex5rjxngj" path="res://features/mobility/wasd/air_strafe_wasd.gd" id="2_air"]
+
+[sub_resource type="Resource" id="Resource_air"]
+script = ExtResource("2_air")
+
+[resource]
+script = ExtResource("1_4r3q3")
+wasd_control = SubResource("Resource_air")
+reel_in_speed = 15.0
+initial_hop_velocity = 14.0
+metadata/_custom_type_script = "res://features/mobility/mobility_profile.gd"

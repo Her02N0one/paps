@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="UIRegistry" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://core/ui/ui_registry.gd" id="1"]
+[ext_resource type="PackedScene" path="res://features/examine/examine_panel.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://features/dialogue/dialogue_panel.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://features/inventory/inventory_panel.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://features/scrapping/scrapping_panel.tscn" id="5"]
+
+[resource]
+script = ExtResource("1")
+registered_panels = Array[PackedScene]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])

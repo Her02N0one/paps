@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://dph0e8jva15yy"]
+
+[ext_resource type="Texture2D" uid="uid://boitcfyp86sy7" path="res://content/items/textures/magazine_cover.jpg" id="1_seshk"]
+[ext_resource type="Script" path="res://features/inventory/data/item_definition.gd" id="1_xdvie"]
+
+[resource]
+script = ExtResource("1_xdvie")
+id = &"clean_dirty_magazine"
+display_name = "Clean Dirty Magazine"
+description = "oh..."
+icon = ExtResource("1_seshk")
+metadata/_custom_type_script = "uid://b76w2fxvbm865"

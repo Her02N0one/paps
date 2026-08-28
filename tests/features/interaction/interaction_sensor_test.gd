@@ -15,7 +15,7 @@ func _run() -> void:
 	cast.enabled = true
 	cast.max_results = 8
 
-	var sensor := InteractionSensorComponent.new()
+	var sensor := InteractionSensor.new()
 	sensor.shape_cast = cast
 	var centered_item := _create_item(Vector3(0.1, 0.0, -3.5))
 	var nearby_item := _create_item(Vector3(0.45, 0.0, -2.0))

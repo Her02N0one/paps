@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://gateway_prefab1"]
+
+[ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://core/level_management/gateway.gd" id="1_gw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 3, 2)
+
+[node name="Gateway" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_gw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="WalkStart" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="WalkEnd" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)

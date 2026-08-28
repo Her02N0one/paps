@@ -1,4 +1,4 @@
-## Data-driven death effect configuration used by ActorDeathEffectsComponent.
+## Data-driven death effect configuration used by ActorDeathEffectsSystem.
 class_name ActorDeathEffectProfile
 extends Resource
 

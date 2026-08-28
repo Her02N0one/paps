@@ -1,6 +1,6 @@
 extends SceneTree
 
-const GAME_MANAGER_SCRIPT := preload("res://core/context/game_manager.gd")
+const GAME_MANAGER_SCRIPT := preload("res://core/bootstrap/game_manager.gd")
 
 
 class TestSaveManager extends SaveManager:
@@ -23,15 +23,15 @@ class TestGameState extends GameState:
 func _initialize() -> void:
 	var save_manager := TestSaveManager.new()
 	var game_state := TestGameState.new()
-	game_state.current_area = "res://levels/maps/zone_b.tscn"
+	game_state.current_area = "res://content/zones/maps/zone_b.tscn"
 
 	var new_game_manager := GAME_MANAGER_SCRIPT.new()
 	new_game_manager.configure(save_manager, game_state)
 	new_game_manager.set_context_switch_callbacks(func(_map: String, _spawn: String, _reversed: bool) -> void: pass, func() -> void: pass)
-	new_game_manager.start_new_game("res://levels/maps/playground.tscn")
+	new_game_manager.start_new_game("res://content/zones/maps/playground.tscn")
 	var new_game_requested: bool = (
-		save_manager.new_game_requests == ["res://levels/maps/playground.tscn"]
-		and new_game_manager.pending_target_map == "res://levels/maps/playground.tscn"
+		save_manager.new_game_requests == ["res://content/zones/maps/playground.tscn"]
+		and new_game_manager.pending_target_map == "res://content/zones/maps/playground.tscn"
 		and new_game_manager.consume_intro_request()
 	)
 
@@ -44,10 +44,10 @@ func _initialize() -> void:
 	var travel_manager := GAME_MANAGER_SCRIPT.new()
 	travel_manager.configure(save_manager, game_state)
 	travel_manager.set_context_switch_callbacks(func(_map: String, _spawn: String, _reversed: bool) -> void: pass, func() -> void: pass)
-	travel_manager.travel("res://levels/maps/playground.tscn", "gate_a", true)
+	travel_manager.travel("res://content/zones/maps/playground.tscn", "gate_a", true)
 	var travel_requested: bool = (
 		save_manager.save_requests == 1
-		and travel_manager.pending_target_map == "res://levels/maps/playground.tscn"
+		and travel_manager.pending_target_map == "res://content/zones/maps/playground.tscn"
 		and travel_manager.pending_target_spawn_id == "gate_a"
 		and travel_manager.pending_entry_reversed
 	)
@@ -55,7 +55,7 @@ func _initialize() -> void:
 	var unconfigured_save_manager := TestSaveManager.new()
 	var unconfigured_callbacks_manager := GAME_MANAGER_SCRIPT.new()
 	unconfigured_callbacks_manager.configure(unconfigured_save_manager, game_state)
-	unconfigured_callbacks_manager.start_new_game("res://levels/maps/playground.tscn")
+	unconfigured_callbacks_manager.start_new_game("res://content/zones/maps/playground.tscn")
 	unconfigured_callbacks_manager.continue_game()
 	unconfigured_callbacks_manager.quit_to_menu()
 	var callback_guard_ok: bool = (

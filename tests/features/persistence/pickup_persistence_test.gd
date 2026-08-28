@@ -1,7 +1,7 @@
 extends SceneTree
 
-const PLAYGROUND := "res://levels/maps/playground.tscn"
-const ZONE_B := "res://levels/maps/zone_b.tscn"
+const PLAYGROUND := "res://content/zones/maps/playground.tscn"
+const ZONE_B := "res://content/zones/maps/zone_b.tscn"
 
 
 func _initialize() -> void:

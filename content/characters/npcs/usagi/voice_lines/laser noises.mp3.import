@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cn77c735twiai"
+path="res://.godot/imported/laser noises.mp3-899f012294bfebac8e4b4c6e32c8c03a.mp3str"
+
+[deps]
+
+source_file="res://content/characters/npcs/usagi/voice_lines/laser noises.mp3"
+dest_files=["res://.godot/imported/laser noises.mp3-899f012294bfebac8e4b4c6e32c8c03a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

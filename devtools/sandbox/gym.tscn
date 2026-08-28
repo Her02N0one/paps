@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://c3yl140o5mh01"]
 
-[ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://core/zone_management/base_level.gd" id="1_level"]
-[ext_resource type="Script" uid="uid://q6mg67xu155w" path="res://core/zone_management/spawn_point.gd" id="2_spawn"]
+[ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://core/level_management/base_level.gd" id="1_level"]
+[ext_resource type="Script" uid="uid://q6mg67xu155w" path="res://core/level_management/spawn_point.gd" id="2_spawn"]
 [ext_resource type="Script" uid="uid://csb2r5pbd7tjd" path="res://devtools/tools/gym_metrics.gd" id="3_gym"]
-[ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://core/zone_management/gateway.gd" id="4_gateway"]
+[ext_resource type="Script" uid="uid://b5pg7uj58ekxv" path="res://core/level_management/gateway.gd" id="4_gateway"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_floor"]
 
@@ -34,7 +34,7 @@ transform = Transform3D(-0.99454325, 0, -0.10432499, 0, 1, 0, 0.10432499, 0, -0.
 collision_layer = 0
 script = ExtResource("4_gateway")
 gateway_id = "gym_back"
-target_scene = "res://levels/maps/playground.tscn"
+target_scene = "res://content/zones/maps/playground.tscn"
 target_gateway_id = "pg_gym"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayBack" unique_id=792841274]

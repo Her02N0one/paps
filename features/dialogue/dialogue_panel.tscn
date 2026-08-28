@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c0pxoo8sgymdh"]
 
 [ext_resource type="Script" uid="uid://c8t36cjke5pat" path="res://features/dialogue/dialogue_panel.gd" id="1_dialogue"]
-[ext_resource type="Texture2D" uid="uid://bp11swqui7buo" path="res://entities/characters/jerry/textures/jerrybust.png" id="2_5n300"]
+[ext_resource type="Texture2D" uid="uid://bp11swqui7buo" path="res://content/characters/npcs/jerry/textures/jerrybust.png" id="2_5n300"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_root"]
 

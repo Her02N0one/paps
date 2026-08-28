@@ -10,17 +10,16 @@ func configure(store: InventoryStore) -> void:
 
 
 func add_item(definition: ItemDefinition, quantity: int = 1) -> bool:
-	if inventory == null or definition == null or quantity <= 0:
+	if quantity <= 0:
 		return false
 	inventory.add_item(definition, quantity)
 	return true
 
 
 static func find_on(actor: Node) -> InventoryHolderComponent:
-	if actor == null:
-		return null
-	# Inventory holder is expected as a direct child on actor prefabs.
-	for child in actor.get_children():
+	var container = actor.get_node_or_null("Components")
+	var children = container.get_children() if container != null else actor.get_children()
+	for child in children:
 		if child is InventoryHolderComponent:
 			return child as InventoryHolderComponent
 	return null

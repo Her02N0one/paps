@@ -13,7 +13,7 @@ var _game_state: GameState
 
 func _ready() -> void:
 	add_to_group("saveable")
-	_game_state = get_tree().get_first_node_in_group("game_state") as GameState
+	_game_state = ServiceRegistry.game_state
 	if _game_state == null:
 		return
 		

@@ -22,7 +22,7 @@ const _DEFAULT_RANGE_ZONE_CENTER := Vector3(0.0, 0.0, 18.0)
 const _DEFAULT_REF_ZONE_CENTER := Vector3(-8.0, 0.0, -22.0)
 const _DEFAULT_BOARD_POSITION := Vector3(-11.0, 1.7, -11.0)
 
-@export_group("Movement (match ActorMovementComponent)")
+@export_group("Movement (match ActorMovementSystem)")
 @export var walk_speed: float = 4.8:
 	set(v):
 		walk_speed = v

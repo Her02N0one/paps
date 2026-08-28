@@ -47,6 +47,7 @@ func get_inventory() -> InventoryStore:
 	return _inventory
 
 func get_in_game_time_string() -> String:
+	@warning_ignore("integer_division")
 	var hours := int(current_time_minutes) / 60
 	var minutes := int(current_time_minutes) % 60
 	return "DAY %d, %02d:%02d" % [current_day, hours, minutes]

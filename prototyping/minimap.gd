@@ -23,9 +23,8 @@ func _ready() -> void:
 	_update_zoom_label()
 
 func _process(_delta: float) -> void:
-	if player == null:
-		player = get_tree().get_first_node_in_group("player")
-	
+	if player == null and ServiceRegistry.world != null:
+		player = ServiceRegistry.world.get("player")
 	if player != null and texture_rect.texture != null:
 		# Player position in pixels (1 pixel = 10 meters)
 		var player_pixel_pos = Vector2(player.global_position.x / 10.0, player.global_position.z / 10.0)

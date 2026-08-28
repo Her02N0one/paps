@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://cy8at5fypmayx"]
+
+[ext_resource type="Script" uid="uid://bjxkarboxmqgl" path="res://core/level_management/base_level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://core/level_management/gateway.tscn" id="2_tp8jt"]
+[ext_resource type="Script" uid="uid://4er8v8jgguer" path="res://prototyping/image_map_builder.gd" id="3_builder"]
+[ext_resource type="PackedScene" uid="uid://protominimap" path="res://prototyping/minimap.tscn" id="4_minimap"]
+[ext_resource type="Script" uid="uid://brbk530mw84km" path="res://prototyping/proto_tile_data.gd" id="4_qa0cu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tp8jt"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_qa0cu"]
+sky_material = SubResource("ProceduralSkyMaterial_tp8jt")
+
+[sub_resource type="Environment" id="Environment_78ehg"]
+background_mode = 2
+sky = SubResource("Sky_qa0cu")
+glow_enabled = true
+
+[sub_resource type="Resource" id="Resource_ri6b7"]
+script = ExtResource("4_qa0cu")
+metadata/_custom_type_script = "uid://brbk530mw84km"
+
+[node name="ScaleTest" type="Node3D" unique_id=1237203677]
+script = ExtResource("1_level")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=99176902]
+environment = SubResource("Environment_78ehg")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1126287780]
+transform = Transform3D(-0.564967, -0.82511353, -3.6066858e-08, 0, -4.371139e-08, 1, -0.82511353, 0.564967, 2.469549e-08, 0, 438.5811, 0)
+shadow_enabled = true
+
+[node name="GatewayPlayground" parent="." unique_id=1621398417 instance=ExtResource("2_tp8jt")]
+transform = Transform3D(-0.9974766, 0, 0.070995964, 0, 1, 0, -0.070995964, 0, -0.9974766, 19.980389, 2.5, 15.033863)
+target_scene_path = "uid://dksh37sfg0mxf"
+target_gateway_id = "GatewayScaletest"
+
+[node name="GridMap" type="GridMap" parent="." unique_id=123456789]
+cell_size = Vector3(10, 0.4, 10)
+
+[node name="ImageMapBuilder" type="Node3D" parent="." unique_id=987654321 node_paths=PackedStringArray("grid_map")]
+script = ExtResource("3_builder")
+elevation_layer = "res://prototyping/maps/elevation.png"
+features_layer = "res://prototyping/maps/features.png"
+grid_map = NodePath("../GridMap")
+wasteland = SubResource("Resource_ri6b7")
+
+[node name="Minimap" parent="." unique_id=279661070 instance=ExtResource("4_minimap")]
+default_map_path = "res://prototyping/maps/elevation.png"
+
+[node name="Ruler" type="Node3D" parent="." unique_id=2109275507]
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Ruler" unique_id=1815703748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 50.906128)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Ruler" unique_id=808056250]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 100.84848)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Ruler" unique_id=873542101]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 151.33392)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Ruler" unique_id=2057508111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 201.27628)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Ruler" unique_id=1248310770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 251.2854)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Ruler" unique_id=1590014680]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 301.22775)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Ruler" unique_id=309668882]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 351.7132)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Ruler" unique_id=594401733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 401.65555)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Ruler" unique_id=1703505633]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 450.9029)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Ruler" unique_id=720048427]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 500.84528)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="Ruler" unique_id=185381106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 551.3307)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="Ruler" unique_id=2053043403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 601.2731)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Ruler" unique_id=942235589]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 651.28217)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="Ruler" unique_id=604238085]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 701.22455)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Ruler" unique_id=1065167848]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 751.70996)
+size = Vector3(30.366394, 1, 1)
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="Ruler" unique_id=845510240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.028748, 2.877164, 801.65234)
+size = Vector3(30.366394, 1, 1)

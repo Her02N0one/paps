@@ -1,6 +1,6 @@
 extends SceneTree
 
-const ROOT_CONTEXT_SCENE := preload("res://core/context/root_context.tscn")
+const ROOT_CONTEXT_SCENE := preload("res://core/bootstrap/root_context.tscn")
 const CONTEXT_MAIN_MENU := &"main_menu"
 const CONTEXT_WORLD := &"world"
 
