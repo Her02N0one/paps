@@ -14,18 +14,18 @@ func register_and_restore(actor: PersonActor) -> bool:
 	if _resolved_person_id.is_empty():
 		push_error("Person '%s' needs a non-empty person_id or node name." % actor.name)
 		return false
-	if not _game_state.register_active_person(_resolved_person_id, actor):
+	if not ServiceRegistry.npc_manager.register_active_person(_resolved_person_id, actor):
 		return false
 	_is_registered_active = true
 
-	_game_state.register_person_if_missing(
+	ServiceRegistry.npc_manager.register_person_if_missing(
 		_resolved_person_id,
 		_game_state.current_area,
 		actor.scene_file_path,
 		actor.global_transform,
 		_build_profile(actor)
 	)
-	var record := _game_state.get_person_record(_resolved_person_id)
+	var record := ServiceRegistry.npc_manager.get_person_record(_resolved_person_id)
 	if not bool(record.get("enabled", true)):
 		return false
 	_apply_profile_from_record(actor, record)
@@ -42,9 +42,9 @@ func register_and_restore(actor: PersonActor) -> bool:
 
 func release_persistence(actor: PersonActor) -> void:
 	if _is_registered_active:
-		_game_state.unregister_active_person(_resolved_person_id, actor)
+		ServiceRegistry.npc_manager.unregister_active_person(_resolved_person_id, actor)
 	if _persist_on_exit:
-		_game_state.update_person_record(
+		ServiceRegistry.npc_manager.update_person_record(
 			_resolved_person_id,
 			_game_state.current_area,
 			actor.global_transform,
@@ -56,7 +56,7 @@ func release_persistence(actor: PersonActor) -> void:
 func persist_current_transform_if_active(actor: PersonActor) -> void:
 	if not _is_registered_active:
 		return
-	_game_state.update_person_record(
+	ServiceRegistry.npc_manager.update_person_record(
 		_resolved_person_id,
 		_game_state.current_area,
 		actor.global_transform,
@@ -66,38 +66,38 @@ func persist_current_transform_if_active(actor: PersonActor) -> void:
 
 
 func set_person_area(actor: PersonActor, target_area_path: String, target_transform: Transform3D) -> void:
-	_game_state.set_person_enabled(_resolved_person_id, true)
-	_game_state.update_person_record(_resolved_person_id, target_area_path, target_transform, actor.scene_file_path, _build_profile(actor))
+	ServiceRegistry.npc_manager.set_person_enabled(_resolved_person_id, true)
+	ServiceRegistry.npc_manager.update_person_record(_resolved_person_id, target_area_path, target_transform, actor.scene_file_path, _build_profile(actor))
 	if target_area_path != _game_state.current_area:
 		_persist_on_exit = false
 		actor.queue_free()
 
 
 func set_person_enabled(actor: PersonActor, enabled: bool) -> void:
-	_game_state.set_person_enabled(_resolved_person_id, enabled)
+	ServiceRegistry.npc_manager.set_person_enabled(_resolved_person_id, enabled)
 	if not enabled:
 		_persist_on_exit = false
 		actor.queue_free()
 
 
 func is_person_enabled() -> bool:
-	return _game_state.is_person_enabled(_resolved_person_id)
+	return ServiceRegistry.npc_manager.is_person_enabled(_resolved_person_id)
 
 
 func set_person_state_value(key: StringName, value: Variant) -> void:
-	_game_state.set_person_state_value(_resolved_person_id, key, value)
+	ServiceRegistry.npc_manager.set_person_state_value(_resolved_person_id, key, value)
 
 
 func get_person_state_value(key: StringName, default_value: Variant = null) -> Variant:
-	return _game_state.get_person_state_value(_resolved_person_id, key, default_value)
+	return ServiceRegistry.npc_manager.get_person_state_value(_resolved_person_id, key, default_value)
 
 
 func set_person_flag(flag: StringName, value: bool) -> void:
-	_game_state.set_person_flag(_resolved_person_id, flag, value)
+	ServiceRegistry.npc_manager.set_person_flag(_resolved_person_id, flag, value)
 
 
 func get_person_flag(flag: StringName, default_value: bool = false) -> bool:
-	return _game_state.get_person_flag(_resolved_person_id, flag, default_value)
+	return ServiceRegistry.npc_manager.get_person_flag(_resolved_person_id, flag, default_value)
 
 
 func get_person_id(actor: PersonActor) -> StringName:

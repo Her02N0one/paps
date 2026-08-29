@@ -1,12 +1,24 @@
+@tool
 class_name DestructibleComponent
 extends Node
 ## Attach to a physical object. When destroy() is called, it spawns loot and frees its parent.
 
+@export_group("Configuration")
 @export var loot_table: LootTable
 @export var spawn_height_offset: float = 0.5
 
 
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings := PackedStringArray()
+	if not get_parent() is Node3D:
+		warnings.append("DestructibleComponent must be a child of a Node3D.")
+	return warnings
+
+
 func destroy() -> void:
+	if Engine.is_editor_hint():
+		return
+		
 	var parent = get_parent()
 	if not parent is Node3D:
 		push_warning("DestructibleComponent parent must be a Node3D")
@@ -16,12 +28,7 @@ func destroy() -> void:
 		var raw_loot := loot_table.generate_loot()
 		for payload in raw_loot:
 			if payload is ItemPayload and payload.item_definition:
-				# Spawn a generic PickupItem for items dropped from destruction
-				# Assuming there's a default pickup item scene somewhere, or we can just 
-				# rely on SpawnPayloads for destruction if items need specific meshes.
-				# Actually, the prompt says "wooden_crate_break.tres" returns ItemPayloads.
-				# To drop them physically, we need a default PickupItem.tscn.
-				# If we don't have one, we can spawn a minimal one here.
+				# Spawn a generic SearchObject for items dropped from destruction
 				var pickup := _create_ephemeral_pickup(payload)
 				get_tree().current_scene.add_child(pickup)
 				pickup.global_position = parent.global_position + Vector3(0, spawn_height_offset, 0)
@@ -45,27 +52,17 @@ func destroy() -> void:
 	parent.queue_free()
 
 
-func _create_ephemeral_pickup(payload: ItemPayload) -> PickupItem:
-	var pickup := PickupItem.new()
+func _create_ephemeral_pickup(payload: ItemPayload) -> SearchObject:
+	var pickup := load("res://content/props/search_object.tscn").instantiate() as SearchObject
 	var qty := randi_range(payload.quantity_min, payload.quantity_max)
-	
 	if qty > 0:
-		pickup.instance = ItemInstance.new(payload.item_definition, qty)
-	
-	# Create a basic visual (fallback, in a real game we'd want proper visuals per item)
-	var mesh_inst := MeshInstance3D.new()
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(0.2, 0.2, 0.2)
-	mesh_inst.mesh = mesh
-	pickup.add_child(mesh_inst)
-	
-	var col := CollisionShape3D.new()
-	var shape := BoxShape3D.new()
-	shape.size = Vector3(0.2, 0.2, 0.2)
-	col.shape = shape
-	pickup.add_child(col)
-	
-	var interactable := Interactable.new()
-	pickup.add_child(interactable)
-	
+		# inventory_holder's inventory is created in _ready, so it might be null here before it enters the tree.
+		# But since we just instanciated it, wait, _ready hasn't run. We need to add it to tree first?
+		# Actually, we can just let _ready initialize it, but if we call add_item, we need the inventory.
+		# Let's just create an InventoryStore manually if it doesn't have one.
+		if not pickup.inventory_holder.inventory:
+			var inv = InventoryStore.new()
+			pickup.inventory_holder.inventory = inv
+			pickup.inventory_holder.add_child(inv)
+		pickup.inventory_holder.add_item(payload.item_definition, qty)
 	return pickup

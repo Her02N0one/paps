@@ -23,6 +23,7 @@ emission_energy_multiplier = 2.0
 
 [node name="Campfire" type="StaticBody3D" unique_id=1077097124]
 script = ExtResource("1_campfire")
+interactable = NodePath("Interactable")
 
 [node name="Interactable" type="Node" parent="." unique_id=1860543880]
 script = ExtResource("2_interactable")

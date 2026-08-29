@@ -6,94 +6,81 @@ extends StaticBody3D
 
 signal collected(persistent_id: String, dynamic_id: String)
 
+@export_group("Configuration")
 @export var loot_table: LootTable
-@export var persistent_id: String = ""
-
-@export var object_name: String = "Object"
+@export var object_name: String = ""
 @export var lifespan: float = 0.0
 
-var dynamic_id := ""
-var _pending_loot: Array[ItemPayload] = []
-var _has_rolled: bool = false
+@export_group("Persistence")
+@export var is_persistent: bool = true
 
-@onready var interaction := $Interactable as Interactable
-
-func _process(delta: float) -> void:
-	if not Engine.is_editor_hint() and lifespan > 0.0:
-		lifespan -= delta
-		if lifespan <= 0.0:
-			queue_free()
-
-
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		update_configuration_warnings()
-	if interaction.has_signal("interact"):
-		interaction.connect("interact", Callable(self, "_on_interacted"))
-	if persistent_id.is_empty() and dynamic_id.is_empty():
-		push_warning("Authored search object '%s' has no persistent_id and will respawn when its area reloads." % name)
-			
-	if not persistent_id.is_empty():
-		var gs := ServiceRegistry.game_state
-		# Static pickups self-prune when already marked collected in the current area.
-		if gs and gs.is_static_pickup_collected(gs.current_area, persistent_id):
-			queue_free()
-			return
-			
-	if loot_table:
-		interaction.set("interact_label", "Search " + object_name)
-	else:
-		interaction.set("interact_label", "Search " + object_name)
-
+@export_group("Dependencies")
+@export var inventory_holder: InventoryHolderComponent
+@export var interaction: Interactable
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
-	if get_node_or_null("Interactable") == null:
-		warnings.append("SearchObject requires an Interactable child node.")
-	if loot_table == null:
-		warnings.append("SearchObject requires a loot_table.")
-	if persistent_id.is_empty():
-		warnings.append("SearchObject has no persistent_id and will always respawn after area reloads unless spawned as a dynamic object.")
+	if not interaction:
+		warnings.append("Missing Interactable node. The player will not be able to interact with this object.")
+	if not inventory_holder:
+		warnings.append("Missing InventoryHolderComponent node. The object cannot store generated loot.")
 	return warnings
+
+var _has_rolled: bool = false
+var dynamic_id := ""
+var _auto_id := ""
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	if lifespan > 0.0:
+		get_tree().create_timer(lifespan).timeout.connect(queue_free)
+		
+	var final_name := object_name
+	if final_name.is_empty():
+		var regex := RegEx.new()
+		regex.compile("\\d+$")
+		final_name = regex.sub(String(name), "").capitalize()
+		
+	interaction.interact.connect(_on_interacted)
+	interaction.set("interact_label", "Search " + final_name)
+		
+	if is_persistent and dynamic_id.is_empty():
+		_auto_id = String(name)
+		var gs := ServiceRegistry.game_state
+		var pickup_manager = ServiceRegistry.pickup_manager
+		if pickup_manager:
+			if pickup_manager.is_static_pickup_collected(gs.current_area, _auto_id):
+				queue_free()
 
 
 func _on_interacted(actor: Node3D) -> void:
-	var inventory_holder := InventoryHolderComponent.find_on(actor)
-	if inventory_holder == null:
-		return
-		
+	var actor_inventory := InventoryHolderComponent.find_on(actor)
+	
 	if not _has_rolled:
-		_roll_loot()
+		_has_rolled = true
+		if loot_table:
+			var raw_loot := loot_table.generate_loot()
+			for payload in raw_loot:
+				if payload is ItemPayload and payload.item_definition:
+					var qty := randi_range(payload.quantity_min, payload.quantity_max)
+					if qty > 0:
+						inventory_holder.add_item(payload.item_definition, qty)
 		
-	if _pending_loot.is_empty():
-		# Empty roll or already looted
-		collected.emit(persistent_id, dynamic_id)
+	var slots := inventory_holder.inventory.get_slots()
+	if slots.is_empty():
+		collected.emit(_auto_id, dynamic_id)
 		queue_free()
 		return
 		
-	var remaining_loot: Array[ItemPayload] = []
-	for payload in _pending_loot:
-		var success := inventory_holder.add_item(payload.item_definition, payload.quantity_min)
-		if not success:
-			remaining_loot.append(payload)
+	var remaining := false
+	for slot in slots:
+		var instance = slot.instance
+		if actor_inventory.add_item(instance.definition, instance.quantity):
+			inventory_holder.inventory.remove_item(instance.definition, instance.quantity)
+		else:
+			remaining = true
 			
-	_pending_loot = remaining_loot
-	
-	if _pending_loot.is_empty():
-		collected.emit(persistent_id, dynamic_id)
+	if not remaining or inventory_holder.inventory.get_slots().is_empty():
+		collected.emit(_auto_id, dynamic_id)
 		queue_free()
-
-
-func _roll_loot() -> void:
-	_has_rolled = true
-	
-	if loot_table:
-		var raw_loot := loot_table.generate_loot()
-		for payload in raw_loot:
-			if payload is ItemPayload and payload.item_definition:
-				var qty := randi_range(payload.quantity_min, payload.quantity_max)
-				if qty > 0:
-					var actual_payload := payload.duplicate() as ItemPayload
-					actual_payload.quantity_min = qty
-					actual_payload.quantity_max = qty
-					_pending_loot.append(actual_payload)

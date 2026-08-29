@@ -3,10 +3,10 @@ extends CanvasLayer
 @export var map_texture: Texture2D
 @export var default_map_path: String = "res://prototyping/maps/features.png"
 
-@onready var mask: Control = $Control/Mask
-@onready var texture_rect: TextureRect = $Control/Mask/TextureRect
-@onready var player_dot: ColorRect = $Control/Mask/PlayerDot
-@onready var label: Label = $Control/Label
+@export var mask: Control
+@export var texture_rect: TextureRect
+@export var player_dot: ColorRect
+@export var label: Label
 
 var player: Node3D
 var zoom_levels = [0.25, 0.5, 1.0, 2.0, 4.0, 8.0]

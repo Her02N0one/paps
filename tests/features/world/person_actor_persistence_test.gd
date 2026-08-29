@@ -1,6 +1,6 @@
 extends SceneTree
 
-const PERSON_SCENE := preload("res://content/characters/npcs/base_npc/simple_npc.tscn")
+const PERSON_SCENE := preload("res://content/characters/npcs/simple_npc/simple_npc.tscn")
 const PLAYGROUND_SCENE := "res://content/zones/maps/playground.tscn"
 const OTHER_SCENE := "res://content/zones/maps/zone_b.tscn"
 
@@ -16,7 +16,7 @@ func _run() -> void:
 
 	game_state.enter_area(PLAYGROUND_SCENE)
 	var saved_transform := Transform3D(Basis.IDENTITY, Vector3(3.0, 4.0, 5.0))
-	game_state.update_person_record(&"unit_person", PLAYGROUND_SCENE, saved_transform, "res://content/characters/npcs/jerry/person_jerry.tscn")
+	ServiceRegistry.npc_manager.update_person_record(&"unit_person", PLAYGROUND_SCENE, saved_transform, "res://content/characters/npcs/jerry/person_jerry.tscn")
 
 	var primary := PERSON_SCENE.instantiate() as PersonActor
 	primary.person_id = &"unit_person"
@@ -70,7 +70,7 @@ func _run() -> void:
 
 	var clone_rejected := not is_instance_valid(clone) or clone.is_queued_for_deletion()
 
-	game_state.update_person_record(&"other_area_person", OTHER_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://content/characters/npcs/jerry/person_jerry.tscn")
+	ServiceRegistry.npc_manager.update_person_record(&"other_area_person", OTHER_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://content/characters/npcs/jerry/person_jerry.tscn")
 	var wrong_area_person := PERSON_SCENE.instantiate() as PersonActor
 	wrong_area_person.person_id = &"other_area_person"
 	wrong_area_person.name = "WrongAreaPerson"
@@ -82,16 +82,16 @@ func _run() -> void:
 	primary.set_person_state_value(&"mood", "curious")
 	primary.set_person_flag(&"met_player", true)
 	var state_roundtrip_ok := (
-		str(game_state.get_person_state_value(&"unit_person", &"mood", "")) == "curious"
-		and game_state.get_person_flag(&"unit_person", &"met_player", false)
+		str(ServiceRegistry.npc_manager.get_person_state_value(&"unit_person", &"mood", "")) == "curious"
+		and ServiceRegistry.npc_manager.get_person_flag(&"unit_person", &"met_player", false)
 	)
 
 	primary.set_person_area(OTHER_SCENE, Transform3D(Basis.IDENTITY, Vector3(9.0, 9.0, 9.0)))
 	await process_frame
-	var moved_record := game_state.get_person_record(&"unit_person")
+	var moved_record := ServiceRegistry.npc_manager.get_person_record(&"unit_person")
 	var moved_area_ok := (
 		str(moved_record.get("area_path", "")) == OTHER_SCENE
-		and game_state.is_person_enabled(&"unit_person")
+		and ServiceRegistry.npc_manager.is_person_enabled(&"unit_person")
 	)
 
 	var teleported := PERSON_SCENE.instantiate() as PersonActor
@@ -100,14 +100,14 @@ func _run() -> void:
 	root.add_child(teleported)
 	await process_frame
 	teleported.teleport_person_to(Vector3(7.0, 8.0, 9.0))
-	var teleported_record := game_state.get_person_record(&"teleport_person")
+	var teleported_record := ServiceRegistry.npc_manager.get_person_record(&"teleport_person")
 	var teleport_api_ok := (
 		typeof(teleported_record.get("transform")) == TYPE_TRANSFORM3D
 		and (teleported_record.get("transform") as Transform3D).origin.is_equal_approx(Vector3(7.0, 8.0, 9.0))
 	)
 
-	game_state.update_person_record(&"disabled_person", PLAYGROUND_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://content/characters/npcs/jerry/person_jerry.tscn")
-	game_state.set_person_enabled(&"disabled_person", false)
+	ServiceRegistry.npc_manager.update_person_record(&"disabled_person", PLAYGROUND_SCENE, Transform3D(Basis.IDENTITY, Vector3.ZERO), "res://content/characters/npcs/jerry/person_jerry.tscn")
+	ServiceRegistry.npc_manager.set_person_enabled(&"disabled_person", false)
 	var disabled_person := PERSON_SCENE.instantiate() as PersonActor
 	disabled_person.person_id = &"disabled_person"
 	disabled_person.name = "DisabledPerson"

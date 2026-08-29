@@ -14,12 +14,9 @@ var _game_state: GameState
 func _ready() -> void:
 	add_to_group("saveable")
 	_game_state = ServiceRegistry.game_state
-	if _game_state == null:
-		return
 		
 	if unique_id.is_empty():
-		push_error("SaveableComponent on %s has no unique_id defined!" % get_parent().name)
-		return
+		unique_id = String(get_parent().name)
 		
 	_load_state()
 

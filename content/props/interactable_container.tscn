@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://content/props/interactable_container.gd" id="1_container"]
+[ext_resource type="Script" path="res://features/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://gnc245sle255" path="res://features/inventory/inventory_holder_component.gd" id="3_inv_holder"]
+
+[sub_resource type="StandardMaterial3D" id="ContainerMaterial"]
+albedo_color = Color(0.4, 0.25, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="ContainerMesh"]
+material = SubResource("ContainerMaterial")
+size = Vector3(0.6, 0.4, 0.4)
+
+[sub_resource type="BoxShape3D" id="ContainerShape"]
+size = Vector3(0.6, 0.4, 0.4)
+
+[node name="InteractableContainer" type="StaticBody3D"]
+script = ExtResource("1_container")
+interactable = NodePath("Interactable")
+inventory_holder = NodePath("InventoryHolderComponent")
+
+[node name="Interactable" type="Node" parent="."]
+script = ExtResource("2_interactable")
+interact_label = "Open Container"
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("ContainerMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ContainerShape")
+
+[node name="InventoryHolderComponent" type="Node" parent="."]
+script = ExtResource("3_inv_holder")

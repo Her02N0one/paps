@@ -24,8 +24,19 @@ radius = 0.55
 
 [node name="Player" type="CharacterBody3D" unique_id=1702401823 groups=["player"]]
 script = ExtResource("1_ffvwl")
+head = NodePath("Head")
+camera_anchor = NodePath("CameraAnchor")
+camera = NodePath("Head/Camera3D")
+movement = NodePath("Systems/ActorMovementSystem")
+grapple = NodePath("Systems/GrappleSystem")
+camera_system = NodePath("Systems/PlayerCameraSystem")
+interaction_sensor = NodePath("Head/Camera3D/InteractionSensor")
+inventory_holder = NodePath("Components/InventoryHolderComponent")
+equipment_holder = NodePath("Head/Camera3D/EquipmentHolder")
+health_component = NodePath("Components/ActorHealthComponent")
+collision_shape = NodePath("CollisionShape3D")
 
-[node name="WorldModel" type="Node3D" parent="." unique_id=439424820]
+[node name="WorldModel" unique_name_in_owner=true type="Node3D" parent="." unique_id=439424820]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="WorldModel" unique_id=739217968]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)

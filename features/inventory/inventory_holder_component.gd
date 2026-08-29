@@ -4,6 +4,11 @@ extends Node
 
 @export var inventory: InventoryStore
 
+func _ready() -> void:
+	if inventory == null:
+		inventory = InventoryStore.new()
+		add_child(inventory)
+
 
 func configure(store: InventoryStore) -> void:
 	inventory = store

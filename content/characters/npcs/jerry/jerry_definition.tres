@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PersonDefinition" format=3 uid="uid://c83jerrydef01"]
 
-[ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://content/characters/npcs/base_npc/person_definition.gd" id="1_def"]
+[ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://features/npc/person_definition.gd" id="1_def"]
 [ext_resource type="Resource" uid="uid://1lcf4l7xxbd0" path="res://content/characters/npcs/jerry/jerry_conversation.tres" id="2_conv"]
 [ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="3_du4qp"]
 [ext_resource type="Texture2D" uid="uid://bnx7ubs03ufgt" path="res://content/characters/npcs/jerry/textures/jerry.png" id="4_body"]

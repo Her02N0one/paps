@@ -6,6 +6,11 @@
 [node name="World" type="Node3D" unique_id=1226249983]
 process_mode = 3
 script = ExtResource("1_world")
+world_ui_controller = NodePath("WorldUI")
+level_root = NodePath("GameplayWorld/LevelRoot")
+entity_root = NodePath("GameplayWorld/EntityRoot")
+player_root = NodePath("GameplayWorld/PlayerRoot")
+effect_root = NodePath("GameplayWorld/EffectRoot")
 
 [node name="Systems" type="Node" parent="." unique_id=728417574]
 process_mode = 3

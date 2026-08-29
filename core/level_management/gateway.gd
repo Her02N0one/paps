@@ -44,7 +44,7 @@ var _line_mesh: ImmediateMesh
 var _line_inst: MeshInstance3D
 
 
-@onready var collision := $CollisionShape3D as CollisionShape3D
+@export var collision: CollisionShape3D
 
 func _get_walk_start() -> Node3D:
 	return custom_walk_start if is_instance_valid(custom_walk_start) else get_node_or_null("WalkStart")

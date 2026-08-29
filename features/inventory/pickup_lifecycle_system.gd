@@ -20,19 +20,19 @@ func drop_item_from_player(instance: ItemInstance, player: CharacterBody3D) -> v
 	# Spawn 1.5 units forward, 1.5 units up to completely clear the player's collision hull
 	var drop_transform := Transform3D(Basis.IDENTITY, player.global_position + drop_direction * 1.5 + Vector3(0, 1.5, 0))
 	# TODO: in the future, GameState needs to store serialized ItemInstances instead of just definition paths.
-	var dynamic_id := _game_state.add_dynamic_pickup(_game_state.current_area, instance.definition, instance.quantity, drop_transform)
+	var dynamic_id := ServiceRegistry.pickup_manager.add_dynamic_pickup(_game_state.current_area, instance.definition, instance.quantity, drop_transform)
 	spawn_dynamic_pickup(instance, dynamic_id, drop_transform)
 
 
 func handle_pickup_collected(persistent_id: String, dynamic_id: String) -> void:
 	if not dynamic_id.is_empty():
-		_game_state.remove_dynamic_pickup(_game_state.current_area, dynamic_id)
+		ServiceRegistry.pickup_manager.remove_dynamic_pickup(_game_state.current_area, dynamic_id)
 	elif not persistent_id.is_empty():
-		_game_state.collect_static_pickup(_game_state.current_area, persistent_id)
+		ServiceRegistry.pickup_manager.collect_static_pickup(_game_state.current_area, persistent_id)
 
 
 func restore_dynamic_pickups(area_path: String) -> void:
-	var dynamic_pickups := _game_state.get_dynamic_pickups(area_path)
+	var dynamic_pickups := ServiceRegistry.pickup_manager.get_dynamic_pickups(area_path)
 	for dynamic_id in dynamic_pickups:
 		var record: Dictionary = dynamic_pickups[dynamic_id]
 		var item_path := str(record.get("item_path", ""))
@@ -51,8 +51,6 @@ func connect_static_pickups(level: BaseLevel) -> void:
 	for child in level.find_children("*", "", true, false):
 		if child is SearchObject and not (child as SearchObject).collected.is_connected(collected_handler):
 			(child as SearchObject).collected.connect(collected_handler)
-		elif child is PickupItem and not (child as PickupItem).collected.is_connected(collected_handler):
-			(child as PickupItem).collected.connect(collected_handler)
 
 
 func spawn_dynamic_pickup(
@@ -60,12 +58,17 @@ func spawn_dynamic_pickup(
 	dynamic_id: String,
 	spawn_transform: Transform3D
 ) -> void:
-	var pickup := _pickup_scene.instantiate() as PickupItem
-	pickup.instance = instance
+	var pickup := _pickup_scene.instantiate() as SearchObject
 	pickup.dynamic_id = dynamic_id
 	
 	_entity_root.add_child(pickup)
 	pickup.global_position = spawn_transform.origin
 	pickup.basis = spawn_transform.basis
+	
+	# The InventoryHolderComponent auto-creates its InventoryStore in _ready() which was called when add_child happened
+	if pickup.inventory_holder:
+		pickup.inventory_holder.add_item(instance.definition, instance.quantity)
+	else:
+		push_error("SearchObject template missing InventoryHolderComponent")
 	
 	pickup.collected.connect(Callable(self, "handle_pickup_collected"))

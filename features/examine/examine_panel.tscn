@@ -16,6 +16,8 @@ offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_examine_script")
+_title = NodePath("VBox/Title")
+_content = NodePath("VBox/Content")
 modal_id = &"examine"
 
 [node name="VBox" type="VBoxContainer" parent="."]

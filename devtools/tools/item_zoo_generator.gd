@@ -119,7 +119,7 @@ func _place_tile(item: ItemDefinition, pos: Vector3, index: int) -> void:
 	mi.material_override = mat
 	_add(mi)
 
-	var pickup: PickupItem = _PICKUP_SCENE.instantiate()
+	var pickup: SearchObject = _PICKUP_SCENE.instantiate()
 	pickup.instance = ItemInstance.new(item, 1)
 	pickup.dynamic_id = "zoo_%d" % index
 	pickup.position = pos + Vector3(0.0, 0.12, 0.6)

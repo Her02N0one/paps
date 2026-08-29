@@ -3,8 +3,8 @@
 class_name PersonActor
 extends CharacterBody3D
 
-const PERSON_VISUAL_RIG_COMPONENT_SCRIPT := preload("res://content/characters/npcs/base_npc/person_visual_rig.gd")
-const PERSON_PERSISTENCE_COMPONENT_SCRIPT := preload("res://content/characters/npcs/base_npc/person_persistence_system.gd")
+const PERSON_VISUAL_RIG_COMPONENT_SCRIPT := preload("res://features/npc/person_visual_rig.gd")
+const PERSON_PERSISTENCE_COMPONENT_SCRIPT := preload("res://features/npc/person_persistence_system.gd")
 
 
 signal person_profile_changed(actor: PersonActor)

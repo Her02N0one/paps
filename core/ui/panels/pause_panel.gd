@@ -54,8 +54,7 @@ func show_status(text: String) -> void:
 	tw.tween_property(status_label, "modulate:a", 0.0, 2.0).set_delay(1.0)
 
 func _on_manual_save_pressed() -> void:
-	var root = get_node("/root/RootContext") as RootContext
-	if root.get_save_manager().save_game("manual"):
+	if ServiceRegistry.save_manager.save_game("manual"):
 		show_status("GAME SAVED!")
 	else:
 		show_status("SAVE FAILED!")
@@ -64,8 +63,7 @@ func _on_resume_pressed() -> void:
 	close_panel()
 
 func _on_quick_save_pressed() -> void:
-	var root = get_node("/root/RootContext") as RootContext
-	if root.get_save_manager().save_game("quick"):
+	if ServiceRegistry.save_manager.save_game("quick"):
 		show_status("GAME SAVED!")
 	else:
 		show_status("SAVE FAILED!")

@@ -3,7 +3,11 @@ class_name DayNightCycle
 extends Node
 
 @export var enabled: bool = true
-@export var profile: SkyProfile
+@export var profile: SkyProfile:
+	set(value):
+		profile = value
+		if Engine.is_editor_hint() and is_node_ready():
+			_update_lighting(initial_time_minutes)
 
 
 
@@ -12,7 +16,11 @@ extends Node
 @export var moon_light: DirectionalLight3D
 @export var moon_sprite: Sprite3D
 @export var world_environment: WorldEnvironment
-@export var initial_time_minutes: float = 480.0 # 8:00 AM default in editor
+@export var initial_time_minutes: float = 480.0: # 8:00 AM default in editor
+	set(value):
+		initial_time_minutes = value
+		if Engine.is_editor_hint() and is_node_ready():
+			_update_lighting(initial_time_minutes)
 
 
 func _ready() -> void:
@@ -28,8 +36,7 @@ func _ready() -> void:
 		assert(world_environment.environment.sky != null, "DayNightCycle requires a Sky on the Environment.")
 		assert(world_environment.environment.sky.sky_material is ProceduralSkyMaterial, "DayNightCycle requires a ProceduralSkyMaterial on the Sky.")
 		
-		var tm = get_node("/root/TimeManager")
-		tm.time_changed.connect(_on_time_changed)
+		TimeManager.time_changed.connect(_on_time_changed)
 		
 		var gs = ServiceRegistry.game_state
 		assert(gs != null, "DayNightCycle requires a GameState.")
@@ -42,7 +49,7 @@ func _process(_delta: float) -> void:
 	if not enabled:
 		return
 	if Engine.is_editor_hint():
-		_update_lighting(initial_time_minutes)
+		return # Editor previews are now driven efficiently via property setters instead of every frame
 	else:
 		# Lock celestial lights to the camera position so their children (like MoonSprite) 
 		# are rendered at 'infinity' without any parallax shifting when the player walks.

@@ -9,6 +9,7 @@ size = Vector3(4, 3, 2)
 collision_layer = 0
 collision_mask = 1
 script = ExtResource("1_gw")
+collision = NodePath("CollisionShape3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_trigger")

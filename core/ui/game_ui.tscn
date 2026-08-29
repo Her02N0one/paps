@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" uid="uid://bd4qp8q813n2f" path="res://core/ui/game_ui_controller.gd" id="1_ui_controller"]
+[ext_resource type="Script" path="res://core/ui/hud/hud_controller.gd" id="99_hud"]
 [ext_resource type="Resource" path="res://core/ui/default_ui_registry.tres" id="2_registry"]
 
 [ext_resource type="PackedScene" path="res://core/ui/hud/debug_layer.tscn" id="4_debug"]
@@ -20,6 +21,9 @@ process_mode = 1
 layer = 10
 
 [node name="HUD" type="Control" parent="HUDLayer"]
+script = ExtResource("99_hud")
+interact_hint = NodePath("InteractHint")
+crosshair = NodePath("CrossHair")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

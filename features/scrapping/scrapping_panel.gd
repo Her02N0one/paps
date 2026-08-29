@@ -26,6 +26,24 @@ var _slot_widgets: Array[ItemStackWidget] = []
 ## from the quantity spinner, so this needs to be stored rather than passed through.
 var _selected_slot: ItemStack
 
+func _ready() -> void:
+	super._ready()
+	if Engine.is_editor_hint(): return
+	var bus = get_node_or_null("/root/MessageBus")
+	if bus and bus.has_signal("interaction_requested") and not bus.interaction_requested.is_connected(_on_interaction_requested):
+		bus.interaction_requested.connect(_on_interaction_requested)
+
+func _on_interaction_requested(request: PlayerInteractionRequest) -> void:
+	if request.action == PlayerInteractionRequest.SCRAPPING:
+		var inventory_holder := InventoryHolderComponent.find_on(request.initiating_actor)
+		if inventory_holder == null or inventory_holder.inventory == null:
+			return
+			
+		show_inventory(inventory_holder.inventory)
+		var ui = get_tree().get_first_node_in_group(ModalManager.GROUP_WORLD_UI_CONTROLLER)
+		if ui and ui.has_method("open"):
+			ui.open(modal_id)
+
 
 func show_inventory(inventory: InventoryStore) -> void:
 	_bind_inventory(inventory)

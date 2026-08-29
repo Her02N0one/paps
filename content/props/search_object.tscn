@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bdp8puhsa55jd"]
 
-[ext_resource type="Script" path="res://content/props/search_object.gd" id="1_pickup"]
-[ext_resource type="Script" path="res://features/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://c8kklyualkh30" path="res://content/props/search_object.gd" id="1_pickup"]
+[ext_resource type="Script" uid="uid://d047hh4w38g7a" path="res://features/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://gnc245sle255" path="res://features/inventory/inventory_holder_component.gd" id="3_inv_holder"]
 
 [sub_resource type="StandardMaterial3D" id="PickupMaterial"]
 albedo_color = Color(0.9, 0.72, 0.18, 1)
@@ -14,14 +15,19 @@ height = 0.4
 [sub_resource type="SphereShape3D" id="PickupShape"]
 radius = 0.24
 
-[node name="SearchObject" type="StaticBody3D"]
+[node name="SearchObject" type="StaticBody3D" unique_id=236726679 node_paths=PackedStringArray("inventory_holder", "interaction")]
 script = ExtResource("1_pickup")
+inventory_holder = NodePath("InventoryHolderComponent")
+interaction = NodePath("Interactable")
 
-[node name="Interactable" type="Node" parent="."]
+[node name="Interactable" type="Node" parent="." unique_id=1001737942]
 script = ExtResource("2_interactable")
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1876827846]
 mesh = SubResource("PickupMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2059388908]
 shape = SubResource("PickupShape")
+
+[node name="InventoryHolderComponent" type="Node" parent="." unique_id=1557807524]
+script = ExtResource("3_inv_holder")

@@ -4,6 +4,11 @@ extends Node
 ## Used heavily to decouple UI from dynamically loaded entities like the Player.
 
 # ==============================================================================
+# Player Interaction Signals
+# ==============================================================================
+signal interaction_requested(request: PlayerInteractionRequest)
+
+# ==============================================================================
 # Player Combat & Status Signals
 # ==============================================================================
 

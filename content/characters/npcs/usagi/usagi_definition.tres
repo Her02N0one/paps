@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://yy16dq5bklgm" path="res://content/characters/npcs/usagi/textures/usagi_world_standing.png" id="1_h48e4"]
 [ext_resource type="Script" uid="uid://c4ge5f0amdtmm" path="res://features/dialogue/dialogue_conversation.gd" id="2_cht3y"]
 [ext_resource type="Resource" uid="uid://cfua3vtse3e45" path="res://content/characters/npcs/usagi/usagi_conversation_foley.tres" id="2_jhwh7"]
-[ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://content/characters/npcs/base_npc/person_definition.gd" id="3_cpb6p"]
+[ext_resource type="Script" uid="uid://cudgu7oqau2ak" path="res://features/npc/person_definition.gd" id="3_cpb6p"]
 [ext_resource type="Texture2D" uid="uid://dh4wou6rlerfe" path="res://content/characters/npcs/usagi/textures/usagi_talk_neutral.png" id="6_6c67f"]
 [ext_resource type="Texture2D" uid="uid://caggakci35ii5" path="res://content/characters/npcs/usagi/textures/usagi_talk_surprised.png" id="7_iyy3j"]
 [ext_resource type="Texture2D" uid="uid://ce3uuh5h2oj66" path="res://content/characters/npcs/usagi/textures/usagi_talk_fat.png" id="10_6c67f"]

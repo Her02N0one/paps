@@ -5,6 +5,10 @@
 [node name="Minimap" type="CanvasLayer" unique_id=678270507]
 layer = 10
 script = ExtResource("1_script")
+mask = NodePath("Control/Mask")
+texture_rect = NodePath("Control/Mask/TextureRect")
+player_dot = NodePath("Control/Mask/PlayerDot")
+label = NodePath("Control/Label")
 
 [node name="Control" type="Control" parent="." unique_id=1613990863]
 layout_mode = 3

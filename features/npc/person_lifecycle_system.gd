@@ -11,7 +11,7 @@ func configure(game_state: GameState, entity_root: Node3D) -> void:
 
 
 func restore_persisted_people(area_path: String, current_level: BaseLevel) -> void:
-	var people := _game_state.get_people_in_area(area_path)
+	var people := ServiceRegistry.npc_manager.get_people_in_area(area_path)
 	if people.is_empty():
 		return
 	var loaded_ids: Dictionary = {}

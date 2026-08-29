@@ -6,7 +6,7 @@ func _ready() -> void:
 	call_deferred("_bind_to_time")
 
 func _bind_to_time() -> void:
-	var tm = get_node("/root/TimeManager")
+	var tm := TimeManager
 	if not tm.time_changed.is_connected(_on_time_changed):
 		tm.time_changed.connect(_on_time_changed)
 		

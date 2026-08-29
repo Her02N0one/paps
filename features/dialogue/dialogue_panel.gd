@@ -22,6 +22,37 @@ var _is_text_revealing := false
 var _displayed_node: DialogueNode
 var _default_voice_blip: AudioStreamWAV
 
+func _ready() -> void:
+	super._ready()
+	if Engine.is_editor_hint(): return
+	var bus = get_node_or_null("/root/MessageBus")
+	if bus and bus.has_signal("interaction_requested") and not bus.interaction_requested.is_connected(_on_interaction_requested):
+		bus.interaction_requested.connect(_on_interaction_requested)
+
+func _on_interaction_requested(request: PlayerInteractionRequest) -> void:
+	if request.action == PlayerInteractionRequest.DIALOGUE:
+		var conversation := request.payload.get("conversation") as DialogueConversation
+		var person_def := request.payload.get("person_definition") as PersonDefinition
+		if conversation == null:
+			conversation = _create_single_line_dialogue(request.payload)
+			
+		var context := DialogueContext.new(request.initiating_actor, request.interactable, null)
+		if open_dialogue(conversation, context, person_def):
+			var ui = get_tree().get_first_node_in_group(ModalManager.GROUP_WORLD_UI_CONTROLLER)
+			if ui and ui.has_method("open"):
+				ui.open(modal_id)
+
+func _create_single_line_dialogue(payload: Dictionary) -> DialogueConversation:
+	var dialogue_node := DialogueNode.new()
+	dialogue_node.id = &"message"
+	dialogue_node.speaker = str(payload.get("speaker", "Person"))
+	dialogue_node.text = str(payload.get("text", ""))
+	var conversation := DialogueConversation.new()
+	conversation.id = &"single_line"
+	conversation.entry_node_id = dialogue_node.id
+	conversation.nodes = [dialogue_node]
+	return conversation
+
 
 ## Creates a fresh session and displays it. Returns false when no entry node exists.
 func open_dialogue(conversation: DialogueConversation, context: DialogueContext, person_def: PersonDefinition = null) -> bool:

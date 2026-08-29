@@ -6,7 +6,15 @@ extends StaticBody3D
 @export var definition: PersonDefinition:
 	set(value):
 		if definition == value: return
+		if definition != null and definition.changed.is_connected(_on_definition_changed):
+			definition.changed.disconnect(_on_definition_changed)
 		definition = value
+		if definition != null and not definition.changed.is_connected(_on_definition_changed):
+			definition.changed.connect(_on_definition_changed)
+		_apply_definition()
+
+func _on_definition_changed() -> void:
+	if Engine.is_editor_hint():
 		_apply_definition()
 
 @export_group("Schedule")
@@ -17,10 +25,10 @@ extends StaticBody3D
 
 var _game_state: GameState
 
-@onready var sprite: Sprite3D = $Sprite3D
-@onready var collision: CollisionShape3D = $CollisionShape3D
-@onready var health_component: ActorHealthComponent = $ActorHealthComponent
-@onready var interactable: InteractablePerson = $InteractablePerson
+@export var sprite: Sprite3D
+@export var collision: CollisionShape3D
+@export var health_component: ActorHealthComponent
+@export var interactable: InteractablePerson
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -29,7 +37,7 @@ func _ready() -> void:
 	
 	_game_state = ServiceRegistry.game_state
 	if _game_state != null and not person_id.is_empty():
-		if not _game_state.is_person_enabled(person_id):
+		if not ServiceRegistry.npc_manager.is_person_enabled(person_id):
 			queue_free()
 			return
 			
@@ -45,7 +53,7 @@ func _ready() -> void:
 
 func _on_defeated(_source: Node) -> void:
 	if _game_state != null and not person_id.is_empty():
-		_game_state.set_person_enabled(person_id, false)
+		ServiceRegistry.npc_manager.set_person_enabled(person_id, false)
 	queue_free()
 
 func _on_hour_tick(_hour: int) -> void:

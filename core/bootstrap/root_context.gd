@@ -18,6 +18,8 @@ var game_state: GameState
 var save_manager
 var game_manager: GameManager
 var settings_manager: SettingsManager
+var npc_manager: NPCManager
+var pickup_manager: PickupManager
 var _active_context: Node
 var _active_context_id: StringName = CONTEXT_NONE
 
@@ -54,12 +56,23 @@ func _build_services() -> void:
 	game_manager.name = "GameManager"
 	game_manager.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(game_manager)
+	npc_manager = NPCManager.new()
+	npc_manager.name = "NPCManager"
+	add_child(npc_manager)
+	pickup_manager = PickupManager.new()
+	pickup_manager.name = "PickupManager"
+	add_child(pickup_manager)
 
 
 func _bind_services() -> void:
 	ServiceRegistry.game_state = game_state
 	ServiceRegistry.save_manager = save_manager
 	ServiceRegistry.game_manager = game_manager
+	ServiceRegistry.npc_manager = npc_manager
+	ServiceRegistry.pickup_manager = pickup_manager
+	
+	npc_manager.configure_hooks(save_manager)
+	pickup_manager.configure_hooks(save_manager)
 	
 	save_manager.configure(game_state, game_state.get_inventory())
 	game_manager.configure(save_manager, game_state)

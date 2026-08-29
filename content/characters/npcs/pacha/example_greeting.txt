@@ -1,0 +1,22 @@
+[entry]
+speaker = Pacha
+expression = happy
+text = Hello! Welcome to the new dialogue workflow.
+choice = It's so much faster! -> fast
+choice = I miss the inspector... -> slow
+
+[fast]
+speaker = Pacha
+expression = happy
+text = I know, right? You just type it out, run the compiler, and you're done!
+next = end
+
+[slow]
+speaker = Pacha
+expression = surprised
+text = Really? You liked clicking a hundred times just to add a single choice?
+choice = I guess not. -> fast
+
+[end]
+speaker = Pacha
+text = See you later!

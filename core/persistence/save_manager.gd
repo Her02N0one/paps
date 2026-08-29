@@ -4,6 +4,8 @@ extends Node
 
 signal save_completed(filename: String, success: bool)
 signal load_completed(filename: String, success: bool)
+signal about_to_save
+signal game_loaded
 
 const SAVE_DIRECTORY := "user://saves"
 
@@ -45,6 +47,12 @@ func set_world(world: Node) -> void:
 func save_game(type: String, save_name: String = "") -> bool:
 	if is_instance_valid(_world):
 		_world.call("capture_player_transform_for_save")
+		
+	about_to_save.emit()
+	
+	for saveable in get_tree().get_nodes_in_group("saveable"):
+		if saveable.has_method("_save_state"):
+			saveable._save_state()
 		
 	if _game_state == null or _game_state.current_area.is_empty():
 		save_completed.emit("", false)
@@ -112,6 +120,7 @@ func load_game(filename: String = "") -> bool:
 	
 	if success:
 		_active_filename = filename
+		game_loaded.emit()
 	load_completed.emit(filename, success)
 	return success
 

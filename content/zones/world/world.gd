@@ -6,13 +6,13 @@ extends Node3D
 const PICKUP_ITEM_SCENE := preload("res://content/items/pickup_item.tscn")
 const PLAYER_SCENE := preload("res://content/characters/player/player.tscn")
 const PICKUP_LIFECYCLE_COMPONENT := preload("res://features/inventory/pickup_lifecycle_system.gd")
-const PERSON_LIFECYCLE_COMPONENT := preload("res://content/characters/npcs/base_npc/person_lifecycle_system.gd")
+const PERSON_LIFECYCLE_COMPONENT := preload("res://features/npc/person_lifecycle_system.gd")
 
-@onready var world_ui_controller: GameUIController = $WorldUI
-@onready var level_root: Node3D = $GameplayWorld/LevelRoot
-@onready var entity_root: Node3D = $GameplayWorld/EntityRoot
-@onready var player_root: Node3D = $GameplayWorld/PlayerRoot
-@onready var effect_root: Node3D = $GameplayWorld/EffectRoot
+@export var world_ui_controller: GameUIController
+@export var level_root: Node3D
+@export var entity_root: Node3D
+@export var player_root: Node3D
+@export var effect_root: Node3D
 var player: Player
 var player_movement: ActorMovementSystem
 var inventory: InventoryStore

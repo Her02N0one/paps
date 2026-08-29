@@ -29,10 +29,7 @@ func _ready() -> void:
 func _bind_save_manager() -> void:
 	if Engine.is_editor_hint():
 		return
-	# Assume root context has bound SaveManager and we can reach it
-	var root_context = get_node("/root/RootContext") as RootContext
-	if root_context:
-		save_manager = root_context.get_save_manager()
+	save_manager = ServiceRegistry.save_manager
 
 
 func open_panel() -> void:
@@ -110,8 +107,7 @@ func _on_save_selected(filename: String) -> void:
 	if save_manager.load_game(filename):
 		close_panel()
 		# Find GameManager to continue
-		var root_context = get_node("/root/RootContext") as RootContext
-		root_context.get_game_manager().continue_game()
+		ServiceRegistry.game_manager.continue_game()
 
 
 func _on_delete_pressed(filename: String) -> void:

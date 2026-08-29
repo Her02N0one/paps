@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2j1aigqxq3u3"
-path.s3tc="res://.godot/imported/pacha.png-f5f3e6cad7a05d4818464544024d4fbf.s3tc.ctex"
+path.s3tc="res://.godot/imported/pacha.png-1d47c0519622e195bd47ae84294ecc2f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://content/characters/pacha/pacha.png"
-dest_files=["res://.godot/imported/pacha.png-f5f3e6cad7a05d4818464544024d4fbf.s3tc.ctex"]
+source_file="res://content/characters/npcs/pacha/pacha.png"
+dest_files=["res://.godot/imported/pacha.png-1d47c0519622e195bd47ae84294ecc2f.s3tc.ctex"]
 
 [params]
 

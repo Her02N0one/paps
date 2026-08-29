@@ -14,7 +14,7 @@ func _run() -> void:
 	await process_frame  # allow _ready() to fire so "game_state" group is populated
 
 	game_state.reset(PLAYGROUND)
-	game_state.collect_static_pickup(PLAYGROUND, "mysterious_key")
+	ServiceRegistry.pickup_manager.collect_static_pickup(PLAYGROUND, "mysterious_key")
 	game_state.enter_area(ZONE_B)
 	game_state.enter_area(PLAYGROUND)
 

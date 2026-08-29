@@ -24,9 +24,9 @@ func _run() -> void:
 
 	game_state.reset(TARGET_AREA)
 	game_state.enter_area(TARGET_AREA)
-	var dynamic_id := game_state.add_dynamic_pickup(TARGET_AREA, SCRAP, 2, Transform3D(Basis.IDENTITY, Vector3(4.0, 1.0, 1.5)))
+	var dynamic_id := ServiceRegistry.pickup_manager.add_dynamic_pickup(TARGET_AREA, SCRAP, 2, Transform3D(Basis.IDENTITY, Vector3(4.0, 1.0, 1.5)))
 	var person_id := StringName("jerry")
-	game_state.register_person_if_missing(person_id, TARGET_AREA, "res://content/characters/npcs/jerry/person_jerry.tscn", Transform3D(Basis.IDENTITY, Vector3(1.5, 0.0, 2.5)), {})
+	ServiceRegistry.npc_manager.register_person_if_missing(person_id, TARGET_AREA, "res://content/characters/npcs/jerry/person_jerry.tscn", Transform3D(Basis.IDENTITY, Vector3(1.5, 0.0, 2.5)), {})
 
 	var world := WORLD_SCENE.instantiate() as World
 	world.bind_services(game_manager, game_state, save_manager)
@@ -48,7 +48,7 @@ func _run() -> void:
 	var restored_dynamic := false
 	var restored_person := false
 	for child in world.entity_root.get_children():
-		if child is PickupItem and (child as PickupItem).dynamic_id == dynamic_id:
+		if child is SearchObject and (child as SearchObject).dynamic_id == dynamic_id:
 			restored_dynamic = true
 		if child is PersonActor and (child as PersonActor).get_person_id() == person_id:
 			restored_person = true

@@ -8,17 +8,17 @@ signal gateway_travel_requested(target_scene: String, gateway_id: String, revers
 @export_group("Body Profile")
 @export var hide_body_in_first_person := true
 
-@onready var head: Node3D = $Head
-@onready var camera_anchor: Marker3D = $CameraAnchor
-@onready var camera: Camera3D = $Head/Camera3D
-@onready var movement: ActorMovementSystem = $Systems/ActorMovementSystem
-@onready var grapple: GrappleSystem = $Systems/GrappleSystem
-@onready var camera_system: PlayerCameraSystem = $Systems/PlayerCameraSystem
-@onready var interaction_sensor: InteractionSensor = $Head/Camera3D/InteractionSensor
-@onready var inventory_holder: InventoryHolderComponent = $Components/InventoryHolderComponent
-@onready var equipment_holder: EquipmentHolder = $Head/Camera3D/EquipmentHolder
-@onready var health_component: ActorHealthComponent = $Components/ActorHealthComponent
-@onready var collision_shape: CollisionShape3D = $CollisionShape3D
+@export var head: Node3D
+@export var camera_anchor: Marker3D
+@export var camera: Camera3D
+@export var movement: ActorMovementSystem
+@export var grapple: GrappleSystem
+@export var camera_system: PlayerCameraSystem
+@export var interaction_sensor: InteractionSensor
+@export var inventory_holder: InventoryHolderComponent
+@export var equipment_holder: EquipmentHolder
+@export var health_component: ActorHealthComponent
+@export var collision_shape: CollisionShape3D
 
 var _interact_press_time := 0.0
 
@@ -31,11 +31,10 @@ func _ready() -> void:
 
 
 func _apply_first_person_body_visibility() -> void:
-	var body_mesh := get_node("WorldModel/MeshInstance3D") as MeshInstance3D
+	var body_mesh := get_node("%WorldModel/MeshInstance3D") as MeshInstance3D
 	body_mesh.visible = not hide_body_in_first_person
-	var bus := get_node("/root/MessageBus")
-	health_component.health_changed.connect(func(c, m): bus.player_health_changed.emit(c, m))
-	health_component.damaged.connect(func(a, s): bus.player_damaged.emit(a, s))
+	health_component.health_changed.connect(func(c, m): MessageBus.player_health_changed.emit(c, m))
+	health_component.damaged.connect(func(a, s): MessageBus.player_damaged.emit(a, s))
 
 func get_standing_height() -> float:
 	return (collision_shape.shape as CapsuleShape3D).height
@@ -102,7 +101,7 @@ func _update_movement_requests() -> void:
 		return
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	# Movement follows target yaw immediately while render view can smooth independently.
-	var yaw_basis := Basis(Vector3.UP, $Systems/PlayerCameraSystem._target_yaw)
+	var yaw_basis := Basis(Vector3.UP, camera_system._target_yaw)
 	movement.direction = (yaw_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	var sprint_pressed = Input.is_action_pressed("sprint")
